@@ -1,0 +1,55 @@
+{
+  "name": "backend-template",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "start": "node dist/server.js",
+    "dev": "nodemon --exec \"nodemon -r tsconfig-paths/register\" src/server.ts",
+    "build": "pnpm lint && tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
+    "lint:fix": "eslint ./src --ext .ts --quiet --fix --ignore-path ./.gitignore",
+    "lint:check": "eslint ./src --ext .ts --ignore-path ./.gitignore",
+    "lint:format": "prettier  --log-level warn --write \"./**/*.{ts,md,json,d.ts}\"",
+    "lint": "pnpm lint:format && pnpm lint:fix",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Saiful Islam Sojib",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "http-status": "^1.7.4",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.4.1",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/node": "^20.14.2",
+    "@typescript-eslint/eslint-plugin": "^7.13.0",
+    "@typescript-eslint/parser": "^7.13.0",
+    "eslint": "^8.57.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-plugin-prettier": "^5.1.3",
+    "nodemon": "^3.1.3",
+    "prettier": "^3.3.2",
+    "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.10",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.4.5"
+  },
+  "engines": {
+    "node": ">=18",
+    "npm": ">=10",
+    "pnpm": ">=8"
+  }
+}
