@@ -1,2 +1,11 @@
-node_modules/*
-dist
+node_modules/
+dist/
+.env
+*.local
+package.json
+README.md
+.env.example
+tsconfig.json
+.vscode
+.DS_Store
+.vercel
