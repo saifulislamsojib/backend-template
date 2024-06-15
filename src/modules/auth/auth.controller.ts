@@ -24,7 +24,7 @@ export const loginUser = catchAsync(async (req, res) => {
 });
 
 export const changePassword = catchAsync(async (req, res) => {
-  const data = await changePasswordToDb(req.user?._id, req.body);
+  const data = await changePasswordToDb(req.user!._id, req.body);
   return sendResponse(res, {
     data,
     message: 'Password changed successfully',
@@ -34,7 +34,7 @@ export const changePassword = catchAsync(async (req, res) => {
 });
 
 export const getCurrentUser = catchAsync(async (req, res) => {
-  const data = req.user;
+  const data = req.user!;
   return sendResponse(res, {
     data,
     message: 'Current user data retrieved successfully',

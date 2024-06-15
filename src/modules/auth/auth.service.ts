@@ -1,5 +1,6 @@
 import AppError from '@/errors/AppError';
 import { BAD_REQUEST, NOT_FOUND } from 'http-status';
+import { ObjectId } from 'mongoose';
 import User from '../user/user.model';
 import TUser from '../user/user.types';
 import { comparePassword, createJWT, hashPassword } from './auth.utils';
@@ -61,7 +62,10 @@ export const loginUserFromDb = async (payload: Pick<TUser, 'email' | 'password'>
   };
 };
 
-export const changePasswordToDb = async (userId: string, payload: Record<string, string>) => {
+export const changePasswordToDb = async (
+  userId: string | ObjectId,
+  payload: Record<string, string>,
+) => {
   const { currentPassword, newPassword } = payload;
 
   if (currentPassword.trim() === newPassword.trim()) {

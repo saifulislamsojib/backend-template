@@ -1,10 +1,10 @@
+import { AuthUser } from '@/modules/auth/auth.types';
 import { EnvType } from '@/utils/catchEnvValidation';
-import { JwtPayload } from 'jsonwebtoken';
 
 declare global {
   namespace Express {
     interface Request {
-      user: JwtPayload;
+      user?: AuthUser;
     }
   }
   namespace NodeJS {
