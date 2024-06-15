@@ -1,11 +1,8 @@
-import { createServer } from 'http';
-import app from './app';
 import configs from './configs';
 import mongoConnect from './configs/dbConnect';
+import { disconnectDB } from './utils/DbConnectUtils';
 import catchEnvValidation from './utils/catchEnvValidation';
-
-// create server
-const server = createServer(app);
+import server, { closeServer } from './utils/serverUtils';
 
 const main = async () => {
   try {
@@ -28,17 +25,13 @@ const main = async () => {
 
 main();
 
-process.on('unhandledRejection', () => {
+process.on('unhandledRejection', async () => {
   console.log('😈 unhandledRejection is detected, shutting down the process..');
-  if (server) {
-    return server.close(() => {
-      process.exit(1);
-    });
-  }
-  return process.exit(1);
+  await closeServer();
 });
 
-process.on('uncaughtException', () => {
+process.on('uncaughtException', async () => {
   console.log('😈 uncaughtException is detected, shutting down the process..');
+  await disconnectDB();
   process.exit(1);
 });

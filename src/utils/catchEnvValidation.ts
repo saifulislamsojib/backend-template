@@ -1,6 +1,6 @@
 import { ZodError, z } from 'zod';
 
-const node_envs = ['development', 'uat', 'production'] as const;
+const node_envs = ['development', 'test', 'uat', 'production'] as const;
 
 const envValidationSchema = z.object({
   NODE_ENV: z.enum(node_envs),
