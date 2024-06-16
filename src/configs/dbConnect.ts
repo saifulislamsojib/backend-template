@@ -1,10 +1,9 @@
-import { disconnectDB, getDbUrl } from '@/utils/DbConnectUtils';
 import { connect, connection } from 'mongoose';
+import configs from '.';
 
 // database connection with mongoose
-const mongoConnect = async () => {
+const dbConnect = async (db_url = configs.db_url) => {
   try {
-    const db_url = await getDbUrl();
     await connect(db_url);
     console.log('Database successfully connected!');
   } catch (error) {
@@ -12,13 +11,21 @@ const mongoConnect = async () => {
   }
 };
 
+export const dbDisconnect = async () => {
+  if (!connection) return;
+  try {
+    await connection.close();
+  } catch (error) {
+    console.log('Database disconnection error: ', (error as Error).message);
+  }
+};
+
 connection.on('disconnected', () => {
-  console.log('Mongoose disconnected from Database');
+  console.log('Database successfully disconnected!');
 });
 
-process.on('SIGINT', async () => {
-  await disconnectDB();
-  process.exit(0);
+process.on('SIGINT', () => {
+  dbDisconnect();
 });
 
-export default mongoConnect;
+export default dbConnect;

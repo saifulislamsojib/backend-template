@@ -1,13 +1,13 @@
 import app from '@/app';
+import { dbDisconnect } from '@/configs/dbConnect';
 import { createServer } from 'http';
-import { disconnectDB } from './DbConnectUtils';
 
 // create server
 const server = createServer(app);
 
-export const closeServer = async () => {
+export const closeServer = () => {
   if (server) {
-    await disconnectDB();
+    dbDisconnect();
     server.close(() => {
       process.exit(1);
     });

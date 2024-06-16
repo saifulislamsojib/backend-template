@@ -1,6 +1,5 @@
 import configs from './configs';
-import mongoConnect from './configs/dbConnect';
-import { disconnectDB } from './utils/DbConnectUtils';
+import dbConnect from './configs/dbConnect';
 import catchEnvValidation from './utils/catchEnvValidation';
 import server, { closeServer } from './utils/serverUtils';
 
@@ -10,7 +9,7 @@ const main = async () => {
     await catchEnvValidation();
 
     // database connection with mongoose(mongodb)
-    mongoConnect();
+    dbConnect();
 
     const { port } = configs;
 
@@ -25,13 +24,12 @@ const main = async () => {
 
 main();
 
-process.on('unhandledRejection', async () => {
+process.on('unhandledRejection', () => {
   console.log('😈 unhandledRejection is detected, shutting down the process..');
-  await closeServer();
+  closeServer();
 });
 
-process.on('uncaughtException', async () => {
+process.on('uncaughtException', () => {
   console.log('😈 uncaughtException is detected, shutting down the process..');
-  await disconnectDB();
-  process.exit(1);
+  closeServer();
 });
