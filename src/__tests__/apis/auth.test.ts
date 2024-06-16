@@ -46,20 +46,16 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
 
       // check email validation
       const notEmailBody = pick(body, 'name', 'password');
-      expected.message = /email/i;
-      await apiTester({ url, method: 'post', body: notEmailBody, expected });
-      // invalid email
       const invalidEmailBody = { ...body, email: 'abraham' };
       expected.message = /email/i;
+      await apiTester({ url, method: 'post', body: notEmailBody, expected });
       await apiTester({ url, method: 'post', body: invalidEmailBody, expected });
 
       // check password validation
       const notPassBody = pick(body, 'name', 'email');
-      expected.message = /password/i;
-      await apiTester({ url, method: 'post', body: notPassBody, expected });
-      // invalid password
       const invalidPassBody = { ...body, password: '123456' };
       expected.message = /password/i;
+      await apiTester({ url, method: 'post', body: notPassBody, expected });
       await apiTester({ url, method: 'post', body: invalidPassBody, expected });
     });
   });
