@@ -42,7 +42,6 @@ export const apiTester = async <T extends ArrayOrObject>({
     query.send(reqBody);
   }
   const res = await query;
-  // console.log(res.body, 'res.body');
   expect(res.status).toBe(status);
   expect(res.body?.success).toBe(success);
   if (data && Array.isArray(data)) {
@@ -67,19 +66,4 @@ export const types = {
   array: expect.any(Array),
   object: expect.any(Object),
   date: expect.any(Date),
-};
-
-export const pick = <T extends Record<string, unknown>, K extends keyof T>(
-  obj: T,
-  ...props: K[]
-) => {
-  return props.reduce(
-    (acc, prop) => {
-      if (prop in obj) {
-        acc[prop] = obj[prop];
-      }
-      return acc;
-    },
-    {} as Record<K, T[K]>,
-  );
 };

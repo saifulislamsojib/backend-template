@@ -1,4 +1,5 @@
 import AppError from '@/errors/AppError';
+import omit from '@/utils/omit';
 import { BAD_REQUEST, NOT_FOUND } from 'http-status';
 import { ObjectId } from 'mongoose';
 import User from '../user/user.model';
@@ -21,14 +22,11 @@ export const registerUserToDb = async (payload: Omit<TUser, '_id'>) => {
   const token = createJWT({ email: user.email, _id: user.id, role: user.role });
 
   // ready user response
-  const newUser = user.toObject() as Partial<TUser>;
-  delete newUser.password;
-  delete newUser.passwordUpdatedAt;
-  delete newUser.__v;
+  const userResponse = omit(user.toObject(), 'password', 'passwordUpdatedAt', '__v');
 
   return {
     token,
-    user: newUser,
+    user: userResponse,
   };
 };
 
@@ -51,10 +49,7 @@ export const loginUserFromDb = async (payload: Pick<TUser, 'email' | 'password'>
   const token = createJWT({ email: user.email, _id: user.id, role: user.role });
 
   // ready user response
-  const userResponse = user.toObject() as Partial<TUser>;
-  delete userResponse.__v;
-  delete userResponse.password;
-  delete userResponse.passwordUpdatedAt;
+  const userResponse = omit(user.toObject(), 'password', 'passwordUpdatedAt', '__v');
 
   return {
     token,
@@ -97,9 +92,6 @@ export const changePasswordToDb = async (
   if (!data) {
     throw new AppError(BAD_REQUEST, 'Password change failed');
   }
-  const updatedData = data.toObject() as Partial<TUser>;
-  delete updatedData.password;
-  delete updatedData.__v;
-  delete updatedData.passwordUpdatedAt;
-  return updatedData;
+  const userResponse = omit(user.toObject(), 'password', 'passwordUpdatedAt', '__v');
+  return userResponse;
 };

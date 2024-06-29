@@ -12,7 +12,8 @@
     "lint:check": "eslint ./src --ext .ts --ignore-path ./.gitignore",
     "lint:format": "prettier  --log-level warn --write \"./**/*.{ts,md,json,d.ts}\"",
     "lint": "pnpm lint:format && pnpm lint:fix",
-    "test": "NODE_ENV=test jest"
+    "test": "NODE_ENV=test jest",
+    "test:w": "NODE_ENV=test jest --watch"
   },
   "keywords": [],
   "author": "Saiful Islam Sojib",

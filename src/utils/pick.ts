@@ -6,7 +6,7 @@ const pick = <T extends Record<string, unknown>, K extends keyof T>(obj: T, ...p
       }
       return acc;
     },
-    {} as Record<K, T[K]>,
+    {} as Pick<T, K>,
   );
 };
 
