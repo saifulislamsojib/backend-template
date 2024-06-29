@@ -29,6 +29,7 @@ type TesterProps<T extends ArrayOrObject> = {
   method?: 'get' | 'post' | 'put' | 'patch' | 'delete';
   body?: Record<string, unknown>;
   expected?: Matcher<T>;
+  token?: string;
 };
 
 export const apiTester = async <T extends ArrayOrObject>({
@@ -36,10 +37,14 @@ export const apiTester = async <T extends ArrayOrObject>({
   method = 'get',
   body: reqBody,
   expected: { status = 200, success = true, message, type, data } = {},
+  token,
 }: TesterProps<T>) => {
   const query = request[method](url);
   if (reqBody) {
     query.send(reqBody);
+  }
+  if (token) {
+    query.set('authorization', token);
   }
   const res = await query;
   expect(res.status).toBe(status);
@@ -61,9 +66,12 @@ export const apiTester = async <T extends ArrayOrObject>({
 
 export const types = {
   string: expect.any(String),
-  number: expect.any(String),
+  number: expect.any(Number),
   boolean: expect.any(Boolean),
   array: expect.any(Array),
   object: expect.any(Object),
   date: expect.any(Date),
 };
+
+export const expectEnum = <const T>(enumArr: readonly T[]) =>
+  expect.stringMatching(enumArr.join('|'));
