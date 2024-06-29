@@ -5,6 +5,8 @@ import { apiTester, apiUrl, expectEnum, types } from '../utils';
 
 const baseUrl = `${apiUrl}/auth`;
 
+// test fake user
+
 const testUser = {
   name: 'john abraham',
   email: 'abraham@gmail.com',
