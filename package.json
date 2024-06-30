@@ -43,6 +43,7 @@
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-plugin-jest": "^28.6.0",
     "eslint-plugin-prettier": "^5.1.3",
     "husky": "^9.0.11",
     "jest": "^29.7.0",
@@ -63,7 +64,7 @@
     "pnpm": ">=8"
   },
   "lint-staged": {
-    "*.{ts}": "pnpm lint:fix",
-    "*.{ts,md,json,d.ts}": "pnpm lint:format"
+    "*.{ts}": "eslint --quiet --fix",
+    "*.{ts,md,json,d.ts}": "prettier  --log-level warn --write"
   }
 }

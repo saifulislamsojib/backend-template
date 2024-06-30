@@ -29,12 +29,13 @@ module.exports = {
     'eslint:recommended',
     'plugin:import/recommended',
     'plugin:import/typescript',
+    'plugin:jest/recommended',
     'plugin:prettier/recommended',
     'plugin:@typescript-eslint/recommended',
   ],
   parser: '@typescript-eslint/parser',
   ignorePatterns: ['node_modules', 'dist', '.eslintrc.cjs'],
-  plugins: ['prettier', '@typescript-eslint', 'import'],
+  plugins: ['prettier', '@typescript-eslint', 'import', 'jest'],
   root: true,
   rules: {
     camelcase: 0,
@@ -42,6 +43,7 @@ module.exports = {
     'no-underscore-dangle': 0,
     'no-console': 0,
     'linebreak-style': 0,
+    'jest/expect-expect': 0,
     '@typescript-eslint/no-non-null-assertion': 0,
     'import/extensions': [
       'error',
