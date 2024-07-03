@@ -4,7 +4,7 @@ import env from 'dotenv';
 env.config();
 
 const configs = {
-  port: process.env.PORT || 5000,
+  port: process.env.PORT || 8080,
   origin: process.env.CLIENT_ORIGIN || '*',
   db_url: process.env.DB_URI,
   node_env: process.env.NODE_ENV,

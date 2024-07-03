@@ -7,7 +7,7 @@
     "preinstall": "npx only-allow pnpm",
     "start": "node dist/server.js",
     "dev": "nodemon --exec \"nodemon -r tsconfig-paths/register\" src/server.ts",
-    "build": "pnpm lint && tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
+    "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
     "lint:fix": "eslint ./src --ext .ts --quiet --fix --ignore-path ./.gitignore",
     "lint:check": "eslint ./src --ext .ts --ignore-path ./.gitignore",
     "lint:format": "prettier  --log-level warn --write \"./**/*.{ts,md,json,d.ts}\"",
@@ -19,6 +19,7 @@
   "keywords": [],
   "author": "Saiful Islam Sojib",
   "license": "ISC",
+  "packageManager": "pnpm@9.4.0",
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
@@ -59,9 +60,9 @@
     "typescript": "^5.4.5"
   },
   "engines": {
-    "node": ">=18",
+    "node": ">=20",
     "npm": ">=10",
-    "pnpm": ">=8"
+    "pnpm": ">=9"
   },
   "lint-staged": {
     "*.{ts}": "eslint --quiet --fix",
