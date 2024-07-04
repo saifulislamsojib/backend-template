@@ -3,5 +3,4 @@ dist/
 .env
 *.local
 .DS_Store
-.vercel
 src/__tests__
