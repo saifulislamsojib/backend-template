@@ -1,6 +1,14 @@
+# same as gitignoire
 node_modules/
 dist/
 .env
 *.local
 .DS_Store
+logs
+
+# others
+.github
+.git
+.dockerignore
+.gitignore
 src/__tests__

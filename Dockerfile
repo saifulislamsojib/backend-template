@@ -21,7 +21,7 @@ FROM base AS bilder
 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
-COPY tsconfig.json ./tsconfig.json
+COPY tsconfig.json ./
 COPY src ./src
 
 RUN pnpm build
@@ -30,7 +30,6 @@ RUN pnpm build
 FROM base
 
 COPY --from=prod-deps /app/node_modules ./node_modules
-
 COPY --from=bilder /app/dist ./dist
 
 EXPOSE 8080

@@ -29,7 +29,8 @@ process.on('unhandledRejection', () => {
   closeServer();
 });
 
-process.on('uncaughtException', () => {
+process.on('uncaughtException', (error) => {
   console.log('😈 uncaughtException is detected, shutting down the process..');
+  console.log('And the error is:', error.message);
   closeServer();
 });

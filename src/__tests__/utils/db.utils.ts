@@ -35,7 +35,8 @@ process.on('unhandledRejection', async () => {
   testDbDisconnect();
 });
 
-process.on('uncaughtException', async () => {
+process.on('uncaughtException', async (error) => {
   console.log('😈 uncaughtException is detected, shutting down the process..');
+  console.log('And the error is:', error.message);
   testDbDisconnect();
 });

@@ -5,10 +5,7 @@ module.exports = {
     sourceType: 'module',
     ecmaVersion: 2020,
   },
-  env: {
-    commonjs: true,
-    node: true,
-  },
+  env: { node: true, jest: true },
   settings: {
     'import/resolver': {
       node: {
