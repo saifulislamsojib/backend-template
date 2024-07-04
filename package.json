@@ -14,7 +14,7 @@
     "lint": "pnpm lint:format && pnpm lint:fix",
     "test": "NODE_ENV=test jest",
     "test:w": "NODE_ENV=test jest --watch",
-    "prepare": "husky"
+    "prepare": "husky || true"
   },
   "keywords": [],
   "author": "Saiful Islam Sojib",
