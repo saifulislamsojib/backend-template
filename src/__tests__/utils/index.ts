@@ -1,13 +1,3 @@
-import { testDbConnect, testDbDisconnect } from './db.utils';
-
-beforeAll(() => {
-  return testDbConnect();
-});
-
-afterAll(() => {
-  return testDbDisconnect();
-});
-
 export { default as apiTester, request } from './apiTester';
 
 export const apiUrl = '/api/v1';
