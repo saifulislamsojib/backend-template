@@ -9,22 +9,20 @@
     "dev": "nodemon --exec \"nodemon -r tsconfig-paths/register\" src/server.ts",
     "build": "tsc && tsc-alias",
     "type:check": "tsc --noEmit",
-    "fix": "eslint ./src --ext .ts --quiet --fix --ignore-path ./.gitignore",
-    "lint:check": "eslint ./src --ext .ts --ignore-path ./.gitignore",
-    "format": "prettier  --log-level warn --write \"./**/*.{ts,md,json,d.ts}\"",
+    "fix": "eslint ./src --ext .ts --quiet --fix",
+    "lint:check": "eslint ./src --ext .ts",
+    "format": "prettier  --log-level warn --write \"./**/*.{ts,json,d.ts}\"",
     "lint": "pnpm format && pnpm fix",
     "test": "jest",
     "test:w": "jest --watch",
     "docker": "docker compose up",
-    "docker:dev": "docker compose -f docker-compose-dev.yml -p backend-template-dev up",
     "docker:sh": "docker exec -it backend sh",
-    "docker:dsh": "docker exec -it backend_dev sh",
     "prepare": "husky || true"
   },
   "keywords": [],
   "author": "Saiful Islam Sojib",
   "license": "ISC",
-  "packageManager": "pnpm@9.4.0",
+  "packageManager": "pnpm@9.5.0",
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
@@ -71,6 +69,6 @@
   },
   "lint-staged": {
     "*.ts": "eslint --quiet --fix",
-    "*.{ts,md,json,d.ts}": "prettier  --log-level warn --write"
+    "*.{ts,json,d.ts}": "prettier  --log-level warn --write"
   }
 }

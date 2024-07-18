@@ -1,4 +1,4 @@
-import { testDbConnect, testDbDisconnect } from './utils/db.utils';
+import { testDbConnect, testDbDisconnect } from './src/__tests__/utils/test.db';
 
 process.env.NODE_ENV = 'test';
 

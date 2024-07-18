@@ -5,10 +5,19 @@ dist/
 *.local
 .DS_Store
 logs
+.vercel
+
+# testing (if you want to test before build then, comment it)
+jest.config.ts
+jest.setup.ts
+src/__tests__
 
 # others
 .github
 .git
+.husky
+.vscode
 .dockerignore
 .gitignore
-src/__tests__
+.env.example
+README.md
