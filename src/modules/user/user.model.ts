@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
 import { hashPassword } from '../auth/auth.utils';
 import { userRoles } from './user.constant';
-import TUser from './user.types';
+import type TUser from './user.types';
 
 const userSchema = new Schema<TUser>(
   {

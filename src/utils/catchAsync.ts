@@ -1,4 +1,4 @@
-import { RequestHandler } from 'express';
+import type { RequestHandler } from 'express';
 
 const catchAsync = (requestHandler: RequestHandler): RequestHandler => {
   return async (req, res, next) => {

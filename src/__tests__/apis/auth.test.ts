@@ -1,5 +1,5 @@
 import { userRoles } from '@/modules/user/user.constant';
-import TUser from '@/modules/user/user.types';
+import type TUser from '@/modules/user/user.types';
 import omit from '@/utils/omit';
 import { apiTester, apiUrl, expectEnum, types } from '../utils';
 
@@ -166,7 +166,7 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
       const expected = {
         status: 401,
         success: false,
-        message: /permissions/i,
+        message: /invalid token/i,
         type: /unauthorized access/i,
       };
 
@@ -228,7 +228,7 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
       const expected = {
         status: 200,
         success: true,
-        data: expectedUser,
+        data: { token: types.string, user: expectedUser },
       };
 
       await apiTester({ url, method: 'post', body, expected, token });

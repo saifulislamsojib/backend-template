@@ -1,4 +1,4 @@
-import { ZodError, z } from 'zod';
+import { type ZodError, z } from 'zod';
 
 const node_envs = ['development', 'test', 'uat', 'production'] as const;
 

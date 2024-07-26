@@ -1,6 +1,6 @@
 import catchAsync from '@/utils/catchAsync';
-import { RequestHandler } from 'express';
-import { AnyZodObject } from 'zod';
+import type { RequestHandler } from 'express';
+import type { AnyZodObject } from 'zod';
 
 const types = ['body', 'params', 'query'] as const;
 

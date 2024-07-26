@@ -1,6 +1,6 @@
 import configs from '@/configs';
 import AppError from '@/errors/AppError';
-import { ErrorRequestHandler } from 'express';
+import type { ErrorRequestHandler } from 'express';
 import { BAD_REQUEST, UNAUTHORIZED } from 'http-status';
 import { Error as MongooseError } from 'mongoose';
 import { ZodError } from 'zod';
@@ -44,7 +44,7 @@ const globalErrorHandler: ErrorRequestHandler = (err: Error, _req, res, next) =>
   } else if (err instanceof AppError && err.statusCode === UNAUTHORIZED) {
     type = 'Unauthorized Access';
     statusCode = UNAUTHORIZED;
-    message = 'You do not have the necessary permissions to access this resource.';
+    message = err.message;
     errorDetails = null;
     stack = null;
   }

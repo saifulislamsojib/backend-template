@@ -3,7 +3,7 @@ import AppError from '@/errors/AppError';
 import bcrypt from 'bcrypt';
 import { UNAUTHORIZED } from 'http-status';
 import jwt from 'jsonwebtoken';
-import { AuthPayload, JWTPayload } from './auth.types';
+import type { AuthPayload, JWTPayload } from './auth.types';
 
 export const hashPassword = (password: string) => {
   return bcrypt.hash(password, configs.bcrypt_salt_rounds);
@@ -23,6 +23,6 @@ export const verifyJWT = (token: string) => {
   try {
     return jwt.verify(token, configs.jwt_access_secret) as AuthPayload;
   } catch (error) {
-    throw new AppError(UNAUTHORIZED, 'Invalid token');
+    throw new AppError(UNAUTHORIZED, 'Invalid token!');
   }
 };

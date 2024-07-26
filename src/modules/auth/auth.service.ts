@@ -1,9 +1,9 @@
 import AppError from '@/errors/AppError';
 import omit from '@/utils/omit';
 import { BAD_REQUEST, NOT_FOUND } from 'http-status';
-import { ObjectId } from 'mongoose';
+import type { ObjectId } from 'mongoose';
 import User from '../user/user.model';
-import TUser from '../user/user.types';
+import type TUser from '../user/user.types';
 import { comparePassword, createJWT, hashPassword } from './auth.utils';
 
 export const registerUserToDb = async (payload: Omit<TUser, '_id'>) => {
@@ -21,12 +21,9 @@ export const registerUserToDb = async (payload: Omit<TUser, '_id'>) => {
   // create jwt token
   const token = createJWT({ email: user.email, _id: user.id, role: user.role });
 
-  // ready user response
-  const userResponse = omit(user.toObject(), 'password', 'passwordUpdatedAt', '__v');
-
   return {
     token,
-    user: userResponse,
+    user: omit(user.toObject(), 'password', 'passwordUpdatedAt', '__v'),
   };
 };
 
@@ -48,12 +45,9 @@ export const loginUserFromDb = async (payload: Pick<TUser, 'email' | 'password'>
   // create jwt token
   const token = createJWT({ email: user.email, _id: user.id, role: user.role });
 
-  // ready user response
-  const userResponse = omit(user.toObject(), 'password', 'passwordUpdatedAt', '__v');
-
   return {
     token,
-    user: userResponse,
+    user: omit(user.toObject(), 'password', 'passwordUpdatedAt', '__v'),
   };
 };
 
@@ -82,16 +76,19 @@ export const changePasswordToDb = async (
   // hash password
   const hashedPassword = await hashPassword(newPassword);
 
-  const data = await User.findOneAndUpdate(
-    { _id: userId },
-    {
-      password: hashedPassword,
-      passwordUpdatedAt: new Date(),
-    },
-  );
+  const data = await User.findByIdAndUpdate(userId, {
+    password: hashedPassword,
+    passwordUpdatedAt: new Date(),
+  });
   if (!data) {
     throw new AppError(BAD_REQUEST, 'Password change failed');
   }
-  const userResponse = omit(user.toObject(), 'password', 'passwordUpdatedAt', '__v');
-  return userResponse;
+
+  // create jwt token
+  const token = createJWT({ email: user.email, _id: user.id, role: user.role });
+
+  return {
+    token,
+    user: omit(user.toObject(), 'password', 'passwordUpdatedAt', '__v'),
+  };
 };

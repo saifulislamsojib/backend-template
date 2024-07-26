@@ -1,4 +1,4 @@
-import TUser from '../user/user.types';
+import type TUser from '../user/user.types';
 
 type JWTDecoded = { exp?: number; iat?: number };
 

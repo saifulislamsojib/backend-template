@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import type { Response } from 'express';
 
 type TResponse<T extends object, U extends object> = {
   success: boolean;
