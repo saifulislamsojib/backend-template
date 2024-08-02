@@ -1,7 +1,3 @@
-export { default as apiTester, request } from './apiTester';
-
-export const apiUrl = '/api/v1';
-
 export const types = {
   string: expect.any(String),
   number: expect.any(Number),

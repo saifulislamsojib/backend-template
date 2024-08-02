@@ -7,7 +7,7 @@ const config: JestConfigWithTsJest = {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
-  modulePathIgnorePatterns: ['<rootDir>/dist/', '<rootDir>/src/__tests__/utils'],
+  modulePathIgnorePatterns: ['<rootDir>/dist/'],
 };
 
 export default config;

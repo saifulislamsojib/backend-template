@@ -1,9 +1,11 @@
+import configs from '@/configs';
 import { userRoles } from '@/modules/user/user.constant';
 import type TUser from '@/modules/user/user.types';
 import omit from '@/utils/omit';
-import { apiTester, apiUrl, expectEnum, types } from '../utils';
+import apiTester from '@/utils/test.api';
+import { expectEnum, types } from '@/utils/test.utils';
 
-const baseUrl = `${apiUrl}/auth`;
+const baseUrl = `${configs.api_route}/auth` as const;
 
 // test fake user
 const testUser = {

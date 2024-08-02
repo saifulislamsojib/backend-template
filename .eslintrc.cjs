@@ -42,12 +42,10 @@ module.exports = {
     'linebreak-style': 0,
     'jest/expect-expect': 0,
     '@typescript-eslint/no-non-null-assertion': 0,
-    'import/extensions': [
+    'import/extensions': ['error', 'ignorePackages', { ts: 'never' }],
+    'import/no-extraneous-dependencies': [
       'error',
-      'ignorePackages',
-      {
-        ts: 'never',
-      },
+      { devDependencies: ['**/test.*.ts', '**/*.test.ts'] },
     ],
   },
 };

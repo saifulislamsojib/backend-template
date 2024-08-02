@@ -10,7 +10,8 @@ logs
 # testing (if you want to test before build then, comment it)
 jest.config.ts
 jest.setup.ts
-src/__tests__
+src/**/test.*.ts
+src/**/*.test.ts
 
 # others
 .github

@@ -1,27 +1,24 @@
-import configs from '@/configs';
-import dbConnect from '@/configs/dbConnect';
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import { connection } from 'mongoose';
+import configs from '.';
+import { dbConnect, dbDisconnect } from './db';
 
 let mongod: MongoMemoryServer | undefined;
 
 export const testDbConnect = async () => {
-  let db_url: string | undefined;
   if (configs.node_env === 'test') {
     try {
       mongod = await MongoMemoryServer.create();
-      db_url = mongod.getUri();
+      const db_url = mongod.getUri();
+      await dbConnect(db_url);
     } catch (error) {
-      console.log('Test MongoMemoryServer creation failed: ', (error as Error).message);
+      console.log('Test database connection error: ', (error as Error).message);
     }
   }
-  await dbConnect(db_url);
 };
 
 export const testDbDisconnect = async () => {
-  if (!connection) return;
   try {
-    await connection.close();
+    await dbDisconnect();
     if (mongod) {
       await mongod.stop();
     }
@@ -30,12 +27,12 @@ export const testDbDisconnect = async () => {
   }
 };
 
-process.on('unhandledRejection', async () => {
+process.on('unhandledRejection', () => {
   console.log('😈 unhandledRejection is detected, shutting down the process..');
   testDbDisconnect();
 });
 
-process.on('uncaughtException', async (error) => {
+process.on('uncaughtException', (error) => {
   console.log('😈 uncaughtException is detected, shutting down the process..');
   console.log('And the error is:', error.message);
   testDbDisconnect();

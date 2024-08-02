@@ -11,6 +11,7 @@ const configs = {
   bcrypt_salt_rounds: parseInt(process.env.BCRYPT_SALT_ROUNDS, 10),
   jwt_access_secret: process.env.JWT_ACCESS_SECRET,
   jwt_access_expires_in: process.env.JWT_ACCESS_EXPIRES_IN,
+  api_route: '/api/v1',
 } as const;
 
 export default configs;

@@ -1,6 +1,7 @@
-import { apiUrl, request } from '../utils';
+import configs from '@/configs';
+import { request } from '@/utils/test.api';
 
-const baseUrl = `${apiUrl}/health`;
+const baseUrl = `${configs.api_route}/health` as const;
 
 describe(`Health api test, API = ${baseUrl}`, () => {
   it(`GET API = ${baseUrl} (health)`, async () => {

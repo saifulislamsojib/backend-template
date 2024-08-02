@@ -2,7 +2,7 @@ import { connect, connection } from 'mongoose';
 import configs from '.';
 
 // database connection with mongoose
-const dbConnect = async (db_url = configs.db_url) => {
+export const dbConnect = async (db_url = configs.db_url) => {
   try {
     await connect(db_url);
     console.log('Database successfully connected!');
@@ -11,8 +11,12 @@ const dbConnect = async (db_url = configs.db_url) => {
   }
 };
 
-export const dbDisconnect = async () => {
+// database disconnection with mongoose
+export const dbDisconnect = async (isDrop = false) => {
   if (!connection) return;
+  if (isDrop && configs.node_env !== 'production') {
+    await connection.dropDatabase();
+  }
   try {
     await connection.close();
   } catch (error) {
@@ -24,8 +28,4 @@ connection.on('disconnected', () => {
   console.log('Database successfully disconnected!');
 });
 
-process.on('SIGINT', () => {
-  dbDisconnect();
-});
-
-export default dbConnect;
+process.on('SIGINT', dbDisconnect);

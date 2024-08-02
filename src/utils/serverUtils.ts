@@ -1,5 +1,5 @@
 import app from '@/app';
-import { dbDisconnect } from '@/configs/dbConnect';
+import { dbDisconnect } from '@/configs/db';
 import { createServer } from 'http';
 
 // create server

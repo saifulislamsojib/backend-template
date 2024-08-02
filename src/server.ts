@@ -1,5 +1,5 @@
 import configs from './configs';
-import dbConnect from './configs/dbConnect';
+import { dbConnect } from './configs/db';
 import catchEnvValidation from './utils/catchEnvValidation';
 import server, { closeServer } from './utils/serverUtils';
 
