@@ -1,0 +1,13 @@
+services:
+  backend_stage:
+    container_name: backend_stage
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8081:8081
+    environment:
+      - NODE_ENV=uat
+      - PORT=8081
+    env_file:
+      - .env

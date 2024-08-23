@@ -33,7 +33,9 @@ FROM base
 
 COPY --from=prod-deps /app/node_modules ./node_modules
 COPY --from=bilder /app/dist ./dist
-# RUN rm -r ./dist/__tests__
+
+# RUN find ./src -type f -name 'test.*.ts' -delete
+# RUN find ./src -type f -name '*.test.ts' -delete
 
 EXPOSE 8080
 

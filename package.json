@@ -16,7 +16,9 @@
     "test": "jest",
     "test:w": "jest --watch",
     "docker": "docker compose up",
+    "docker-stage": "docker compose -f docker-compose-stage.yml up",
     "docker:sh": "docker exec -it backend sh",
+    "docker-stage:sh": "docker exec -it backend_stage sh",
     "prepare": "husky || true"
   },
   "keywords": [],
