@@ -18,7 +18,7 @@ const authCheck = (...roles: Role[]) => {
     const payload = verifyJWT(authorization);
 
     // check user exist or not
-    const user = await User.findById(payload._id);
+    const user = await User.findById(payload._id).select('+passwordUpdatedAt');
     if (!user) {
       throw new AppError(NOT_FOUND, 'This user not found!');
     }
@@ -45,7 +45,10 @@ const authCheck = (...roles: Role[]) => {
 
     // check user role authorization
     if (roles && !roles.includes(role)) {
-      throw new AppError(UNAUTHORIZED, 'You are not authorized!');
+      throw new AppError(
+        UNAUTHORIZED,
+        'You do not have the necessary permissions to access this resource!',
+      );
     }
 
     // all ok, then add payload and user in request and call next function
