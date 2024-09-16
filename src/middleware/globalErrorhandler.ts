@@ -22,7 +22,7 @@ const globalErrorHandler: ErrorRequestHandler = (err: Error, _req, res, next) =>
     message = err.issues.reduce((acc, { path, message: msg, code }) => {
       const lastPath = path?.[path.length - 1];
       const singleMessage = code === 'custom' ? msg : `${lastPath} is ${msg?.toLowerCase()}`;
-      return `${acc}${acc ? '; ' : ''}${singleMessage}.`;
+      return `${acc}${acc ? '; ' : ''}${singleMessage}`;
     }, '');
   } else if (err.name === 'CastError') {
     type = 'Invalid ID';

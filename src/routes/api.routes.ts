@@ -1,12 +1,12 @@
 import authRoutes from '@/modules/auth/auth.route';
-import health from '@/modules/health/health.controller';
+import healthRoute from '@/modules/health/health.route';
 import { Router } from 'express';
 
 const apiRoutes = Router();
 
 const moduleRoutes = [
   { path: '/auth', route: authRoutes },
-  { path: '/health', route: health },
+  { path: '/health', route: healthRoute },
 ];
 
 moduleRoutes.forEach((route) => apiRoutes.use(route.path, route.route));

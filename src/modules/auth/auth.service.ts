@@ -12,7 +12,7 @@ export const registerUserToDb = async (payload: Omit<TUser, '_id'>) => {
   // check user is already registered or not
   const isExist = await User.findOne({ email });
   if (isExist) {
-    throw new AppError(BAD_REQUEST, 'The User already exists by email');
+    throw new AppError(BAD_REQUEST, 'The User already exists by the email');
   }
 
   // Now create the user

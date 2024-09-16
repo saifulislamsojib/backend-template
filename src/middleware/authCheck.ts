@@ -27,7 +27,10 @@ const authCheck = (...roles: Role[]) => {
 
     // after password update invalid the old token
     if (passwordUpdatedAt && payload.iat) {
-      const passwordChangedTime = new Date(passwordUpdatedAt).getTime() / 1000;
+      const passwordChangedTime = parseInt(
+        (new Date(passwordUpdatedAt).getTime() / 1000).toString(),
+        10,
+      );
       if (passwordChangedTime > payload.iat) {
         throw new AppError(UNAUTHORIZED, 'Invalid token!');
       }
