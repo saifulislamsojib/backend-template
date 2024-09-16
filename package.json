@@ -70,7 +70,7 @@
     "pnpm": ">=9"
   },
   "lint-staged": {
-    "*.ts": "eslint --quiet --fix",
+    "*.{ts,d.ts}": "eslint --quiet --fix",
     "*.{ts,json,d.ts}": "prettier  --log-level warn --write"
   }
 }
