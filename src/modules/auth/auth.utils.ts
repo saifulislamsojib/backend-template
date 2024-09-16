@@ -22,7 +22,7 @@ export const createJWT = (payload: JWTPayload) => {
 export const verifyJWT = (token: string) => {
   try {
     return jwt.verify(token, configs.jwt_access_secret) as AuthPayload;
-  } catch (error) {
+  } catch {
     throw new AppError(UNAUTHORIZED, 'Invalid token!');
   }
 };
