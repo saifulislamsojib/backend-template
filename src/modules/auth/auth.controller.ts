@@ -1,4 +1,5 @@
 import catchAsync from '@/utils/catchAsync';
+import omit from '@/utils/omit';
 import sendResponse from '@/utils/sendResponse';
 import { CREATED, OK } from 'http-status';
 import { changePasswordToDb, loginUserFromDb, registerUserToDb } from './auth.service';
@@ -34,7 +35,7 @@ export const changePassword = catchAsync(async (req, res) => {
 });
 
 export const getCurrentUser = catchAsync(async (req, res) => {
-  const data = req.user!;
+  const data = omit(req.user!, 'exp', 'iat');
   return sendResponse(res, {
     data,
     message: 'Current user data retrieved successfully',
