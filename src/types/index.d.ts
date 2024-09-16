@@ -1,5 +1,5 @@
 import type { AuthUser } from '@/modules/auth/auth.types';
-import type { EnvType } from '@/utils/catchEnvValidation';
+import { EnvType } from '@/utils/catchEnvValidation';
 
 declare global {
   namespace Express {
@@ -8,6 +8,8 @@ declare global {
     }
   }
   namespace NodeJS {
-    interface ProcessEnv extends EnvType {}
+    interface ProcessEnv extends EnvType {
+      [key: string]: string | undefined;
+    }
   }
 }
