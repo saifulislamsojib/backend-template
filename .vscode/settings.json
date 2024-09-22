@@ -9,5 +9,6 @@
   "[typescript]": {
     "editor.formatOnSave": false,
     "editor.defaultFormatter": null
-  }
+  },
+  "typescript.preferences.preferTypeOnlyAutoImports": true
 }
