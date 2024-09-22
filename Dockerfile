@@ -17,7 +17,7 @@ FROM base AS prod-deps
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
 
 # Stage 2: build
-FROM base AS bilder
+FROM base AS builder
 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
@@ -32,7 +32,7 @@ RUN pnpm build
 FROM base
 
 COPY --from=prod-deps /app/node_modules ./node_modules
-COPY --from=bilder /app/dist ./dist
+COPY --from=builder /app/dist ./dist
 
 # RUN find ./src -type f -name 'test.*.ts' -delete
 # RUN find ./src -type f -name '*.test.ts' -delete

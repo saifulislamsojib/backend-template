@@ -1,5 +1,5 @@
 import type { AuthUser } from '@/modules/auth/auth.types';
-import { EnvType } from '@/utils/catchEnvValidation';
+import type { EnvType } from '@/utils/catchEnvValidation';
 
 declare global {
   namespace Express {

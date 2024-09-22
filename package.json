@@ -19,12 +19,13 @@
     "docker-stage": "docker compose -f docker-compose-stage.yml up",
     "docker:sh": "docker exec -it backend sh",
     "docker-stage:sh": "docker exec -it backend_stage sh",
+    "lint-staged": "lint-staged",
     "prepare": "husky || true"
   },
   "keywords": [],
   "author": "Saiful Islam Sojib",
   "license": "ISC",
-  "packageManager": "pnpm@9.8.0",
+  "packageManager": "pnpm@9.11.0",
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",

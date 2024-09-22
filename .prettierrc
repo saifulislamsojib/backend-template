@@ -4,5 +4,11 @@
   "printWidth": 100,
   "tabWidth": 2,
   "semi": true,
-  "endOfLine": "auto"
+  "endOfLine": "auto",
+  "arrowParens": "always",
+  "bracketSpacing": true,
+  "htmlWhitespaceSensitivity": "css",
+  "proseWrap": "preserve",
+  "quoteProps": "as-needed",
+  "useTabs": false
 }
