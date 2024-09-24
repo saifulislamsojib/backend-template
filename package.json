@@ -6,7 +6,8 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "start": "node dist/server.js",
-    "dev": "nodemon --exec \"nodemon -r tsconfig-paths/register\" src/server.ts",
+    "dev": "ts-node-dev -r tsconfig-paths/register --respawn src/server.ts --transpileOnly",
+    "dev:d": "ts-node-dev -r tsconfig-paths/register --poll --respawn src/server.ts --transpileOnly",
     "build": "tsc && tsc-alias",
     "type:check": "tsc --noEmit",
     "fix": "eslint ./src --ext .ts --quiet --fix",
@@ -17,8 +18,10 @@
     "test:w": "jest --watch",
     "docker": "docker compose up -d",
     "docker-stage": "docker compose -f docker-compose-stage.yml up -d",
+    "docker-dev": "docker compose -f docker-compose-dev.yml up",
     "docker:sh": "docker exec -it backend sh",
     "docker-stage:sh": "docker exec -it backend_stage sh",
+    "docker-dev:sh": "docker exec -it backend_dev sh",
     "lint-staged": "lint-staged",
     "prepare": "husky || true"
   },
@@ -56,11 +59,10 @@
     "jest": "^29.7.0",
     "lint-staged": "^15.2.10",
     "mongodb-memory-server": "^10.0.0",
-    "nodemon": "^3.1.7",
     "prettier": "^3.3.3",
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.5",
-    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
     "tsc-alias": "^1.8.10",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.6.2"

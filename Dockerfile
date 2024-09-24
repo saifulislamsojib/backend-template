@@ -1,6 +1,7 @@
 # Stage 0: setup base
 FROM node:20-alpine AS base
 
+# pnpm setup
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
@@ -36,7 +37,5 @@ COPY --from=builder /app/dist ./dist
 
 # RUN find ./src -type f -name 'test.*.ts' -delete
 # RUN find ./src -type f -name '*.test.ts' -delete
-
-EXPOSE 8080
 
 CMD [ "pnpm", "start" ]

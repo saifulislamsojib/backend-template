@@ -7,7 +7,7 @@ dist/
 logs
 .vercel
 
-# testing (if you want to test before build then, comment it)
+# testing (if you want to test before build then or run in development comment this 3 lines)
 jest.config.ts
 src/**/test.*.ts
 src/**/*.test.ts
@@ -21,3 +21,7 @@ src/**/*.test.ts
 .gitignore
 .env.example
 README.md
+Dockerfile
+Dockerfile.*
+compose.yml
+docker-compose-*.yml

@@ -1,0 +1,24 @@
+services:
+  backend_dev:
+    container_name: backend_dev
+    build:
+      context: .
+      dockerfile: Dockerfile.Dev
+    restart: on-failure
+    volumes:
+      - ./src:/app/src
+      - ./.eslintrc.json:/app/.eslintrc.json
+      - ./.prettierignore:/app/.prettierignore
+      - ./.prettierrc:/app/.prettierrc
+      - ./jest.config.ts:/app/jest.config.ts
+      - ./package.json:/app/package.json
+      - ./pnpm-lock.yaml:/app/pnpm-lock.yaml
+      - ./tsconfig.json:/app/tsconfig.json
+      - /app/node_modules
+    ports:
+      - 8080:8080
+    environment:
+      - NODE_ENV=development
+      - PORT=8080
+    env_file:
+      - .env
