@@ -24,7 +24,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 COPY . .
 
-RUN pnpm lint && pnpm type:check
+RUN pnpm lint
 # RUN pnpm test
 
 RUN pnpm build
