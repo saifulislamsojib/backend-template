@@ -20,7 +20,9 @@ app.enable('case sensitive routing');
 app.use(express.urlencoded({ extended: true, limit: '20mb' }));
 
 // Use Morgan middleware to log requests
-app.use(morgan(node_env === 'development' ? 'dev' : 'combined'));
+if (node_env !== 'test') {
+  app.use(morgan(node_env === 'development' ? 'dev' : 'combined'));
+}
 
 // all routes
 app.use('/', rootRoute);
