@@ -1,12 +1,13 @@
 import cors from 'cors';
 import express from 'express';
+import morgan from 'morgan';
 import configs from './configs';
 import globalErrorhandler from './middleware/globalErrorhandler';
 import notFound from './middleware/notFound';
 import apiRoute from './routes/api.routes';
 import rootRoute from './routes/root.routes';
 
-const { origin } = configs;
+const { origin, node_env } = configs;
 
 // app initialization
 const app = express();
@@ -14,6 +15,12 @@ const app = express();
 // app middleware
 app.use(express.json());
 app.use(cors({ origin }));
+app.enable('trust proxy');
+app.enable('case sensitive routing');
+app.use(express.urlencoded({ extended: true, limit: '20mb' }));
+
+// Use Morgan middleware to log requests
+app.use(morgan(node_env === 'development' ? 'dev' : 'combined'));
 
 // all routes
 app.use('/', rootRoute);
