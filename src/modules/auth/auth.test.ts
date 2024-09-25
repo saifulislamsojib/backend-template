@@ -2,8 +2,11 @@ import configs from '@/configs';
 import { userRoles } from '@/modules/user/user.constant';
 import type TUser from '@/modules/user/user.types';
 import omit from '@/utils/omit';
+import type { TSuccessResponse } from '@/utils/sendResponse';
 import apiTester from '@/utils/test.api';
 import { expectEnum, types } from '@/utils/test.utils';
+
+type SuccessRes = TSuccessResponse<{ token: string; user: TUser }, AnyObject>;
 
 const baseUrl = `${configs.api_route}/auth` as const;
 
@@ -63,7 +66,7 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
 
       const expected = { status: 201, success: true };
 
-      const resBody = await apiTester({ url, method: 'post', body, expected });
+      const resBody = await apiTester<SuccessRes>({ url, method: 'post', body, expected });
       expect(resBody?.data).toStrictEqual(expect.objectContaining({ token: types.string, user }));
       token = resBody?.data.token;
     });
@@ -133,7 +136,7 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
 
       const expected = { status: 200, success: true };
 
-      const resBody = await apiTester({ url, method: 'post', body, expected });
+      const resBody = await apiTester<SuccessRes>({ url, method: 'post', body, expected });
       expect(resBody?.data).toStrictEqual(expect.objectContaining({ token: types.string, user }));
       token = resBody.data.token;
     });
@@ -214,7 +217,7 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
 
       const expected = { status: 200, success: true };
 
-      const resBody = await apiTester({ url, method: 'post', body, expected, token });
+      const resBody = await apiTester<SuccessRes>({ url, method: 'post', body, expected, token });
       expect(resBody?.data).toStrictEqual(expect.objectContaining({ token: types.string, user }));
       token = resBody.data.token;
     });

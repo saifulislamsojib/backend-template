@@ -5,6 +5,20 @@ import type { Role } from '@/modules/user/user.types';
 import catchAsync from '@/utils/catchAsync';
 import { NOT_FOUND, UNAUTHORIZED } from 'http-status';
 
+/**
+ * Middleware to check authentication and authorization.
+ *
+ * This middleware will check if the `authorization` header is present, then verify the JWT token.
+ * After that, it will check if the user exist or not, and if the user exist, it will check if the
+ * user's password or email or role has been updated after the token was issued. If the user's
+ * password or email or role has been updated, it will throw an invalid token error.
+ *
+ * If the user has the necessary permissions, it will add the `user` property to the `req` object
+ * and call the next function, otherwise it will throw an unauthorized error.
+ *
+ * @param roles - The roles that are allowed to access this resource.
+ * @returns A middleware function that checks authentication and authorization.
+ */
 const authCheck = (...roles: Role[]) => {
   return catchAsync(async (req, _res, next) => {
     const { authorization } = req.headers;

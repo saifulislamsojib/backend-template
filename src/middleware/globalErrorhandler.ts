@@ -1,10 +1,19 @@
 import configs from '@/configs';
 import AppError from '@/errors/AppError';
+import sendResponse from '@/utils/sendResponse';
 import type { ErrorRequestHandler } from 'express';
 import { BAD_REQUEST, UNAUTHORIZED } from 'http-status';
 import { Error as MongooseError } from 'mongoose';
 import { ZodError } from 'zod';
 
+/**
+ * Global error handler middleware to handle errors in a standard way.
+ *
+ * @param err - The error object
+ * @param _req - The express request object
+ * @param res - The express response object
+ * @param next - The express next function
+ */
 const globalErrorHandler: ErrorRequestHandler = (err: Error, _req, res, next) => {
   if (res.headersSent) {
     return next('Something went wrong!');
@@ -48,7 +57,7 @@ const globalErrorHandler: ErrorRequestHandler = (err: Error, _req, res, next) =>
     errorDetails = null;
     stack = null;
   }
-  return res.status(statusCode).json({
+  return sendResponse(res, {
     success: false,
     statusCode,
     type,

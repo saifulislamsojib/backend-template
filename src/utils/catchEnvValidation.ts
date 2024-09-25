@@ -21,6 +21,11 @@ const envValidationSchema = z.object({
 
 export type EnvType = z.infer<typeof envValidationSchema>;
 
+/**
+ * This function validates the environment variables of the current process.
+ * If any of the required environment variables are missing or invalid,
+ * this function will log the error and exit the process with code 1.
+ */
 const catchEnvValidation = async () => {
   try {
     await envValidationSchema.parseAsync(process.env);

@@ -4,6 +4,12 @@ import { dbConnect, dbDisconnect } from './db';
 
 let mongod: MongoMemoryServer | undefined;
 
+/**
+ * Connect to a test database.
+ *
+ * If the current node environment is set to 'test', this function will
+ * create a new in-memory MongoDB server and connect to it.
+ */
 export const testDbConnect = async () => {
   if (configs.node_env === 'test') {
     try {
@@ -16,6 +22,12 @@ export const testDbConnect = async () => {
   }
 };
 
+/**
+ * Disconnect from a test database.
+ *
+ * If the current node environment is set to 'test', this function will
+ * disconnect from the in-memory MongoDB server and stop it.
+ */
 export const testDbDisconnect = async () => {
   try {
     await dbDisconnect();

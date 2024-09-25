@@ -6,6 +6,12 @@ const types = ['body', 'params', 'query'] as const;
 
 type Type = (typeof types)[number];
 
+/**
+ * Validate request data using zod schema middleware creator function
+ * @param schema - zod schema for validation
+ * @param type - where to validate, default is body
+ * @returns validator middleware
+ */
 const validateRequest = (schema: AnyZodObject, type: Type = 'body'): RequestHandler => {
   if (!types.includes(type)) {
     throw new Error('Type must be body or params or query');

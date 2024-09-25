@@ -1,5 +1,6 @@
 import app from '@/app';
 import supertest from 'supertest';
+import type { TResponse } from './sendResponse';
 
 export const request = supertest(app);
 
@@ -12,18 +13,38 @@ type Matcher = {
 type TesterProps = {
   url: string;
   method?: 'get' | 'post' | 'put' | 'patch' | 'delete';
-  body?: Record<string, unknown>;
+  body?: AnyObject;
   expected?: Matcher;
   token?: string;
 };
 
-const apiTester = async ({
-  url,
-  method = 'get',
-  body: reqBody,
-  expected: { status = 200, success = true, type } = {},
-  token,
-}: TesterProps) => {
+/**
+ * A helper function to test API endpoints.
+ *
+ * @param {TesterProps} testerOptions an object with the following properties: --
+ * - `url`: the URL of the API endpoint to test.
+ * - `method`: the HTTP method to use. Defaults to `'get'`.
+ * - `body`: an object to send in the request body.
+ * - `expected`: an object with the following properties: --
+ *    - - `status`: the expected HTTP status code. Defaults to `200`.
+ *    - - `success`: the expected value of `res.body.success`. Defaults to `true`.
+ *    - - `type`: the expected value of `res.body.type` if success false. Optional.
+ * - `token`: the value of the `authorization` header to set. Optional.
+ *
+ * @returns a promise that resolves to the response body
+ */
+const apiTester = async <
+  T extends TResponse<AnyObject, AnyObject> = TResponse<AnyObject, AnyObject>,
+>(
+  testerOptions: TesterProps,
+) => {
+  const {
+    url,
+    method = 'get',
+    body: reqBody,
+    expected: { status = 200, success = true, type } = {},
+    token,
+  } = testerOptions;
   const query = request[method](url);
   if (reqBody) {
     query.send(reqBody);
@@ -33,12 +54,12 @@ const apiTester = async ({
   }
   const res = await query;
   expect(res.status).toBe(status);
-  expect(res.body?.success).toBe(success);
-  if (type) {
-    expect(res.body?.type).toMatch(type);
+  const resBody: T = res.body;
+  expect(resBody.success).toBe(success);
+  if (type && resBody.success === false) {
+    expect(resBody.type).toMatch(type);
   }
-
-  return res.body;
+  return resBody;
 };
 
 export default apiTester;

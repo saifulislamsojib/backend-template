@@ -12,4 +12,6 @@ declare global {
       [key: string]: string | undefined;
     }
   }
+
+  type AnyObject = Record<string, unknown>;
 }
