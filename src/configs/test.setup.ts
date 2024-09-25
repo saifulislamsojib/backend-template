@@ -4,7 +4,7 @@ process.env.NODE_ENV = 'test';
 
 beforeAll(() => {
   return testDbConnect();
-});
+}, 70 * 1000);
 
 afterAll(() => {
   return testDbDisconnect();
