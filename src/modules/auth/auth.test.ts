@@ -111,14 +111,19 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
 
     // not found user and password not match test
     it('Not found user and password not match test for login', async () => {
-      const expected = { status: NOT_FOUND as number, success: false, type: ERROR_TYPE.notFound };
+      const expected = {
+        status: NOT_FOUND as number,
+        success: false,
+        type: ERROR_TYPE.notFound as ErrorType,
+      };
 
       // not found user test
-      const notFoundEmailBody = { ...body, email: 'abraham1@gmail.com' };
+      const notFoundEmailBody = { ...body, email: 'abraham123@gmail.com' };
       let resBody = await apiTester({ url, method: 'post', body: notFoundEmailBody, expected });
       expect(resBody?.message).toMatch(/not found/i);
 
       // password not matched test
+      expected.type = ERROR_TYPE.appError;
       expected.status = BAD_REQUEST;
       const notMatchedPassBody = { ...body, password: '123456@Aa1' };
       resBody = await apiTester({ url, method: 'post', body: notMatchedPassBody, expected });
