@@ -1,5 +1,6 @@
 import configs from './configs';
 import { dbConnect } from './configs/db';
+import logger from './configs/logger';
 import catchEnvValidation from './utils/catchEnvValidation';
 import server, { closeServer } from './utils/serverUtils';
 
@@ -15,22 +16,24 @@ const main = async () => {
 
     // listen server
     server.listen(port, () => {
-      console.log(`Hello Boss! I am listening at http://localhost:${port}`);
+      logger.info(`Hello Boss! I am listening at http://localhost:${port}`);
     });
   } catch (error) {
-    console.log(`Server error: ${(error as Error).message}`);
+    logger.fatal(`Server error: ${(error as Error).message}`);
   }
 };
 
 main();
 
 process.on('unhandledRejection', () => {
-  console.log('😈 unhandledRejection is detected, shutting down the process..');
+  logger.fatal('😈 unhandledRejection is detected, shutting down the process..');
   closeServer();
 });
 
 process.on('uncaughtException', (error) => {
-  console.log('😈 uncaughtException is detected, shutting down the process..');
-  console.log('And the error is:', error.message);
+  logger.fatal(
+    { errorMsg: error.message },
+    '😈 uncaughtException is detected, shutting down the process..',
+  );
   closeServer();
 });

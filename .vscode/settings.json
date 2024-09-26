@@ -10,5 +10,6 @@
     "editor.formatOnSave": false,
     "editor.defaultFormatter": null
   },
-  "typescript.preferences.preferTypeOnlyAutoImports": true
+  "typescript.preferences.preferTypeOnlyAutoImports": true,
+  "cSpell.words": ["pino"]
 }

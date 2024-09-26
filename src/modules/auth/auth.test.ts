@@ -1,10 +1,12 @@
 import configs from '@/configs';
+import { ERROR_TYPE, type ErrorType } from '@/errors/const.error';
 import { userRoles } from '@/modules/user/user.constant';
 import type TUser from '@/modules/user/user.types';
 import omit from '@/utils/omit';
 import type { TSuccessResponse } from '@/utils/sendResponse';
 import apiTester from '@/utils/test.api';
 import { expectEnum, types } from '@/utils/test.utils';
+import { BAD_REQUEST, NOT_FOUND, UNAUTHORIZED } from 'http-status';
 
 type SuccessRes = TSuccessResponse<{ token: string; user: TUser }, AnyObject>;
 
@@ -27,7 +29,7 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
 
     // Register Validation Error test
     it('Validation Error Test for register', async () => {
-      const expected = { status: 400, success: false, type: /validation error/i };
+      const expected = { status: BAD_REQUEST, success: false, type: ERROR_TYPE.validationError };
 
       // check name validation
       const notNameBody = omit(body, 'name');
@@ -73,7 +75,7 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
 
     // Duplication errors test
     it('Duplication errors test for Register', async () => {
-      const expected = { status: 400, success: false, type: /app error/i };
+      const expected = { status: BAD_REQUEST, success: false, type: ERROR_TYPE.appError };
       const resBody = await apiTester({ url, method: 'post', body, expected });
       expect(resBody?.message).toMatch(/email/i);
     });
@@ -86,7 +88,7 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
 
     // login Validation Error test
     it('Validation Error Test for login', async () => {
-      const expected = { status: 400, success: false, type: /validation error/i };
+      const expected = { status: BAD_REQUEST, success: false, type: ERROR_TYPE.validationError };
 
       // check email validation
       const notEmailBody = omit(body, 'email');
@@ -109,7 +111,7 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
 
     // not found user and password not match test
     it('Not found user and password not match test for login', async () => {
-      const expected = { status: 404, success: false, type: /app error/i };
+      const expected = { status: NOT_FOUND as number, success: false, type: ERROR_TYPE.notFound };
 
       // not found user test
       const notFoundEmailBody = { ...body, email: 'abraham1@gmail.com' };
@@ -117,7 +119,7 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
       expect(resBody?.message).toMatch(/not found/i);
 
       // password not matched test
-      expected.status = 400;
+      expected.status = BAD_REQUEST;
       const notMatchedPassBody = { ...body, password: '123456@Aa1' };
       resBody = await apiTester({ url, method: 'post', body: notMatchedPassBody, expected });
       expect(resBody?.message).toMatch(/password/i);
@@ -152,7 +154,7 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
 
     // change password Validation Error test
     it('Authorization Test for change-password', async () => {
-      const expected = { status: 401, success: false, type: /unauthorized access/i };
+      const expected = { status: UNAUTHORIZED, success: false, type: ERROR_TYPE.unauthorized };
 
       let resBody = await apiTester({ url, method: 'post', body, expected });
       expect(resBody?.message).toMatch(/invalid token/i);
@@ -166,9 +168,9 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
     // change password Validation Error test
     it('Validation Error Test for change-password', async () => {
       const expected = {
-        status: 400,
+        status: BAD_REQUEST,
         success: false,
-        type: /validation error/i,
+        type: ERROR_TYPE.validationError as ErrorType,
       };
 
       // check currentPassword validation
@@ -190,7 +192,7 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
       expect(resBody?.message).toMatch(/newPassword/i);
 
       // check now app errors
-      expected.type = /app error/i;
+      expected.type = ERROR_TYPE.appError;
 
       // check same pass validation
       const samePassBody = { ...body, newPassword: body.currentPassword };
@@ -198,7 +200,7 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
       expect(resBody?.message).toMatch(/same/i);
 
       // password not matched
-      expected.status = 400;
+      expected.status = BAD_REQUEST;
       const notMatchPassBody = { ...body, currentPassword: '123456@Aa100' };
       resBody = await apiTester({ url, method: 'post', body: notMatchPassBody, expected, token });
       expect(resBody?.message).toMatch(/password/i);

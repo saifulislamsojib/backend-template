@@ -1,6 +1,8 @@
+import logger from '@/configs/logger';
 import { type ZodError, z } from 'zod';
 
 const node_envs = ['development', 'test', 'staging', 'production'] as const;
+const log_levels = ['trace', 'debug', 'info', 'warn', 'error', 'fatal', 'silent'] as const;
 
 const envValidationSchema = z.object({
   NODE_ENV: z.enum(node_envs),
@@ -8,6 +10,7 @@ const envValidationSchema = z.object({
   JWT_ACCESS_SECRET: z.string(),
   JWT_ACCESS_EXPIRES_IN: z.string(),
   CLIENT_ORIGIN: z.string().optional(),
+  LOG_LEVEL: z.enum(log_levels).optional(),
   PORT: z
     .string()
     .optional()
@@ -30,7 +33,8 @@ const catchEnvValidation = async () => {
   try {
     await envValidationSchema.parseAsync(process.env);
   } catch (error) {
-    console.log('Env validation error =', (error as ZodError).errors);
+    // TODO: format errors and it be more readable
+    logger.fatal('Env validation error =', (error as ZodError).errors);
     process.exit(1);
   }
 };

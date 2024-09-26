@@ -1,7 +1,8 @@
 import cors from 'cors';
 import express from 'express';
-import morgan from 'morgan';
+import pinoHttp from 'pino-http';
 import configs from './configs';
+import logger from './configs/logger';
 import globalErrorhandler from './middleware/globalErrorhandler';
 import notFound from './middleware/notFound';
 import apiRoute from './routes/api.routes';
@@ -19,9 +20,9 @@ app.enable('trust proxy');
 app.enable('case sensitive routing');
 app.use(express.urlencoded({ extended: true, limit: '20mb' }));
 
-// Use Morgan middleware to log requests
+// Use pino-http middleware for HTTP request logging
 if (node_env !== 'test') {
-  app.use(morgan(node_env === 'development' ? 'dev' : 'combined'));
+  app.use(pinoHttp({ logger }));
 }
 
 // all routes
