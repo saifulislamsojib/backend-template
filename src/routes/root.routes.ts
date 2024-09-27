@@ -1,5 +1,5 @@
-import { Router } from 'express';
 import packageJson from '@/../package.json';
+import { Router } from 'express';
 
 const rootRoute = Router();
 

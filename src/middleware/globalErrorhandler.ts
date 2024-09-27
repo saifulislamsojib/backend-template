@@ -1,7 +1,7 @@
 import configs from '@/configs';
 import logger from '@/configs/logger';
 import AppError from '@/errors/AppError';
-import { type ErrorType, ERROR_TYPE } from '@/errors/const.error';
+import { ERROR_TYPE, type ErrorType } from '@/errors/error.const';
 import sendResponse, { type TErrorResponse } from '@/utils/sendResponse';
 import type { ErrorRequestHandler } from 'express';
 import { BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND, UNAUTHORIZED } from 'http-status';

@@ -1,5 +1,5 @@
 import configs from '@/configs';
-import { ERROR_TYPE, type ErrorType } from '@/errors/const.error';
+import { ERROR_TYPE, type ErrorType } from '@/errors/error.const';
 import { userRoles } from '@/modules/user/user.constant';
 import type TUser from '@/modules/user/user.types';
 import omit from '@/utils/omit';
@@ -185,7 +185,7 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
 
       const invalidCurrPass = { ...body, currentPassword: '12345678' };
       resBody = await apiTester({ url, method: 'post', body: invalidCurrPass, expected, token });
-      expect(resBody?.message).toMatch(/currentPassword/i);
+      expect(resBody?.message).toMatch(/Current Password/i);
 
       // check newPassword validation
       const notNewPassBody = omit(body, 'newPassword');
@@ -194,7 +194,7 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
 
       const invalidNewPassBody = { ...body, newPassword: '12345678' };
       resBody = await apiTester({ url, method: 'post', body: invalidNewPassBody, expected, token });
-      expect(resBody?.message).toMatch(/newPassword/i);
+      expect(resBody?.message).toMatch(/New Password/i);
 
       // check now app errors
       expected.type = ERROR_TYPE.appError;

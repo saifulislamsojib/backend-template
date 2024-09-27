@@ -1,4 +1,4 @@
-import type { ErrorType } from '@/errors/const.error';
+import type { ErrorType } from '@/errors/error.const';
 import type { Response } from 'express';
 
 export type TSuccessResponse<T extends object, U extends object> = {
@@ -20,6 +20,18 @@ export type TErrorResponse = {
 
 export type TResponse<T extends object, U extends object> = TSuccessResponse<T, U> | TErrorResponse;
 
+/**
+ * A helper function to send a JSON response to the request.
+ *
+ * It takes the express response object and the data that needs to be sent.
+ * It will construct the response object according to the type of data.
+ * If data.success is true, it will add the data to the response object.
+ * If data.success is false, it will add the type, error, and stack to the response object.
+ *
+ * @param res - the express response object
+ * @param {} data - the data that needs to be sent
+ * @return the express response object
+ */
 const sendResponse = <T extends object, U extends object>(res: Response, data: TResponse<T, U>) => {
   const response = {
     success: data.success,

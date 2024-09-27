@@ -1,14 +1,14 @@
 import type { RequestHandler } from 'express';
 
 /**
- * A middleware function that catches errors and passes them to the global error
- * handler middleware, using `next(err)`. Meant to be used with functions that return
- * Promises, such as async functions.
+ * A higher-order function that takes a request handler function and returns
+ * a new function that wraps the given function in a try-catch block.
  *
- * @param {RequestHandler} requestHandler - A function that takes `(req, res, next)`
- *   and returns a Promise.
- * @returns {RequestHandler} A new middleware function that calls the
- *   original function, catches any errors, and passes them to `next(err)`.
+ * If the wrapped function throws an error, the error is passed to the next
+ * middleware function in the application's request-response cycle.
+ *
+ * @param requestHandler - the function to be wrapped
+ * @returns the wrapped function
  */
 const catchAsync = (requestHandler: RequestHandler): RequestHandler => {
   return async (req, res, next) => {

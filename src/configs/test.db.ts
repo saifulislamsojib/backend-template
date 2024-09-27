@@ -1,3 +1,5 @@
+/* eslint-disable no-console */ /* for this file only */
+
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import configs from '.';
 import { dbConnect, dbDisconnect } from './db';
@@ -38,7 +40,6 @@ export const testDbDisconnect = async () => {
     console.log('Mongodb disconnect failed: ', (err as Error).message);
   }
 };
-
 process.on('unhandledRejection', () => {
   console.log('😈 unhandledRejection is detected, shutting down the process..');
   testDbDisconnect();

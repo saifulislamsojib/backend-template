@@ -5,20 +5,42 @@ import { UNAUTHORIZED } from 'http-status';
 import jwt from 'jsonwebtoken';
 import type { AuthPayload, JWTPayload } from './auth.types';
 
-export const hashPassword = (password: string) => {
-  return bcrypt.hash(password, configs.bcrypt_salt_rounds);
+/**
+ * Hash a given plaintext string using bcrypt.
+ * @param plaintext - The plaintext string to hash.
+ * @returns A promise that resolves the hashed string.
+ */
+export const hashText = (plaintext: string) => {
+  return bcrypt.hash(plaintext, configs.bcrypt_salt_rounds);
 };
 
-export const comparePassword = (plaintextPassword: string, hashedPassword: string) => {
-  return bcrypt.compare(plaintextPassword, hashedPassword);
+/**
+ * Compare a given plaintext string with a hashed string using bcrypt.
+ * @param plaintext - The plaintext string to compare.
+ * @param hashed - The hashed string to compare against.
+ * @returns A promise that resolves true if the comparison is valid, otherwise false.
+ */
+export const compareHashedText = (plaintext: string, hashed: string) => {
+  return bcrypt.compare(plaintext, hashed);
 };
 
+/**
+ * Create a new JWT token based on the given payload.
+ * @param payload - The payload to use in the JWT token.
+ * @returns The newly created JWT token.
+ */
 export const createJWT = (payload: JWTPayload) => {
   return jwt.sign(payload, configs.jwt_access_secret, {
     expiresIn: configs.jwt_access_expires_in,
   });
 };
 
+/**
+ * Verify a given JWT token.
+ * @param token - The JWT token to verify.
+ * @returns The payload of the verified JWT token.
+ * @throws AppError If the token is invalid.
+ */
 export const verifyJWT = (token: string) => {
   try {
     return jwt.verify(token, configs.jwt_access_secret) as AuthPayload;

@@ -4,7 +4,7 @@ import { BAD_REQUEST, NOT_FOUND } from 'http-status';
 import type { ObjectId } from 'mongoose';
 import User from '../user/user.model';
 import type TUser from '../user/user.types';
-import { comparePassword, createJWT, hashPassword } from './auth.utils';
+import { createJWT, hashText } from './auth.utils';
 
 export const registerUserToDb = async (payload: Omit<TUser, '_id'>) => {
   const { email } = payload;
@@ -37,8 +37,7 @@ export const loginUserFromDb = async (payload: Pick<TUser, 'email' | 'password'>
   }
 
   // check the user password
-  const isValidPassword = await comparePassword(password, user.password);
-  if (!isValidPassword) {
+  if (!(await user.isValidPassword(password))) {
     throw new AppError(BAD_REQUEST, 'Password is not valid');
   }
 
@@ -68,13 +67,12 @@ export const changePasswordToDb = async (
   }
 
   // check currentPassword
-  const isValid = await comparePassword(currentPassword, user?.password);
-  if (!isValid) {
+  if (!(await user.isValidPassword(currentPassword))) {
     throw new AppError(BAD_REQUEST, 'Current password is not matched');
   }
 
   // hash password
-  const hashedPassword = await hashPassword(newPassword);
+  const hashedPassword = await hashText(newPassword);
 
   const data = await User.findByIdAndUpdate(userId, {
     password: hashedPassword,

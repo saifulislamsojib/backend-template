@@ -8,4 +8,6 @@ export const ERROR_TYPE = {
   serverError: 'serverError',
 } as const;
 
+Object.freeze(ERROR_TYPE);
+
 export type ErrorType = (typeof ERROR_TYPE)[keyof typeof ERROR_TYPE];

@@ -21,7 +21,6 @@ export const dbConnect = async (db_url = configs.db_url) => {
  * Disconnect from the MongoDB database.
  *
  * @param isDrop - If true, the database is dropped before disconnecting. Default is false.
- *
  * @returns A promise that is resolved when the disconnection is successfully completed, and rejected if there is an error.
  */
 export const dbDisconnect = async (isDrop = false) => {

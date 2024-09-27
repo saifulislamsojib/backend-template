@@ -33,6 +33,6 @@ export const loginUserSchema = z.object({
 });
 
 export const changePasswordSchema = z.object({
-  currentPassword: passwordSchema('currentPassword'),
-  newPassword: passwordSchema('newPassword'),
+  currentPassword: passwordSchema('Current Password'),
+  newPassword: passwordSchema('New Password'),
 });
