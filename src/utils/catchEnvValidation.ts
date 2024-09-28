@@ -1,5 +1,5 @@
 import logger from '@/configs/logger';
-import { type ZodError, z } from 'zod';
+import { type ZodError, type ZodIssue, z } from 'zod';
 
 const node_envs = ['development', 'test', 'staging', 'production'] as const;
 const log_levels = ['trace', 'debug', 'info', 'warn', 'error', 'fatal', 'silent'] as const;
@@ -11,6 +11,7 @@ const envValidationSchema = z.object({
   JWT_ACCESS_EXPIRES_IN: z.string(),
   CLIENT_ORIGIN: z.string().optional(),
   LOG_LEVEL: z.enum(log_levels).optional(),
+  IS_LOGS_ON_FILE: z.enum(['true', 'false']).optional(),
   PORT: z
     .string()
     .optional()
@@ -33,8 +34,21 @@ const catchEnvValidation = async () => {
   try {
     await envValidationSchema.parseAsync(process.env);
   } catch (error) {
-    // TODO: format errors and it be more readable
-    logger.fatal('Env validation error =', (error as ZodError).errors);
+    const err = (error as ZodError).errors.reduce(
+      (acc, cur) => {
+        const path = cur.path[0] as keyof EnvType;
+        if (path) {
+          const copyCurrent: Partial<ZodIssue> = { ...cur };
+          delete copyCurrent.path;
+          delete copyCurrent.code;
+          acc[path] = copyCurrent;
+          return acc;
+        }
+        return acc;
+      },
+      {} as Record<Partial<keyof EnvType>, Partial<ZodIssue>>,
+    );
+    logger.fatal(err, 'Environment Variable validation error');
     process.exit(1);
   }
 };

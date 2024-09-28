@@ -64,7 +64,13 @@ const globalErrorHandler: ErrorRequestHandler = (err: Error, req, res, next) => 
     errorResponse.stack = err.stack;
   }
 
-  const logResponse = { url: req.url, method: req.method, ...errorResponse };
+  const logResponse = {
+    url: req.url,
+    method: req.method,
+    userId: req.user?._id,
+    userEmail: req.user?.email,
+    ...errorResponse,
+  };
   if (statusCode === INTERNAL_SERVER_ERROR) {
     logger.fatal(logResponse, 'Global Error');
   } else {

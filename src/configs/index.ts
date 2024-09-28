@@ -12,6 +12,7 @@ const configs = {
   jwt_access_secret: process.env.JWT_ACCESS_SECRET,
   jwt_access_expires_in: process.env.JWT_ACCESS_EXPIRES_IN,
   log_level: process.env.LOG_LEVEL,
+  is_logs_on_file: process.env.IS_LOGS_ON_FILE === 'true',
   api_route: '/api/v1',
 } as const;
 

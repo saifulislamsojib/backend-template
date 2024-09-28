@@ -3,17 +3,18 @@ import configs from '.';
 import logger from './logger';
 
 /**
- * Connect to the MongoDB database.
- *
- * @param db_url - The URL of the MongoDB database.
- * @returns A promise that is resolved when the connection is successfully established, and rejected if there is an error.
+ * Connects to the MongoDB database using the provided url.
+ * @param db_url - The database url to connect to. Defaults to the `db_url` in the application config.
+ * @returns - Promise that resolves to true if the connection is successful, false if it fails.
  */
 export const dbConnect = async (db_url = configs.db_url) => {
   try {
     await connect(db_url);
     logger.info('Database successfully connected!');
+    return true;
   } catch (error) {
-    logger.fatal('Database connection error: ', (error as Error).message);
+    logger.fatal({ errorMsg: (error as Error).message }, 'Database connection error');
+    return false;
   }
 };
 

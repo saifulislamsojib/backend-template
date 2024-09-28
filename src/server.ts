@@ -4,26 +4,28 @@ import logger from './configs/logger';
 import catchEnvValidation from './utils/catchEnvValidation';
 import server, { closeServer } from './utils/serverUtils';
 
-const main = async () => {
+(async () => {
   try {
     // check env validation
     await catchEnvValidation();
 
-    // database connection with mongoose(mongodb)
-    dbConnect();
+    // database connection with mongodb using mongoose
+    const isDbConnected = await dbConnect();
 
-    const { port } = configs;
+    // if db is connected successfully then start the server otherwise not
+    if (isDbConnected) {
+      const { port } = configs;
 
-    // listen server
-    server.listen(port, () => {
-      logger.info(`Hello Boss! I am listening at http://localhost:${port}`);
-    });
+      server.listen(port, () => {
+        logger.info(`Hello Boss! I am listening at http://localhost:${port}`);
+      });
+    } else {
+      process.exit(1);
+    }
   } catch (error) {
-    logger.fatal(`Server error: ${(error as Error).message}`);
+    logger.fatal({ errorMsg: (error as Error).message }, `Server connection error`);
   }
-};
-
-main();
+})();
 
 process.on('unhandledRejection', () => {
   logger.fatal('😈 unhandledRejection is detected, shutting down the process..');

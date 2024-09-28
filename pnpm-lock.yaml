@@ -35,6 +35,9 @@ importers:
       pino-http:
         specifier: ^10.3.0
         version: 10.3.0
+      pino-pretty:
+        specifier: ^11.2.2
+        version: 11.2.2
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -99,9 +102,6 @@ importers:
       mongodb-memory-server:
         specifier: ^10.0.0
         version: 10.0.0(socks@2.8.3)
-      pino-pretty:
-        specifier: ^11.2.2
-        version: 11.2.2
       prettier:
         specifier: ^3.3.3
         version: 3.3.3
