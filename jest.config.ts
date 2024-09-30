@@ -3,6 +3,9 @@ import type { JestConfigWithTsJest } from 'ts-jest';
 const config: JestConfigWithTsJest = {
   preset: 'ts-jest',
   testEnvironment: 'node',
+  modulePaths: ['<rootDir>/src'],
+  moduleFileExtensions: ['ts'],
+  moduleDirectories: ['node_modules'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
