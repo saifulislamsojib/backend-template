@@ -11,11 +11,13 @@ const server = createServer(app);
  * This function is usually called when an unhandledRejection or uncaughtException
  * is detected. It's also called when the process is about to exit.
  */
-export const closeServer = () => {
+export const closeServer = async () => {
   if (server) {
-    dbDisconnect();
+    await dbDisconnect();
     server.close(() => {
-      process.exit(1);
+      setTimeout(() => {
+        process.exit(1);
+      }, 100);
     });
   }
 };

@@ -50,3 +50,5 @@ process.on('uncaughtException', (error) => {
   console.log('And the error is:', error.message);
   testDbDisconnect();
 });
+
+process.on('SIGINT', testDbDisconnect);

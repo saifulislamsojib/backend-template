@@ -1,5 +1,5 @@
 import configs from './configs';
-import { dbConnect } from './configs/db';
+import { dbConnect, dbDisconnect } from './configs/db';
 import logger from './configs/logger';
 import catchEnvValidation from './utils/catchEnvValidation';
 import server, { closeServer } from './utils/serverUtils';
@@ -19,11 +19,12 @@ import server, { closeServer } from './utils/serverUtils';
       server.listen(port, () => {
         logger.info(`Hello Boss! I am listening at http://localhost:${port}`);
       });
-    } else {
-      process.exit(1);
     }
   } catch (error) {
     logger.fatal({ errorMsg: (error as Error).message }, `Server connection error`);
+    setTimeout(() => {
+      process.exit(1);
+    }, 100);
   }
 })();
 
@@ -38,4 +39,11 @@ process.on('uncaughtException', (error) => {
     '😈 uncaughtException is detected, shutting down the process..',
   );
   closeServer();
+});
+
+process.on('SIGINT', async () => {
+  await dbDisconnect();
+  if (server.listening) {
+    server.close();
+  }
 });

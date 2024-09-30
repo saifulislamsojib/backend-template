@@ -49,7 +49,9 @@ const catchEnvValidation = async () => {
       {} as Record<Partial<keyof EnvType>, Partial<ZodIssue>>,
     );
     logger.fatal(err, 'Environment Variable validation error');
-    process.exit(1);
+    setTimeout(() => {
+      process.exit(1);
+    }, 100);
   }
 };
 

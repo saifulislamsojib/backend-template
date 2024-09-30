@@ -2,6 +2,8 @@ import { connect, connection } from 'mongoose';
 import configs from '.';
 import logger from './logger';
 
+let isDbConnected = false;
+
 /**
  * Connects to the MongoDB database using the provided url.
  * @param db_url - The database url to connect to. Defaults to the `db_url` in the application config.
@@ -11,18 +13,21 @@ export const dbConnect = async (db_url = configs.db_url) => {
   try {
     await connect(db_url);
     logger.info('Database successfully connected!');
-    return true;
+    isDbConnected = true;
   } catch (error) {
     logger.fatal({ errorMsg: (error as Error).message }, 'Database connection error');
-    return false;
+    setTimeout(() => {
+      process.exit(1);
+    }, 100);
   }
+  return isDbConnected;
 };
 
 /**
  * Disconnect from the MongoDB database.
  *
  * @param isDrop - If true, the database is dropped before disconnecting. Default is false.
- * @returns A promise that is resolved when the disconnection is successfully completed, and rejected if there is an error.
+ * @returns A promise that is resolved when the disconnection is successfully completed, and logs error if there is an error.
  */
 export const dbDisconnect = async (isDrop = false) => {
   if (!connection) return;
@@ -37,7 +42,7 @@ export const dbDisconnect = async (isDrop = false) => {
 };
 
 connection.on('disconnected', () => {
-  logger.fatal('Database disconnected!');
+  if (isDbConnected) {
+    logger.fatal('Database disconnected!');
+  }
 });
-
-process.on('SIGINT', dbDisconnect);
