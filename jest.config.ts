@@ -4,7 +4,7 @@ const config: JestConfigWithTsJest = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   modulePaths: ['<rootDir>/src'],
-  moduleFileExtensions: ['ts'],
+  moduleFileExtensions: ['ts', 'js'],
   moduleDirectories: ['node_modules'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
