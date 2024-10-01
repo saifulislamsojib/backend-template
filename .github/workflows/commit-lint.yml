@@ -25,8 +25,8 @@ jobs:
           pnpm --version
       - name: Install commitlint
         run: |
-          pnpm install conventional-changelog-conventionalcommits --no-save
-          pnpm install commitlint@latest --no-save
+          pnpm install conventional-changelog-conventionalcommits --ignore-scripts
+          pnpm install commitlint@latest --ignore-scripts
 
       - name: Validate current commit (last commit) with commitlint
         if: github.event_name == 'push'
