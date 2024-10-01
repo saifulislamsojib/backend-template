@@ -29,9 +29,10 @@ if (node_env !== 'test') {
 app.use('/', rootRoute);
 app.use('/api/v1', apiRoute);
 
-// not found
+// not found route handler
 app.use(notFound);
-// global error handler
+
+// global error handler.
 app.use(globalErrorhandler);
 
 export default app;

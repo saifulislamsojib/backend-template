@@ -1,7 +1,7 @@
 import type { ErrorType } from '@/errors/error.const';
 import type { Response } from 'express';
 
-export type TSuccessResponse<T extends object, U extends object> = {
+export type TSuccessResponse<T extends AnyObject, U extends AnyObject> = {
   success: true;
   statusCode: number;
   message: string;
@@ -18,7 +18,9 @@ export type TErrorResponse = {
   stack?: string;
 };
 
-export type TResponse<T extends object, U extends object> = TSuccessResponse<T, U> | TErrorResponse;
+export type TResponse<T extends AnyObject, U extends AnyObject> =
+  | TSuccessResponse<T, U>
+  | TErrorResponse;
 
 /**
  * A helper function to send a JSON response to the request.
@@ -32,7 +34,10 @@ export type TResponse<T extends object, U extends object> = TSuccessResponse<T, 
  * @param {} data - the data that needs to be sent
  * @return the express response object
  */
-const sendResponse = <T extends object, U extends object>(res: Response, data: TResponse<T, U>) => {
+const sendResponse = <T extends AnyObject, U extends AnyObject>(
+  res: Response,
+  data: TResponse<T, U>,
+) => {
   const response = {
     success: data.success,
     statusCode: data.statusCode,

@@ -1,5 +1,9 @@
 import type { UserConfig } from '@commitlint/types';
 
+// types of commit
+// 'build', 'ci', 'docs', 'feat', 'fix', 'perf',
+// 'refactor', 'revert', 'style', 'test' 'chore'
+
 const Configuration: UserConfig = {
   extends: ['@commitlint/config-conventional'],
   rules: {
