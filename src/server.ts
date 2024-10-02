@@ -1,6 +1,7 @@
 import configs from './configs';
 import { dbConnect, dbDisconnect } from './configs/db';
 import logger from './configs/logger';
+import client from './configs/redis';
 import catchEnvValidation from './utils/catchEnvValidation';
 import server, { closeServer } from './utils/serverUtils';
 
@@ -43,6 +44,7 @@ process.on('uncaughtException', (error) => {
 
 process.on('SIGINT', async () => {
   await dbDisconnect();
+  await client.disconnect();
   if (server.listening) {
     server.close();
   }

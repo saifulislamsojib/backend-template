@@ -12,6 +12,7 @@ const envValidationSchema = z.object({
   CLIENT_ORIGIN: z.string().optional(),
   LOG_LEVEL: z.enum(log_levels).optional(),
   IS_LOGS_ON_FILE: z.enum(['true', 'false']).optional(),
+  REDIS_URL: z.string().optional(),
   PORT: z
     .string()
     .optional()
