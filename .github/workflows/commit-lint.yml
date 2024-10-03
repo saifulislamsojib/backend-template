@@ -6,32 +6,29 @@ jobs:
   commitlint:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
+      - name: Checkout Code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Install pnpm
+
+      - name: Install PNPM
         uses: pnpm/action-setup@v4
-      - name: Set node version
+
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
           cache: 'pnpm'
-      - name: Print versions
-        run: |
-          git --version
-          node --version
-          npm --version
-          pnpm --version
-      - name: Install commitlint
+
+      - name: Install Commitlint
         run: |
           pnpm install conventional-changelog-conventionalcommits
           pnpm install commitlint@latest
 
-      - name: Validate current commit (last commit) with commitlint
+      - name: Validate Last Commit With Commitlint
         if: github.event_name == 'push'
         run: pnpx commitlint --last --verbose
 
-      - name: Validate PR commits with commitlint
+      - name: Validate PR Commits With Commitlint
         if: github.event_name == 'pull_request'
         run: pnpx commitlint --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} --to ${{ github.event.pull_request.head.sha }} --verbose
