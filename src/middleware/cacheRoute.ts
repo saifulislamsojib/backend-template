@@ -32,8 +32,7 @@ export const getRouteCacheKey = (req: Request, type: Type = 'protected') => {
  */
 const cacheRoute = (type: Type = 'protected') => {
   return catchAsync(async (req, res, next) => {
-    const key = getRouteCacheKey(req, type);
-    const cached = await client.get(key);
+    const cached = await client.get(getRouteCacheKey(req, type));
     if (cached) {
       return sendResponse(res, {
         data: JSON.parse(cached),
@@ -70,9 +69,7 @@ export const setRouteCache = (req: Request, data: unknown, type: Type = 'protect
  * @returns A promise that resolves when the cache is deleted.
  */
 export const deleteRouteCache = (req: Request, type: Type = 'protected') => {
-  const key = getRouteCacheKey(req, type);
-
-  return client.del(key);
+  return client.del(getRouteCacheKey(req, type));
 };
 
 export default cacheRoute;

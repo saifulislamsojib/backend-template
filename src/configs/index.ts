@@ -14,7 +14,8 @@ const configs = {
   log_level: process.env.LOG_LEVEL,
   is_logs_on_file: process.env.IS_LOGS_ON_FILE === 'true',
   api_route: '/api/v1',
-  redis_url: process.env.REDIS_URL || 'redis://127.0.0.1:6379',
+  redis_host: process.env.REDIS_HOST || 'localhost',
+  redis_port: parseInt(process.env.REDIS_PORT || '6379', 10),
   // time in seconds
   cache_revalidate_time: 60 * 60 * 24,
 } as const;

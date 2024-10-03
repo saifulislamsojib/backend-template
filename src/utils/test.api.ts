@@ -18,6 +18,8 @@ type TesterProps = {
   token?: string;
 };
 
+type Response = TResponse<AnyObject, AnyObject>;
+
 /**
  * A helper function to test API endpoints.
  *
@@ -33,11 +35,7 @@ type TesterProps = {
  *
  * @returns a promise that resolves to the response body
  */
-const apiTester = async <
-  T extends TResponse<AnyObject, AnyObject> = TResponse<AnyObject, AnyObject>,
->(
-  testerOptions: TesterProps,
-) => {
+const apiTester = async <T extends Response = Response>(testerOptions: TesterProps) => {
   const {
     url,
     method = 'get',

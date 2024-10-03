@@ -1,14 +1,40 @@
 services:
-  backend:
-    container_name: backend
+  redis:
+    container_name: redis
+    image: redis:7-alpine
+    ports:
+      - 6379:6379
+    restart: always
+    volumes:
+      - redis-data:/var/lib/redis
+    networks:
+      - template-server-network
+
+  server:
+    depends_on:
+      - redis
+    container_name: template-server
     build:
       context: .
       dockerfile: Dockerfile
     restart: always
+    volumes:
+      - ./logs:/app/logs
+      - /app/node_modules
     ports:
       - 8080:8080
     environment:
       - NODE_ENV=production
       - PORT=8080
+      - REDIS_HOST=redis
     env_file:
       - .env
+    networks:
+      - template-server-network
+
+networks:
+  template-server-network:
+    driver: bridge
+
+volumes:
+  redis-data:

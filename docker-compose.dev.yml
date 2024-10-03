@@ -1,6 +1,19 @@
 services:
-  backend_dev:
-    container_name: backend_dev
+  redis:
+    container_name: redis
+    image: redis:7-alpine
+    ports:
+      - 6379:6379
+    restart: on-failure
+    volumes:
+      - redis-data:/var/lib/redis
+    networks:
+      - template-server-network
+
+  server-dev:
+    depends_on:
+      - redis
+    container_name: template-server-dev
     build:
       context: .
       dockerfile: Dockerfile.Dev
@@ -14,11 +27,22 @@ services:
       - ./package.json:/app/package.json
       - ./pnpm-lock.yaml:/app/pnpm-lock.yaml
       - ./tsconfig.json:/app/tsconfig.json
+      - ./logs:/app/logs
       - /app/node_modules
     ports:
       - 8080:8080
     environment:
       - NODE_ENV=development
       - PORT=8080
+      - REDIS_HOST=redis
     env_file:
       - .env
+    networks:
+      - template-server-network
+
+networks:
+  template-server-network:
+    driver: bridge
+
+volumes:
+  redis-data:
