@@ -1,8 +1,8 @@
-/* eslint-disable no-console */ /* for this file only */
-
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import configs from '.';
 import { dbConnect, dbDisconnect } from './db';
+import logger from './logger';
+import redisClient from './redis';
 
 let mongod: MongoMemoryServer | undefined;
 
@@ -19,7 +19,7 @@ export const testDbConnect = async () => {
       const db_url = mongod.getUri();
       await dbConnect(db_url);
     } catch (error) {
-      console.log('Test database connection error: ', (error as Error).message);
+      logger.fatal({ errorMsg: (error as Error).message }, 'Test database creation error');
     }
   }
 };
@@ -36,19 +36,21 @@ export const testDbDisconnect = async () => {
     if (mongod) {
       await mongod.stop();
     }
-  } catch (err) {
-    console.log('Mongodb disconnect failed: ', (err as Error).message);
+  } catch (error) {
+    logger.fatal({ errorMsg: (error as Error).message }, 'Test database stopping error');
   }
 };
 process.on('unhandledRejection', () => {
-  console.log('😈 unhandledRejection is detected, shutting down the process..');
+  logger.fatal('😈 unhandledRejection is detected, shutting down the process..');
   testDbDisconnect();
 });
 
 process.on('uncaughtException', (error) => {
-  console.log('😈 uncaughtException is detected, shutting down the process..');
-  console.log('And the error is:', error.message);
+  logger.fatal(
+    { errorMsg: error.message },
+    '😈 uncaughtException is detected, shutting down the process..',
+  );
   testDbDisconnect();
 });
 
-process.on('SIGINT', testDbDisconnect);
+process.on('SIGINT', () => Promise.all([testDbDisconnect(), redisClient.disconnect()]));

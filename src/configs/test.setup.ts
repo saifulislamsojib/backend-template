@@ -1,7 +1,11 @@
+import redisClient from './redis';
 import { testDbConnect, testDbDisconnect } from './test.db';
 
+// set env for test
 process.env.NODE_ENV = 'test';
+process.env.LOG_LEVEL = 'silent';
+process.env.IS_LOGS_ON_FILE = 'false';
 
-beforeAll(testDbConnect, 70 * 1000);
+beforeAll(() => Promise.all([testDbConnect(), redisClient.connect()]), 70 * 1000);
 
-afterAll(testDbDisconnect);
+afterAll(() => Promise.all([testDbDisconnect(), redisClient.disconnect()]));

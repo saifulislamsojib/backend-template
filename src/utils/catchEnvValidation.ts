@@ -34,6 +34,7 @@ export type EnvType = z.infer<typeof envValidationSchema>;
 const catchEnvValidation = async () => {
   try {
     await envValidationSchema.parseAsync(process.env);
+    return true;
   } catch (error) {
     const err = (error as ZodError).errors.reduce(
       (acc, cur) => {
@@ -53,6 +54,7 @@ const catchEnvValidation = async () => {
     setTimeout(() => {
       process.exit(1);
     }, 100);
+    return false;
   }
 };
 

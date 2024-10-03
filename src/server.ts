@@ -1,14 +1,18 @@
 import configs from './configs';
 import { dbConnect, dbDisconnect } from './configs/db';
 import logger from './configs/logger';
-import client from './configs/redis';
+import redisClient from './configs/redis';
 import catchEnvValidation from './utils/catchEnvValidation';
 import server, { closeServer } from './utils/serverUtils';
 
 (async () => {
   try {
     // check env validation
-    await catchEnvValidation();
+    const ok = await catchEnvValidation();
+    if (!ok) return;
+
+    // redis connection
+    redisClient.connect();
 
     // database connection with mongodb using mongoose
     const isDbConnected = await dbConnect();
@@ -43,8 +47,7 @@ process.on('uncaughtException', (error) => {
 });
 
 process.on('SIGINT', async () => {
-  await dbDisconnect();
-  await client.disconnect();
+  await Promise.all([dbDisconnect(), redisClient.disconnect()]);
   if (server.listening) {
     server.close();
   }

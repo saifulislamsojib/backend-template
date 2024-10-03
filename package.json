@@ -23,6 +23,8 @@
     "docker:sh": "docker exec -it backend sh",
     "docker-stage:sh": "docker exec -it backend_stage sh",
     "docker-dev:sh": "docker exec -it backend_dev sh",
+    "redis": "docker run -d --name redis-stack-server -p 6379:6379 redis/redis-stack-server:latest",
+    "redis-cli": "docker exec -it redis-stack-server redis-cli",
     "lint-staged": "lint-staged",
     "prepare": "husky || true"
   },

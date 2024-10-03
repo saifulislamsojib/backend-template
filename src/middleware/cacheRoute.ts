@@ -4,12 +4,35 @@ import catchAsync from '@/utils/catchAsync';
 import sendResponse from '@/utils/sendResponse';
 import type { Request } from 'express';
 
-const cacheRoute = (type: 'public' | 'protected' = 'protected') => {
+type Type = 'public' | 'protected';
+
+/**
+ * Generates a cache key for the given request.
+ * If the type is 'protected', the user's id and role will be appended to the key.
+ * @param req - The express request object.
+ * @param type - The type of the cache. If 'public', the cache is not user-specific.
+ *               If 'protected', the cache is user-specific and will be prefixed with the user's id and role.
+ * @returns The generated cache key.
+ */
+export const getRouteCacheKey = (req: Request, type: Type = 'protected') => {
+  let key = req.originalUrl;
+  if (type === 'protected' && req.user) {
+    key += `:${req.user._id}:${req.user.role}`;
+  }
+  return key;
+};
+
+/**
+ * A middleware function that checks if the request has a cached response in Redis.
+ * If so, it will return the cached response. Otherwise, it will call the next middleware.
+ *
+ * @param type - The type of the cache. If 'public', the cache is not user-specific.
+ *               If 'protected', the cache is user-specific and will be prefixed with the user's id and role.
+ * @returns A middleware function that checks for a cached response.
+ */
+const cacheRoute = (type: Type = 'protected') => {
   return catchAsync(async (req, res, next) => {
-    let key = req.originalUrl;
-    if (type === 'protected' && req.user) {
-      key += `:${req.user._id}:${req.user.role}`;
-    }
+    const key = getRouteCacheKey(req, type);
     const cached = await client.get(key);
     if (cached) {
       return sendResponse(res, {
@@ -23,17 +46,33 @@ const cacheRoute = (type: 'public' | 'protected' = 'protected') => {
   });
 };
 
-export const setRouteCache = async (
-  req: Request,
-  data: unknown,
-  type: 'public' | 'protected' = 'protected',
-) => {
-  let key = req.originalUrl;
-  if (type === 'protected' && req.user) {
-    key += `:${req.user._id}:${req.user.role}`;
-  }
+/**
+ * Set a cache for a route.
+ *
+ * @param req - The request object.
+ * @param data - The data to be cached.
+ * @param type - The type of the cache. If 'public', the cache is not user-specific.
+ *               If 'protected', the cache is user-specific and will be prefixed with the user's id and role.
+ * @returns A promise that resolves when the cache is set.
+ */
+export const setRouteCache = (req: Request, data: unknown, type: Type = 'protected') => {
+  const key = getRouteCacheKey(req, type);
 
   return client.setEx(key, configs.cache_revalidate_time, JSON.stringify(data));
+};
+
+/**
+ * Delete a cache for a route.
+ *
+ * @param req - The request object.
+ * @param type - The type of the cache. If 'public', the cache is not user-specific.
+ *               If 'protected', the cache is user-specific and will be prefixed with the user's id and role.
+ * @returns A promise that resolves when the cache is deleted.
+ */
+export const deleteRouteCache = (req: Request, type: Type = 'protected') => {
+  const key = getRouteCacheKey(req, type);
+
+  return client.del(key);
 };
 
 export default cacheRoute;
