@@ -5,6 +5,15 @@ on: [push, pull_request]
 jobs:
   code-checker:
     runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis
+        # Set health checks to wait until redis has started
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -31,3 +40,6 @@ jobs:
 
       - name: Run Tests
         run: pnpm test
+        env:
+          REDIS_HOST: redis
+          REDIS_PORT: 6379
