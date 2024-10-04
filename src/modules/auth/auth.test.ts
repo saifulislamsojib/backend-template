@@ -2,10 +2,10 @@ import configs from '@/configs';
 import { ERROR_TYPE, type ErrorType } from '@/errors/error.const';
 import { userRoles } from '@/modules/user/user.constant';
 import type TUser from '@/modules/user/user.types';
+import apiTester from '@/test/apiTester';
+import { expectEnum, types } from '@/test/utils';
 import omit from '@/utils/omit';
 import type { TSuccessResponse } from '@/utils/sendResponse';
-import apiTester from '@/utils/test.api';
-import { expectEnum, types } from '@/utils/test.utils';
 import { BAD_REQUEST, NOT_FOUND, UNAUTHORIZED } from 'http-status';
 
 type SuccessRes = TSuccessResponse<{ token: string; user: TUser }, AnyObject>;

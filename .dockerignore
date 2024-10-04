@@ -8,8 +8,8 @@ logs
 .vercel
 
 # testing (if you want to test before build then or run in development comment this 3 lines)
+src/test
 jest.config.ts
-src/**/test.*.ts
 src/**/*.test.ts
 
 # others
@@ -24,4 +24,4 @@ README.md
 Dockerfile
 Dockerfile.*
 compose.yml
-docker-compose-*.yml
+docker-compose*.yml

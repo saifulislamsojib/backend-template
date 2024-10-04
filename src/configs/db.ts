@@ -9,9 +9,9 @@ let isDbConnected = false;
  * @param db_url - The database url to connect to. Defaults to the `db_url` in the application config.
  * @returns - Promise that resolves to true if the connection is successful, false if it fails.
  */
-export const dbConnect = async (db_url = configs.db_url) => {
+export const dbConnect = async () => {
   try {
-    await connect(db_url);
+    await connect(configs.db_url);
     logger.info('Database successfully connected!');
     isDbConnected = true;
   } catch (error) {

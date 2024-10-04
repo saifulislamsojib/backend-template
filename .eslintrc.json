@@ -39,7 +39,7 @@
     "import/extensions": ["error", "ignorePackages", { "ts": "never" }],
     "import/no-extraneous-dependencies": [
       "error",
-      { "devDependencies": ["**/test.*.ts", "**/*.test.ts"] }
+      { "devDependencies": ["**/*.test.ts", "src/test/*.ts"] }
     ]
   }
 }

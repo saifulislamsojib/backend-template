@@ -1,6 +1,6 @@
 import app from '@/app';
 import supertest from 'supertest';
-import type { TResponse } from './sendResponse';
+import type { TResponse } from '../utils/sendResponse';
 
 export const request = supertest(app);
 

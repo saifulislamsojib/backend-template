@@ -9,7 +9,9 @@ const config: JestConfigWithTsJest = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
-  setupFilesAfterEnv: ['<rootDir>/src/configs/test.setup.ts'],
+  setupFilesAfterEnv: ['<rootDir>/src/test/setupFile.ts'],
+  globalSetup: '<rootDir>/src/test/globalSetup.ts',
+  globalTeardown: '<rootDir>/src/test/globalTeardown.ts',
   modulePathIgnorePatterns: ['<rootDir>/dist/'],
 };
 
