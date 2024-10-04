@@ -2,12 +2,17 @@ name: Code Checker(eslint, type check, and run tests)
 
 on: [push, pull_request]
 
+permissions:
+  contents: read
+
 env:
   # Used for separate cache
   MONGOMS_PREFER_GLOBAL_PATH: true
 
 jobs:
   code-checker:
+    permissions:
+      contents: read # for actions/checkout to fetch code
     runs-on: ubuntu-latest
     services:
       redis:
