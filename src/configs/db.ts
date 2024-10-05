@@ -12,7 +12,6 @@ let isDbConnected = false;
 export const dbConnect = async () => {
   try {
     await connect(configs.db_url);
-    console.log('Database successfully connected!');
     logger.info('Database successfully connected!');
     isDbConnected = true;
   } catch (error) {
