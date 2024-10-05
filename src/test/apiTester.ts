@@ -51,7 +51,6 @@ const apiTester = async <T extends Response = Response>(testerOptions: TesterPro
     query.set('authorization', token);
   }
   const res = await query;
-  console.log(res.body, 'res.body');
   expect(res.status).toBe(status);
   const resBody: T = res.body;
   expect(resBody.success).toBe(success);

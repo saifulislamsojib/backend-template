@@ -13,6 +13,7 @@ export const dbConnect = async () => {
   try {
     await connect(configs.db_url);
     logger.info('Database successfully connected!');
+    console.log('Database successfully connected!');
     isDbConnected = true;
   } catch (error) {
     logger.fatal({ errorMsg: (error as Error).message }, 'Database connection error');
