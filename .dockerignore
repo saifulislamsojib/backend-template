@@ -9,7 +9,7 @@ logs
 
 # testing (if you want to test before build then or run in development comment this 3 lines)
 src/test
-jest.config.ts
+vitest.config.ts
 src/**/*.test.ts
 
 # others

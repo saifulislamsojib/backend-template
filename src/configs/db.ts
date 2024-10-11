@@ -29,11 +29,8 @@ export const dbConnect = async () => {
  * @param isDrop - If true, the database is dropped before disconnecting. Default is false.
  * @returns A promise that is resolved when the disconnection is successfully completed, and logs error if there is an error.
  */
-export const dbDisconnect = async (isDrop = false) => {
+export const dbDisconnect = async () => {
   if (!connection) return;
-  if (isDrop && configs.node_env !== 'production') {
-    await connection.dropDatabase();
-  }
   try {
     await connection.close();
   } catch (error) {

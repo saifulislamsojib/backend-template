@@ -8,7 +8,7 @@ export const types = {
 };
 
 /**
- * Helper function to generate a Jest matcher for a given enum array.
+ * Helper function to generate a vitest matcher for a given enum array.
  * This can be used to check if a string value is one of the enum values.
  * @example
  * const myEnum = ['a', 'b', 'c'] as const;

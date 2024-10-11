@@ -20,10 +20,11 @@ services:
     restart: on-failure
     volumes:
       - ./src:/app/src
-      - ./.eslintrc.json:/app/.eslintrc.json
+      - ./eslint.config.mjs:/app/eslint.config.mjs
+      - ./eslint.airbnb.mjs:/app/eslint.airbnb.mjs
       - ./.prettierignore:/app/.prettierignore
       - ./.prettierrc:/app/.prettierrc
-      - ./jest.config.ts:/app/jest.config.ts
+      - ./vitest.config.ts:/app/vitest.config.ts
       - ./package.json:/app/package.json
       - ./pnpm-lock.yaml:/app/pnpm-lock.yaml
       - ./tsconfig.json:/app/tsconfig.json
