@@ -19,7 +19,7 @@ export const registerUserToDb = async (payload: Omit<TUser, '_id'>) => {
   const user = await new User(payload).save();
 
   // create jwt token
-  const token = createJWT({ email: user.email, _id: user.id, role: user.role });
+  const token = createJWT({ email: user.email, _id: user._id, role: user.role });
 
   return {
     token,
@@ -42,7 +42,7 @@ export const loginUserFromDb = async (payload: Pick<TUser, 'email' | 'password'>
   }
 
   // create jwt token
-  const token = createJWT({ email: user.email, _id: user.id, role: user.role });
+  const token = createJWT({ email: user.email, _id: user._id, role: user.role });
 
   return {
     token,
@@ -83,7 +83,7 @@ export const changePasswordToDb = async (
   }
 
   // create jwt token
-  const token = createJWT({ email: user.email, _id: user.id, role: user.role });
+  const token = createJWT({ email: user.email, _id: user._id, role: user.role });
 
   return {
     token,

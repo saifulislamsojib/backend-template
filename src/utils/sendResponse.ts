@@ -54,7 +54,7 @@ const sendResponse = <T extends AnyObject, U extends AnyObject>(
     response.error = data.error;
     response.stack = data.stack;
   }
-  return res.status(data.statusCode).json(response);
+  res.status(data.statusCode).json(response);
 };
 
 export default sendResponse;

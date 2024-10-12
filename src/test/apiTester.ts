@@ -52,7 +52,7 @@ const apiTester = async <T extends Response = Response>(testerOptions: TesterPro
   }
   const res = await query;
   expect(res.status).toBe(status);
-  const resBody: T = res.body;
+  const resBody = res.body as T;
   expect(resBody.success).toBe(success);
   if (type && resBody.success === false) {
     expect(resBody.type).toMatch(type);

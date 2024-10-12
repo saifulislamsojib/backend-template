@@ -1,10 +1,10 @@
 export const types = {
-  string: expect.any(String),
-  number: expect.any(Number),
-  boolean: expect.any(Boolean),
-  array: expect.any(Array),
-  object: expect.any(Object),
-  date: expect.any(Date),
+  string: expect.any(String) as string,
+  number: expect.any(Number) as number,
+  boolean: expect.any(Boolean) as boolean,
+  array: expect.any(Array) as unknown[],
+  object: expect.any(Object) as object,
+  date: expect.any(Date) as Date,
 };
 
 /**
@@ -15,4 +15,4 @@ export const types = {
  * expect('a').toEqual(expectEnum(myEnum));
  */
 export const expectEnum = <const T>(enumArr: readonly T[]) =>
-  expect.stringMatching(enumArr.join('|'));
+  expect.stringMatching(enumArr.join('|')) as string;

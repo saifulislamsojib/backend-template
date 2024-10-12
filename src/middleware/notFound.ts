@@ -1,6 +1,6 @@
 import logger from '@/configs/logger';
 import sendResponse, { type TErrorResponse } from '@/utils/sendResponse';
-import { RequestHandler } from 'express';
+import type { RequestHandler } from 'express';
 import { NOT_FOUND } from 'http-status';
 
 const notFoundResponse: TErrorResponse = {

@@ -17,7 +17,7 @@ type Type = 'public' | 'protected';
 export const getRouteCacheKey = (req: Request, type: Type = 'protected') => {
   let key = req.originalUrl;
   if (type === 'protected' && req.user) {
-    key += `:${req.user._id}:${req.user.role}`;
+    key += `:${String(req.user._id)}:${req.user.role}`;
   }
   return key;
 };
@@ -35,7 +35,7 @@ const cacheRoute = (type: Type = 'protected') => {
     const cached = await client.get(getRouteCacheKey(req, type));
     if (cached) {
       return sendResponse(res, {
-        data: JSON.parse(cached),
+        data: JSON.parse(cached) as AnyObject,
         message: 'Data retrieved successfully from cache',
         statusCode: 200,
         success: true,

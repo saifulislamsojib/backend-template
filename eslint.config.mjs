@@ -20,6 +20,10 @@ export default [
       globals: globals.node,
       ecmaVersion: 2020,
       sourceType: 'module',
+      // parserOptions: {
+      //   project: true,
+      //   tsconfigRootDir: import.meta.dirname,
+      // },
     },
     settings: {
       'import/resolver': {
@@ -45,7 +49,6 @@ export default [
   {
     files: ['**/*.test.ts', 'src/test/*.ts'],
     plugins: { vitest },
-    languageOptions: { globals: vitest.environments.env.globals },
     settings: { vitest: { typecheck: true } },
     rules: {
       ...vitest.configs.recommended.rules,
