@@ -1,54 +1,51 @@
 import configs from './configs';
-import { dbConnect, dbDisconnect } from './configs/db';
+import { dbConnect } from './configs/db';
 import logger from './configs/logger';
 import redisClient from './configs/redis';
 import catchEnvValidation from './utils/catchEnvValidation';
 import server, { closeServer } from './utils/serverUtils';
 
-(async () => {
-  try {
-    // check env validation
-    const ok = await catchEnvValidation();
-    if (!ok) return;
+const main = async () => {
+  // check env validation
+  const ok = await catchEnvValidation();
+  if (!ok) return;
 
-    // redis connection
-    redisClient.connect();
+  // redis connection
+  const connection = redisClient.connect();
 
-    // database connection with mongodb using mongoose
-    const isDbConnected = await dbConnect();
+  // database connection with mongodb using mongoose
+  const [isDbConnected] = await Promise.all([dbConnect(), connection]);
 
-    // if db is connected successfully then start the server otherwise not
-    if (isDbConnected) {
-      const { port } = configs;
+  // if db is connected successfully then start the server otherwise not
+  if (isDbConnected) {
+    const { port } = configs;
 
-      server.listen(port, () => {
-        logger.info(`Hello Boss! I am listening at http://localhost:${port}`);
-      });
-    }
-  } catch (error) {
-    logger.fatal({ errorMsg: (error as Error).message }, `Server connection error`);
-    setTimeout(() => {
-      process.exit(1);
-    }, 100);
+    server.listen(port, () => {
+      logger.info(`Hello Boss! I am listening at http://localhost:${port}`);
+    });
   }
-})();
+};
 
-process.on('unhandledRejection', () => {
-  logger.fatal('😈 unhandledRejection is detected, shutting down the process..');
-  closeServer();
+main().catch((error) => {
+  logger.fatal({ errorMsg: (error as Error).message }, 'Server connection error');
+  setTimeout(() => {
+    process.exit(1);
+  }, 100);
 });
 
-process.on('uncaughtException', (error) => {
+process.on('unhandledRejection', async () => {
+  logger.fatal('😈 unhandledRejection is detected, shutting down the process..');
+  await closeServer();
+});
+
+process.on('uncaughtException', async (error) => {
   logger.fatal(
     { errorMsg: error.message },
     '😈 uncaughtException is detected, shutting down the process..',
   );
-  closeServer();
+  await closeServer();
 });
 
-process.on('SIGINT', async () => {
-  await Promise.all([dbDisconnect(), redisClient.disconnect()]);
-  if (server.listening) {
-    server.close();
-  }
-});
+process.on('SIGINT', closeServer);
+
+process.on('SIGTERM', closeServer);

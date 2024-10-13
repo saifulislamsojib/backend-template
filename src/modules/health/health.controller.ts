@@ -3,7 +3,7 @@ import type { RequestHandler } from 'express';
 import { OK } from 'http-status';
 
 const health: RequestHandler = (_req, res) => {
-  return res.status(OK).json({
+  res.status(OK).json({
     success: true,
     statusCode: OK,
     message: 'Server is up and running',

@@ -1,7 +1,7 @@
 {
   "name": "backend-template",
   "version": "1.0.0",
-  "description": "",
+  "description": "Robust and scalable backend server template with NodeJS, TypeScript, Express, MongoDB(mongoose), Redis for caching, Pino logger, testing with Vitest, Linter with ESLint airbnb style, Prettier formatter, Dockerize for production, staging and development environments, Path alias setup, husky with lint-staged and commit-lint, CI/CD with Github Actions for code checker(lint, type-check, run tests) and commit-lint and many more",
   "main": "dist/server.js",
   "scripts": {
     "install:pkg": "pnpm install --frozen-lockfile",
@@ -13,7 +13,7 @@
     "type:check": "tsc --noEmit",
     "lint:fix": "eslint --max-warnings 0 --fix",
     "lint:check": "eslint",
-    "format": "prettier --log-level warn --write \"./**/*.{ts,json,d.ts}\"",
+    "format": "prettier --log-level warn --write \"./**/*.{js,mjs,cjs,ts,d.ts,json}\"",
     "lint": "pnpm format && pnpm lint:fix",
     "test": "vitest run",
     "test:w": "vitest --watch",
@@ -54,7 +54,7 @@
     "@eslint/js": "^9.12.0",
     "@types/bcrypt": "^5.0.2",
     "@types/cors": "^2.8.17",
-    "@types/express": "^4.17.21",
+    "@types/express": "^5.0.0",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22.7.5",
     "@types/supertest": "^6.0.2",
@@ -84,7 +84,7 @@
     "pnpm": ">=9"
   },
   "lint-staged": {
-    "*.{ts,d.ts}": "eslint --max-warnings 0 --fix",
-    "*.{ts,json,d.ts}": "prettier --log-level warn --write"
+    "*.{js,mjs,cjs,ts,d.ts}": "eslint --max-warnings 0 --fix",
+    "*.{js,mjs,cjs,ts,d.ts,json}": "prettier --log-level warn --write"
   }
 }

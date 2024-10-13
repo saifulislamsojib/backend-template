@@ -1,29 +1,28 @@
 import pluginJs from '@eslint/js';
-import pluginImport from 'eslint-plugin-import';
-import pluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
+import { flatConfigs as importConfigs } from 'eslint-plugin-import';
+import prettierRecommended from 'eslint-plugin-prettier/recommended';
 import vitest from 'eslint-plugin-vitest';
 import globals from 'globals';
 import { configs as tsEslintConfigs } from 'typescript-eslint';
 import airbnb from './eslint.airbnb.mjs';
 
+const files = ['src/**/*.{ts,d.ts}'];
+
 export default [
-  ...airbnb,
   pluginJs.configs.recommended,
-  pluginImport.flatConfigs.recommended,
-  pluginImport.flatConfigs.typescript,
-  pluginPrettierRecommended,
+  importConfigs.recommended,
+  importConfigs.typescript,
   ...tsEslintConfigs.recommended,
+  ...airbnb,
+  prettierRecommended,
+  // for root custom configs
   {
-    files: ['**/*.{js,mjs,cjs,ts}'],
+    files: ['**/*.{js,mjs,cjs,ts,d.ts}'],
     ignores: ['**/node_modules', '**/dist'],
     languageOptions: {
       globals: globals.node,
       ecmaVersion: 2020,
       sourceType: 'module',
-      // parserOptions: {
-      //   project: true,
-      //   tsconfigRootDir: import.meta.dirname,
-      // },
     },
     settings: {
       'import/resolver': {
@@ -46,6 +45,31 @@ export default [
       ],
     },
   },
+  // for src directory ts files only for type checking
+  ...tsEslintConfigs.recommendedTypeChecked.map((config) => ({
+    files,
+    ...config,
+  })),
+  {
+    files,
+    languageOptions: {
+      parserOptions: {
+        project: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+    rules: {
+      '@typescript-eslint/no-misused-promises': [
+        'error',
+        {
+          checksVoidReturn: {
+            arguments: false,
+          },
+        },
+      ],
+    },
+  },
+  // for test files only
   {
     files: ['**/*.test.ts', 'src/test/*.ts'],
     plugins: { vitest },

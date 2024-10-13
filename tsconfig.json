@@ -22,7 +22,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
-    },
+    }
   },
   "files": ["src/types/index.d.ts"],
   "include": ["src/*", "src/**/*"],

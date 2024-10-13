@@ -25,7 +25,6 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 COPY . .
 
 RUN pnpm lint
-# RUN pnpm test
 
 RUN pnpm build
 
@@ -35,7 +34,4 @@ FROM base
 COPY --from=prod-deps /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
 
-# RUN find ./src -type f -name 'test.*.ts' -delete
-# RUN find ./src -type f -name '*.test.ts' -delete
-
-CMD [ "pnpm", "start" ]
+CMD [ "node", "dist/server.js" ]

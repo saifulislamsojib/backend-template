@@ -15,4 +15,11 @@ type TUser = {
   __v?: number;
 };
 
+export type TUserResponse = Omit<TUser, '_id' | 'passwordUpdatedAt' | 'createdAt' | 'updatedAt'> & {
+  _id: string;
+  passwordUpdatedAt?: string;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
 export default TUser;

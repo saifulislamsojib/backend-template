@@ -4,7 +4,7 @@ import { Router } from 'express';
 const rootRoute = Router();
 
 rootRoute.get('/', (_req, res) => {
-  return res.status(200).json({
+  res.status(200).json({
     success: true,
     message: `Welcome to the ${packageJson.name} server boss!`,
   });

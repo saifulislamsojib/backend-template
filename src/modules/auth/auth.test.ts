@@ -2,6 +2,7 @@ import configs from '@/configs';
 import { ERROR_TYPE, type ErrorType } from '@/errors/error.const';
 import { userRoles } from '@/modules/user/user.constant';
 import type TUser from '@/modules/user/user.types';
+import type { TUserResponse } from '@/modules/user/user.types';
 import apiTester from '@/test/apiTester';
 import { expectEnum, types } from '@/test/utils';
 import omit from '@/utils/omit';
@@ -57,7 +58,7 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
 
     // Register Successful test
     it('Register Successful test with all proper data', async () => {
-      const user: Partial<TUser> = {
+      const user: Partial<TUserResponse> = {
         ...body,
         role: 'user',
         _id: types.string,

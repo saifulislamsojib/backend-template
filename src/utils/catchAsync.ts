@@ -10,14 +10,14 @@ import type { RequestHandler } from 'express';
  * @param requestHandler - the function to be wrapped
  * @returns the wrapped function
  */
-const catchAsync = (requestHandler: RequestHandler) => {
-  return (async (req, res, next) => {
+const catchAsync = (requestHandler: RequestHandler): RequestHandler => {
+  return async (req, res, next) => {
     try {
       await Promise.resolve(requestHandler(req, res, next));
     } catch (err) {
       next(err);
     }
-  }) as RequestHandler;
+  };
 };
 
 export default catchAsync;
