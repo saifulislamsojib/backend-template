@@ -15,10 +15,11 @@ export default [
   ...tsEslintConfigs.recommended,
   ...airbnb,
   prettierRecommended,
+  // for ignore directories
+  { ignores: ['**/node_modules/', '**/dist/'] },
   // for root custom configs
   {
     files: ['**/*.{js,mjs,cjs,ts,d.ts}'],
-    ignores: ['**/node_modules', '**/dist'],
     languageOptions: {
       globals: globals.node,
       ecmaVersion: 2020,
