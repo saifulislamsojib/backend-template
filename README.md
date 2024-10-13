@@ -2,27 +2,27 @@
 
 ## With:
 
-- #### Framework: Express JS
+- Framework: Express JS
 
-- #### Database: MongoDB with mongoose
+- Database: MongoDB with mongoose
 
-- #### Tester: Testes with `Vitest`, for api test also use `supertest` and for mongodb used `mongodb-memory-server`
+- Tester: Testes with `Vitest`, for api test also use `supertest` and for mongodb used `mongodb-memory-server`
 
-- #### Linter: Typescript `ESLint Airbnb` style guidelines
+- Linter: Typescript `ESLint Airbnb` style guidelines
 
-- #### Formatter: `Prettier` Formatter with ESLint
+- Formatter: `Prettier` Formatter with ESLint
 
-- #### Dockerize: Dockerize for `production`, `staging` and `development` environments
+- Dockerize: Dockerize for `production`, `staging` and `development` environments
 
-- #### `Husky` Git Hooks: Husky pre-commit hook with `lint-staged` for eslint and prettier, pre-push hook for run tests and commit-msg hook for `commit-lint` for checking commit messages
+- `Husky` Git Hooks: Husky pre-commit hook with `lint-staged` for eslint and prettier, pre-push hook for run tests and commit-msg hook for `commit-lint` for checking commit messages
 
-- #### CI/CD with Github Actions: Github Actions for`Code Checker` (lint-check, type-check & run tests) & `Commit Lint` for checking commit messages
+- CI/CD with Github Actions: Github Actions for`Code Checker` (lint-check, type-check & run tests) & `Commit Lint` for checking commit messages
 
-- #### Path alias: Path alias with `jsconfig-paths`
+- Path alias: Path alias with `jsconfig-paths`
 
-- #### HTTP & Application Logger: Pino logger with `pino`, `pino-http` and `pino-pretty`
+- HTTP & Application Logger: Pino logger with `pino`, `pino-http` and `pino-pretty`
 
-- #### Caching with Redis: Caching with `Redis server`
+- Caching with Redis: Caching with `Redis server`
 
 ## Instructions for local server running
 
