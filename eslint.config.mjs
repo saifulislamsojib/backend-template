@@ -1,7 +1,7 @@
 import pluginJs from '@eslint/js';
+import vitest from '@vitest/eslint-plugin';
 import { flatConfigs as importConfigs } from 'eslint-plugin-import';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
-import vitest from 'eslint-plugin-vitest';
 import globals from 'globals';
 import { configs as tsEslintConfigs } from 'typescript-eslint';
 import airbnb from './eslint.airbnb.mjs';
