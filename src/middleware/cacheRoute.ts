@@ -17,7 +17,8 @@ type Type = 'public' | 'protected';
 export const getRouteCacheKey = (req: Request, type: Type = 'protected') => {
   let key = req.originalUrl;
   if (type === 'protected' && req.user) {
-    key += `:${String(req.user._id)}:${req.user.role}`;
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
+    key += `:${req.user._id?.toString()}:${req.user.role}`;
   }
   return key;
 };
