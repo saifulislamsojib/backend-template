@@ -14,4 +14,5 @@ declare global {
   }
 
   type AnyObject = Record<string, unknown>;
+  type Params = Record<string, string | undefined>;
 }

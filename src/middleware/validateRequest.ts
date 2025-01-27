@@ -1,5 +1,5 @@
 import catchAsync from '@/utils/catchAsync';
-import type { AnyZodObject } from 'zod';
+import type { AnyZodObject, ZodEffects } from 'zod';
 
 const types = ['body', 'params', 'query'] as const;
 
@@ -11,7 +11,7 @@ type Type = (typeof types)[number];
  * @param type - where to validate, default is body
  * @returns validator middleware
  */
-const validateRequest = (schema: AnyZodObject, type: Type = 'body') => {
+const validateRequest = (schema: AnyZodObject | ZodEffects<AnyZodObject>, type: Type = 'body') => {
   if (!types.includes(type)) {
     throw new Error('Type must be body or params or query');
   }

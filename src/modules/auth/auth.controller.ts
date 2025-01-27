@@ -5,8 +5,8 @@ import { CREATED, OK } from 'http-status';
 import type TUser from '../user/user.types';
 import { changePasswordToDb, loginUserFromDb, registerUserToDb } from './auth.service';
 
-export const registerUser = catchAsync(async (req, res) => {
-  const data = await registerUserToDb(req.body as Omit<TUser, '_id'>);
+export const registerUser = catchAsync<Omit<TUser, '_id'>>(async (req, res) => {
+  const data = await registerUserToDb(req.body);
   return sendResponse(res, {
     data,
     message: 'User registered successfully',
@@ -15,8 +15,8 @@ export const registerUser = catchAsync(async (req, res) => {
   });
 });
 
-export const loginUser = catchAsync(async (req, res) => {
-  const data = await loginUserFromDb(req.body as Pick<TUser, 'email' | 'password'>);
+export const loginUser = catchAsync<Pick<TUser, 'email' | 'password'>>(async (req, res) => {
+  const data = await loginUserFromDb(req.body);
   return sendResponse(res, {
     data,
     message: 'User login successful',
@@ -25,8 +25,8 @@ export const loginUser = catchAsync(async (req, res) => {
   });
 });
 
-export const changePassword = catchAsync(async (req, res) => {
-  const data = await changePasswordToDb(req.user!._id, req.body as Record<string, string>);
+export const changePassword = catchAsync<Params>(async (req, res) => {
+  const data = await changePasswordToDb(req.user!._id, req.body);
   return sendResponse(res, {
     data,
     message: 'Password changed successfully',

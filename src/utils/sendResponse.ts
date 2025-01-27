@@ -1,7 +1,9 @@
 import type { ErrorType } from '@/errors/error.const';
 import type { Response } from 'express';
 
-export type TSuccessResponse<T extends AnyObject, U extends AnyObject> = {
+type ResponseData = AnyObject | unknown[];
+
+export type TSuccessResponse<T extends ResponseData, U extends AnyObject = AnyObject> = {
   success: true;
   statusCode: number;
   message: string;
@@ -18,7 +20,7 @@ export type TErrorResponse = {
   stack?: string;
 };
 
-export type TResponse<T extends AnyObject, U extends AnyObject> =
+export type TResponse<T extends ResponseData, U extends AnyObject> =
   | TSuccessResponse<T, U>
   | TErrorResponse;
 
@@ -34,7 +36,7 @@ export type TResponse<T extends AnyObject, U extends AnyObject> =
  * @param {} data - the data that needs to be sent
  * @return the express response object
  */
-const sendResponse = <T extends AnyObject, U extends AnyObject>(
+const sendResponse = <T extends ResponseData, U extends AnyObject>(
   res: Response,
   data: TResponse<T, U>,
 ) => {

@@ -1,7 +1,7 @@
 services:
   redis:
     container_name: redis
-    image: redis:7-alpine
+    image: redis:7.4.2-alpine
     ports:
       - 6379:6379
     restart: on-failure
@@ -13,22 +13,13 @@ services:
   server-dev:
     depends_on:
       - redis
-    container_name: template-server-dev
+    container_name: template-server:dev
     build:
       context: .
       dockerfile: Dockerfile.Dev
     restart: on-failure
     volumes:
-      - ./src:/app/src
-      - ./eslint.config.mjs:/app/eslint.config.mjs
-      - ./eslint.airbnb.mjs:/app/eslint.airbnb.mjs
-      - ./.prettierignore:/app/.prettierignore
-      - ./.prettierrc:/app/.prettierrc
-      - ./vitest.config.ts:/app/vitest.config.ts
-      - ./package.json:/app/package.json
-      - ./pnpm-lock.yaml:/app/pnpm-lock.yaml
-      - ./tsconfig.json:/app/tsconfig.json
-      - ./logs:/app/logs
+      - .:/app
       - /app/node_modules
     ports:
       - 8080:8080

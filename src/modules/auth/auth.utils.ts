@@ -31,7 +31,7 @@ export const compareHashedText = (plaintext: string, hashed: string) => {
  */
 export const createJWT = (payload: JWTPayload) => {
   return jwt.sign(payload, configs.jwt_access_secret, {
-    expiresIn: configs.jwt_access_expires_in,
+    expiresIn: configs.jwt_access_expires_in as `${number}`,
   });
 };
 

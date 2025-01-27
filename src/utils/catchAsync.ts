@@ -1,4 +1,6 @@
-import type { RequestHandler } from 'express';
+import type { Request, RequestHandler } from 'express';
+
+type Handler<T extends AnyObject> = RequestHandler<Request['params'], AnyObject, T, Params>;
 
 /**
  * A higher-order function that takes a request handler function and returns
@@ -10,9 +12,10 @@ import type { RequestHandler } from 'express';
  * @param requestHandler - the function to be wrapped
  * @returns the wrapped function
  */
-const catchAsync = (requestHandler: RequestHandler): RequestHandler => {
+const catchAsync = <T extends AnyObject>(requestHandler: Handler<T>): Handler<T> => {
   return async (req, res, next) => {
     try {
+      if (!req.body) req.body = {} as T;
       await Promise.resolve(requestHandler(req, res, next));
     } catch (err) {
       next(err);

@@ -3,7 +3,7 @@ import env from 'dotenv';
 // env config
 env.config();
 
-const configs = {
+const configs = Object.freeze({
   port: process.env.PORT || 8080,
   origin: process.env.CLIENT_ORIGIN || '*',
   db_url: process.env.DB_URI,
@@ -18,8 +18,6 @@ const configs = {
   redis_port: parseInt(process.env.REDIS_PORT || '6379', 10),
   // time in seconds
   cache_revalidate_time: 60 * 60 * 24,
-} as const;
-
-Object.freeze(configs);
+});
 
 export default configs;

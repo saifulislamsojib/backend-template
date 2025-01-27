@@ -20,7 +20,6 @@ const globalErrorHandler: ErrorRequestHandler = (err: Error, req, res, next) => 
   if (res.headersSent) {
     return next('Something went wrong!');
   }
-  const { node_env } = configs;
   let statusCode = err instanceof AppError ? err.statusCode : INTERNAL_SERVER_ERROR;
   let type: ErrorType = err instanceof AppError ? ERROR_TYPE.appError : ERROR_TYPE.serverError;
   let message = err.message || 'Something went wrong!';
@@ -59,10 +58,7 @@ const globalErrorHandler: ErrorRequestHandler = (err: Error, req, res, next) => 
 
   const errorResponse: TErrorResponse = { success: false, statusCode, type, message };
 
-  if (node_env === 'development') {
-    // errorResponse.error = err;
-    errorResponse.stack = err.stack;
-  }
+  if (configs.node_env === 'development') errorResponse.stack = err.stack;
 
   const logResponse = {
     url: req.url,

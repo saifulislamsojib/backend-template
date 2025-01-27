@@ -16,7 +16,7 @@ export default [
   ...airbnb,
   prettierRecommended,
   // for ignore directories
-  { ignores: ['**/node_modules/', '**/dist/'] },
+  { ignores: ['node_modules', 'dist'] },
   // for root custom configs
   {
     files: ['**/*.{js,mjs,cjs,ts,d.ts}'],

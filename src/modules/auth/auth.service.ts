@@ -50,13 +50,10 @@ export const loginUserFromDb = async (payload: Pick<TUser, 'email' | 'password'>
   };
 };
 
-export const changePasswordToDb = async (
-  userId: string | ObjectId,
-  payload: Record<string, string>,
-) => {
+export const changePasswordToDb = async (userId: string | ObjectId, payload: Params) => {
   const { currentPassword, newPassword } = payload;
 
-  if (currentPassword.trim() === newPassword.trim()) {
+  if (currentPassword?.trim() === newPassword?.trim()) {
     throw new AppError(BAD_REQUEST, 'Current password and new password cannot be the same', null);
   }
 
@@ -67,12 +64,12 @@ export const changePasswordToDb = async (
   }
 
   // check currentPassword
-  if (!(await user.isValidPassword(currentPassword))) {
+  if (!(await user.isValidPassword(currentPassword!))) {
     throw new AppError(BAD_REQUEST, 'Current password is not matched');
   }
 
   // hash password
-  const hashedPassword = await hashText(newPassword);
+  const hashedPassword = await hashText(newPassword!);
 
   const data = await User.findByIdAndUpdate(userId, {
     password: hashedPassword,

@@ -58,7 +58,5 @@ jobs:
         run: pnpm test
         env:
           REDIS_HOST: redis
-          REDIS_PORT: 6379
           BCRYPT_SALT_ROUNDS: 10
           JWT_ACCESS_SECRET: 97acafd11d03882b5ad23f9198f80f9a414e3e2475fb16a121a0f36f8a3a49fc
-          CI: true
