@@ -13,7 +13,7 @@ services:
   server-stage:
     depends_on:
       - redis
-    container_name: template-server:stage
+    container_name: template-server-stage
     build:
       context: .
       dockerfile: Dockerfile
@@ -22,10 +22,10 @@ services:
       - ./logs:/app/logs
       - /app/node_modules
     ports:
-      - 8081:8081
+      - 8081:8080
     environment:
       - NODE_ENV=staging
-      - PORT=8081
+      - PORT=8080
       - REDIS_HOST=redis
     env_file:
       - .env

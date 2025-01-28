@@ -12,7 +12,7 @@
     "type:check": "tsc --noEmit",
     "lint:fix": "eslint --max-warnings 0 --fix",
     "lint:check": "eslint",
-    "format": "prettier --log-level warn --write \"./**/*.{js,mjs,cjs,ts,d.ts,json,yaml,yml,html}\"",
+    "format": "prettier --log-level warn --write \"./**/*.{js,mjs,cjs,ts,d.ts,mts,json,yaml,yml,html}\"",
     "lint": "pnpm format && pnpm lint:fix",
     "test": "vitest run",
     "test:w": "vitest --watch",
@@ -21,8 +21,8 @@
     "docker-stage": "docker compose -f docker-compose.stage.yml up --build -d",
     "docker-dev": "docker compose -f docker-compose.dev.yml up --build",
     "docker:sh": "docker exec -it template-server sh",
-    "docker-stage:sh": "docker exec -it template-server:stage sh",
-    "docker-dev:sh": "docker exec -it template-server:dev sh",
+    "docker-stage:sh": "docker exec -it template-server-stage sh",
+    "docker-dev:sh": "docker exec -it template-server-dev sh",
     "redis-cli": "docker exec -it redis redis-cli",
     "lint-staged": "lint-staged",
     "prepare": "husky || true"
@@ -81,7 +81,7 @@
     "pnpm": ">=9"
   },
   "lint-staged": {
-    "*.{js,mjs,cjs,ts,d.ts}": "eslint --max-warnings 0 --fix",
-    "*.{js,mjs,cjs,ts,d.ts,json,yaml,yml,html}": "prettier --log-level warn --write"
+    "*.{js,mjs,cjs,ts,d.ts,mts}": "eslint --max-warnings 0 --fix",
+    "*.{js,mjs,cjs,ts,d.ts,mts,json,yaml,yml,html}": "prettier --log-level warn --write"
   }
 }

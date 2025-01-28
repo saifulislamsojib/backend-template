@@ -1,7 +1,7 @@
 services:
   redis:
     container_name: redis
-    image: redis:7.4.2-alpine
+    image: redis:7-alpine
     ports:
       - 6379:6379
     restart: on-failure
@@ -13,7 +13,7 @@ services:
   server-dev:
     depends_on:
       - redis
-    container_name: template-server:dev
+    container_name: template-server-dev
     build:
       context: .
       dockerfile: Dockerfile.Dev

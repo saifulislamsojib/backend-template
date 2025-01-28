@@ -12,14 +12,13 @@ export default [
   pluginJs.configs.recommended,
   importConfigs.recommended,
   importConfigs.typescript,
-  ...tsEslintConfigs.recommended,
   ...airbnb,
   prettierRecommended,
   // for ignore directories
   { ignores: ['node_modules', 'dist'] },
   // for root custom configs
   {
-    files: ['**/*.{js,mjs,cjs,ts,d.ts}'],
+    files: ['**/*.{js,mjs,cjs,ts,d.ts,mts}'],
     languageOptions: {
       globals: globals.node,
       ecmaVersion: 2020,
@@ -40,17 +39,12 @@ export default [
       'import/extensions': ['error', 'ignorePackages', { ts: 'never' }],
       'import/no-extraneous-dependencies': [
         'error',
-        {
-          devDependencies: ['vitest.config.*ts', 'eslint.*.mjs'],
-        },
+        { devDependencies: ['vitest.config.mts', 'eslint.*.mjs'] },
       ],
     },
   },
   // for src directory ts files only for type checking
-  ...tsEslintConfigs.recommendedTypeChecked.map((config) => ({
-    files,
-    ...config,
-  })),
+  ...tsEslintConfigs.recommendedTypeChecked.map((config) => ({ files, ...config })),
   {
     files,
     languageOptions: {
@@ -62,12 +56,9 @@ export default [
     rules: {
       '@typescript-eslint/no-misused-promises': [
         'error',
-        {
-          checksVoidReturn: {
-            arguments: false,
-          },
-        },
+        { checksVoidReturn: { arguments: false } },
       ],
+      '@typescript-eslint/no-base-to-string': ['error', { ignoredTypeNames: ['ObjectId'] }],
     },
   },
   // for test files only
