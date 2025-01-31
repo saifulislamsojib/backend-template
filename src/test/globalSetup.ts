@@ -1,7 +1,9 @@
-import { MongoMemoryServer } from 'mongodb-memory-server';
+import { MongoMemoryReplSet } from 'mongodb-memory-server';
 
 const globalSetup = async () => {
-  const instance = await MongoMemoryServer.create();
+  const instance = await MongoMemoryReplSet.create({
+    replSet: { count: 1, storageEngine: 'wiredTiger' },
+  });
   process.env.DB_URI = instance.getUri();
 
   return () => {
