@@ -43,7 +43,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/mongodb-binaries
-          key: 20
+          key: 22
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile

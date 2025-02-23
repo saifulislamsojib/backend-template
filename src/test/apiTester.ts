@@ -1,4 +1,5 @@
 import app from '@/app';
+import { OK } from 'http-status';
 import supertest from 'supertest';
 import type { TResponse } from '../utils/sendResponse';
 
@@ -40,7 +41,7 @@ const apiTester = async <T extends Response = Response>(testerOptions: TesterPro
     url,
     method = 'get',
     body: reqBody,
-    expected: { status = 200, success = true, type } = {},
+    expected: { status = OK, success = true, type } = {},
     token,
   } = testerOptions;
   const query = request[method](url);

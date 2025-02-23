@@ -3,6 +3,7 @@ import client from '@/configs/redis';
 import catchAsync from '@/utils/catchAsync';
 import sendResponse from '@/utils/sendResponse';
 import type { Request } from 'express';
+import { OK } from 'http-status';
 
 type Type = 'public' | 'protected';
 
@@ -14,7 +15,7 @@ type Type = 'public' | 'protected';
  *               If 'protected', the cache is user-specific and will be prefixed with the user's id and role.
  * @returns The generated cache key.
  */
-export const getRouteCacheKey = (req: Request, type: Type = 'protected') => {
+export const getRouteCacheKey = (req: Request, type: Type = 'public') => {
   let key = req.originalUrl;
   if (type === 'protected' && req.user) {
     key += `:${req.user._id?.toString()}:${req.user.role}`;
@@ -30,14 +31,14 @@ export const getRouteCacheKey = (req: Request, type: Type = 'protected') => {
  *               If 'protected', the cache is user-specific and will be prefixed with the user's id and role.
  * @returns A middleware function that checks for a cached response.
  */
-const cacheRoute = (type: Type = 'protected') => {
+const cacheRoute = (type: Type = 'public') => {
   return catchAsync(async (req, res, next) => {
     const cached = await client.get(getRouteCacheKey(req, type));
     if (cached) {
       return sendResponse(res, {
         data: JSON.parse(cached) as AnyObject,
         message: 'Data retrieved successfully from cache',
-        statusCode: 200,
+        statusCode: OK,
         success: true,
       });
     }
@@ -54,7 +55,7 @@ const cacheRoute = (type: Type = 'protected') => {
  *               If 'protected', the cache is user-specific and will be prefixed with the user's id and role.
  * @returns A promise that resolves when the cache is set.
  */
-export const setRouteCache = (req: Request, data: unknown, type: Type = 'protected') => {
+export const setRouteCache = (req: Request, data: unknown, type: Type = 'public') => {
   const key = getRouteCacheKey(req, type);
 
   return client.setEx(key, configs.cache_revalidate_time, JSON.stringify(data));
@@ -68,7 +69,7 @@ export const setRouteCache = (req: Request, data: unknown, type: Type = 'protect
  *               If 'protected', the cache is user-specific and will be prefixed with the user's id and role.
  * @returns A promise that resolves when the cache is deleted.
  */
-export const deleteRouteCache = (req: Request, type: Type = 'protected') => {
+export const deleteRouteCache = (req: Request, type: Type = 'public') => {
   return client.del(getRouteCacheKey(req, type));
 };
 

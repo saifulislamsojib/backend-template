@@ -7,7 +7,7 @@ import apiTester from '@/test/apiTester';
 import { expectEnum, types } from '@/test/utils';
 import omit from '@/utils/omit';
 import type { TSuccessResponse } from '@/utils/sendResponse';
-import { BAD_REQUEST, NOT_FOUND, UNAUTHORIZED } from 'http-status';
+import { BAD_REQUEST, CREATED, NOT_FOUND, OK, UNAUTHORIZED } from 'http-status';
 
 type SuccessRes = TSuccessResponse<{ token: string; user: TUser }, AnyObject>;
 
@@ -67,7 +67,7 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
       };
       delete user.password;
 
-      const expected = { status: 201, success: true };
+      const expected = { status: CREATED, success: true };
 
       const resBody = await apiTester<SuccessRes>({ url, method: 'post', body, expected });
       expect(resBody?.data).toStrictEqual(expect.objectContaining({ token: types.string, user }));
@@ -142,7 +142,7 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
         updatedAt: types.string,
       };
 
-      const expected = { status: 200, success: true };
+      const expected = { status: OK, success: true };
 
       const resBody = await apiTester<SuccessRes>({ url, method: 'post', body, expected });
       expect(resBody?.data).toStrictEqual(expect.objectContaining({ token: types.string, user }));
@@ -223,7 +223,7 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
         updatedAt: types.string,
       };
 
-      const expected = { status: 200, success: true };
+      const expected = { status: OK, success: true };
 
       const resBody = await apiTester<SuccessRes>({ url, method: 'post', body, expected, token });
       expect(resBody?.data).toStrictEqual(expect.objectContaining({ token: types.string, user }));
