@@ -15,7 +15,7 @@ type Handler<T extends AnyObject> = RequestHandler<Request['params'], AnyObject,
 const catchAsync = <T extends AnyObject>(requestHandler: Handler<T>): Handler<T> => {
   return async (req, res, next) => {
     try {
-      if (!req.body) req.body = {} as T;
+      if (!req.body && (req.method === 'POST' || req.method === 'PATCH')) req.body = {} as T;
       await Promise.resolve(requestHandler(req, res, next));
     } catch (err) {
       next(err);
