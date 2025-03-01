@@ -37,7 +37,7 @@ export type TResponse<T extends ResponseData, U extends AnyObject> =
  * @return the express response object
  */
 const sendResponse = <T extends ResponseData, U extends AnyObject>(
-  res: Response,
+  res: Pick<Response, 'status'>,
   data: TResponse<T, U>,
 ) => {
   const response = {

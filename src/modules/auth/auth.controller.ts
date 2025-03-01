@@ -4,10 +4,11 @@ import sendResponse from '@/utils/sendResponse';
 import { CREATED, OK } from 'http-status';
 import type TUser from '../user/user.types';
 import { changePasswordToDb, loginUserFromDb, registerUserToDb } from './auth.service';
+import { setAuthCookie } from './auth.utils';
 
 export const registerUser = catchAsync<Omit<TUser, '_id'>>(async (req, res) => {
   const data = await registerUserToDb(req.body);
-  return sendResponse(res, {
+  return sendResponse(setAuthCookie(res, data.token), {
     data,
     message: 'User registered successfully',
     statusCode: CREATED,
@@ -17,7 +18,7 @@ export const registerUser = catchAsync<Omit<TUser, '_id'>>(async (req, res) => {
 
 export const loginUser = catchAsync<Pick<TUser, 'email' | 'password'>>(async (req, res) => {
   const data = await loginUserFromDb(req.body);
-  return sendResponse(res, {
+  return sendResponse(setAuthCookie(res, data.token), {
     data,
     message: 'User login successful',
     statusCode: OK,

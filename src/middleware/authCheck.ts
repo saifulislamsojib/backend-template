@@ -1,5 +1,5 @@
 import AppError from '@/errors/AppError';
-import { verifyJWT } from '@/modules/auth/auth.utils';
+import { AUTH_TOKEN_KEY, verifyJWT } from '@/modules/auth/auth.utils';
 import User from '@/modules/user/user.model';
 import type { Role } from '@/modules/user/user.types';
 import catchAsync from '@/utils/catchAsync';
@@ -21,21 +21,18 @@ import { NOT_FOUND, UNAUTHORIZED } from 'http-status';
  */
 const authCheck = (...roles: Role[]) => {
   return catchAsync(async (req, _res, next) => {
-    const { authorization } = req.headers;
+    const authorization = (req.cookies as Params)?.[AUTH_TOKEN_KEY] || req.headers.authorization;
 
     // check authorization send from client
-    if (!authorization) {
-      throw new AppError(UNAUTHORIZED, 'Invalid token!');
-    }
+    if (!authorization) throw new AppError(UNAUTHORIZED, 'Invalid token!');
 
     // check authorization token
     const payload = verifyJWT(authorization);
 
     // check user exist or not
     const user = await User.findById(payload._id).select('+passwordUpdatedAt');
-    if (!user) {
-      throw new AppError(NOT_FOUND, 'This user not found!');
-    }
+
+    if (!user) throw new AppError(NOT_FOUND, 'This user not found!');
 
     const { email, _id, role, name, createdAt, updatedAt, passwordUpdatedAt } = user;
 

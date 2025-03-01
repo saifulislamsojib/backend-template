@@ -19,6 +19,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
+    "erasableSyntaxOnly": true,
     "types": ["vitest/globals"],
     "baseUrl": ".",
     "paths": {

@@ -9,7 +9,7 @@ const envValidationSchema = z.object({
   DB_URI: z.string(),
   JWT_ACCESS_SECRET: z.string(),
   JWT_ACCESS_EXPIRES_IN: z.string(),
-  CLIENT_ORIGIN: z.string().optional(),
+  CLIENT_ORIGIN: z.string().url(),
   LOG_LEVEL: z.enum(log_levels).optional(),
   IS_LOGS_ON_FILE: z.enum(['true', 'false']).optional(),
   REDIS_HOST: z.string().optional(),

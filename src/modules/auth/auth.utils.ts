@@ -1,6 +1,7 @@
 import configs from '@/configs';
 import AppError from '@/errors/AppError';
 import bcrypt from 'bcrypt';
+import type { Response } from 'express';
 import { UNAUTHORIZED } from 'http-status';
 import jwt from 'jsonwebtoken';
 import type { AuthPayload, JWTPayload } from './auth.types';
@@ -47,4 +48,24 @@ export const verifyJWT = (token: string) => {
   } catch {
     throw new AppError(UNAUTHORIZED, 'Invalid token!');
   }
+};
+
+export const AUTH_TOKEN_KEY = 'access-token';
+
+/**
+ * Sets an authentication cookie with the provided JWT token.
+ * @param res - The response object used to set the cookie.
+ * @param token - The JWT token to be stored in the cookie.
+ * The cookie is set with HttpOnly, SameSite=None, and Secure attributes for security,
+ * and is configured to expire in 7 days.
+ */
+
+export const setAuthCookie = (res: Pick<Response, 'cookie'>, token: string) => {
+  return res.cookie(AUTH_TOKEN_KEY, token, {
+    maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+    httpOnly: true,
+    sameSite: 'none',
+    secure: true,
+    // domain,
+  });
 };
