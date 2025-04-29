@@ -18,7 +18,7 @@
 
 - CI/CD with Github Actions: Github Actions for`Code Checker` (lint-check, type-check & run tests) & `Commit Lint` for checking commit messages
 
-- Path alias: Path alias with `jsconfig-paths`
+- Path alias: Path alias with `tsconfig-paths`
 
 - HTTP & Application Logger: Pino logger with `pino`, `pino-http` and `pino-pretty`
 
