@@ -45,13 +45,13 @@ const sendResponse = <T extends ResponseData, U extends AnyObject>(
     statusCode: data.statusCode,
     message: data.message,
   } as TResponse<T, U>;
-  if (data.success === true && response.success === true) {
+  if (data.success && response.success) {
     response.data = data.data;
     if (data.meta) {
       response.meta = data.meta;
     }
   }
-  if (data.success === false && response.success === false) {
+  if (!data.success && !response.success) {
     response.type = data.type;
     response.error = data.error;
     response.stack = data.stack;
