@@ -2,7 +2,7 @@ import configs from '@/configs';
 import AppError from '@/errors/AppError';
 import bcrypt from 'bcrypt';
 import type { Response } from 'express';
-import { UNAUTHORIZED } from 'http-status';
+import status from 'http-status';
 import jwt from 'jsonwebtoken';
 import type { AuthPayload, JWTPayload } from './auth.types';
 
@@ -46,7 +46,7 @@ export const verifyJWT = (token: string) => {
   try {
     return jwt.verify(token, configs.jwt_access_secret) as AuthPayload;
   } catch {
-    throw new AppError(UNAUTHORIZED, 'Invalid token!');
+    throw new AppError(status.UNAUTHORIZED, 'Invalid token!');
   }
 };
 

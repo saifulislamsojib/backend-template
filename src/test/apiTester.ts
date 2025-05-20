@@ -1,5 +1,5 @@
 import app from '@/app';
-import { OK } from 'http-status';
+import status from 'http-status';
 import supertest from 'supertest';
 import type { TResponse } from '../utils/sendResponse';
 
@@ -41,7 +41,7 @@ const apiTester = async <T extends Response = Response>(testerOptions: TesterPro
     url,
     method = 'get',
     body: reqBody,
-    expected: { status = OK, success = true, type } = {},
+    expected: { status: expectedStatus = status.OK, success = true, type } = {},
     token,
   } = testerOptions;
   const query = request[method](url);
@@ -52,7 +52,7 @@ const apiTester = async <T extends Response = Response>(testerOptions: TesterPro
     query.set('authorization', token);
   }
   const res = await query;
-  expect(res.status).toBe(status);
+  expect(res.status).toBe(expectedStatus);
   const resBody = res.body as T;
   expect(resBody.success).toBe(success);
   if (type && resBody.success === false) {

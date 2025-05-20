@@ -3,7 +3,7 @@ import { AUTH_TOKEN_KEY, verifyJWT } from '@/modules/auth/auth.utils';
 import User from '@/modules/user/user.model';
 import type { Role } from '@/modules/user/user.types';
 import catchAsync from '@/utils/catchAsync';
-import { NOT_FOUND, UNAUTHORIZED } from 'http-status';
+import status from 'http-status';
 
 /**
  * Middleware to check authentication and authorization.
@@ -24,7 +24,7 @@ const authCheck = (...roles: Role[]) => {
     const authorization = (req.cookies as Params)?.[AUTH_TOKEN_KEY] || req.headers.authorization;
 
     // check authorization send from client
-    if (!authorization) throw new AppError(UNAUTHORIZED, 'Invalid token!');
+    if (!authorization) throw new AppError(status.UNAUTHORIZED, 'Invalid token!');
 
     // check authorization token
     const payload = verifyJWT(authorization);
@@ -32,7 +32,7 @@ const authCheck = (...roles: Role[]) => {
     // check user exist or not
     const user = await User.findById(payload._id).select('+passwordUpdatedAt');
 
-    if (!user) throw new AppError(NOT_FOUND, 'This user not found!');
+    if (!user) throw new AppError(status.NOT_FOUND, 'This user not found!');
 
     const { email, _id, role, name, createdAt, updatedAt, passwordUpdatedAt } = user;
 
@@ -43,24 +43,24 @@ const authCheck = (...roles: Role[]) => {
         10,
       );
       if (passwordChangedTime > payload.iat) {
-        throw new AppError(UNAUTHORIZED, 'Invalid token!');
+        throw new AppError(status.UNAUTHORIZED, 'Invalid token!');
       }
     }
 
     // after email update invalid the old token
     if (email !== payload.email) {
-      throw new AppError(UNAUTHORIZED, 'Invalid token!');
+      throw new AppError(status.UNAUTHORIZED, 'Invalid token!');
     }
 
     // after role update invalid the old token
     if (role !== payload.role) {
-      throw new AppError(UNAUTHORIZED, 'Invalid token!');
+      throw new AppError(status.UNAUTHORIZED, 'Invalid token!');
     }
 
     // check user role authorization
     if (roles && !roles.includes(role)) {
       throw new AppError(
-        UNAUTHORIZED,
+        status.UNAUTHORIZED,
         'You do not have the necessary permissions to access this resource!',
       );
     }

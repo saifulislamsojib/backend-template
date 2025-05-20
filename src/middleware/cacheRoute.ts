@@ -3,7 +3,7 @@ import client from '@/configs/redis';
 import catchAsync from '@/utils/catchAsync';
 import sendResponse from '@/utils/sendResponse';
 import type { Request } from 'express';
-import { OK } from 'http-status';
+import status from 'http-status';
 
 type Type = 'public' | 'protected';
 
@@ -38,7 +38,7 @@ const cacheRoute = (type: Type = 'public') => {
       return sendResponse(res, {
         data: JSON.parse(cached) as AnyObject,
         message: 'Data retrieved successfully from cache',
-        statusCode: OK,
+        statusCode: status.OK,
         success: true,
       });
     }

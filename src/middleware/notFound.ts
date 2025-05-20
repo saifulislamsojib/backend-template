@@ -1,12 +1,12 @@
 import logger from '@/configs/logger';
 import sendResponse, { type TErrorResponse } from '@/utils/sendResponse';
 import type { RequestHandler } from 'express';
-import { NOT_FOUND } from 'http-status';
+import status from 'http-status';
 
 const notFoundResponse: TErrorResponse = {
   success: false,
   message: 'Requested Url Not Found!!',
-  statusCode: NOT_FOUND,
+  statusCode: status.NOT_FOUND,
   type: 'notFound',
 };
 

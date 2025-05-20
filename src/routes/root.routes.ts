@@ -1,11 +1,11 @@
 import packageJson from '@/../package.json';
 import { Router } from 'express';
-import { OK } from 'http-status';
+import status from 'http-status';
 
 const rootRoute = Router();
 
 rootRoute.get('/', (_req, res) => {
-  res.status(OK).json({
+  res.status(status.OK).json({
     success: true,
     message: `Welcome to the ${packageJson.name} server boss!`,
   });

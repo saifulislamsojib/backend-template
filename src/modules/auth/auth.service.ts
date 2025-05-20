@@ -1,6 +1,6 @@
 import AppError from '@/errors/AppError';
 import omit from '@/utils/omit';
-import { BAD_REQUEST, NOT_FOUND } from 'http-status';
+import status from 'http-status';
 import type { ObjectId } from 'mongoose';
 import User from '../user/user.model';
 import type TUser from '../user/user.types';
@@ -12,7 +12,7 @@ export const registerUserToDb = async (payload: Omit<TUser, '_id'>) => {
   // check user is already registered or not
   const isExist = await User.findOne({ email });
   if (isExist) {
-    throw new AppError(BAD_REQUEST, 'The User already exists by the email');
+    throw new AppError(status.BAD_REQUEST, 'The User already exists by the email');
   }
 
   // Now create the user
@@ -33,12 +33,12 @@ export const loginUserFromDb = async (payload: Pick<TUser, 'email' | 'password'>
   // check the user found or not
   const user = await User.findOne({ email }).select('+password');
   if (!user?._id) {
-    throw new AppError(NOT_FOUND, 'User not found with the email');
+    throw new AppError(status.NOT_FOUND, 'User not found with the email');
   }
 
   // check the user password
   if (!(await user.isValidPassword(password))) {
-    throw new AppError(BAD_REQUEST, 'Password is not valid');
+    throw new AppError(status.BAD_REQUEST, 'Password is not valid');
   }
 
   // create jwt token
@@ -54,18 +54,22 @@ export const changePasswordToDb = async (userId: string | ObjectId, payload: Par
   const { currentPassword, newPassword } = payload;
 
   if (currentPassword?.trim() === newPassword?.trim()) {
-    throw new AppError(BAD_REQUEST, 'Current password and new password cannot be the same', null);
+    throw new AppError(
+      status.BAD_REQUEST,
+      'Current password and new password cannot be the same',
+      null,
+    );
   }
 
   const user = await User.findById(userId).select('+password');
 
   if (!user) {
-    throw new AppError(NOT_FOUND, 'User not found');
+    throw new AppError(status.NOT_FOUND, 'User not found');
   }
 
   // check currentPassword
   if (!(await user.isValidPassword(currentPassword!))) {
-    throw new AppError(BAD_REQUEST, 'Current password is not matched');
+    throw new AppError(status.BAD_REQUEST, 'Current password is not matched');
   }
 
   // hash password
@@ -76,7 +80,7 @@ export const changePasswordToDb = async (userId: string | ObjectId, payload: Par
     passwordUpdatedAt: new Date(),
   });
   if (!data) {
-    throw new AppError(BAD_REQUEST, 'Password change failed');
+    throw new AppError(status.BAD_REQUEST, 'Password change failed');
   }
 
   // create jwt token

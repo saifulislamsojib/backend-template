@@ -32,15 +32,15 @@ type DeleteCacheOptions = DeleteCacheKeysOption | DeleteCachePatternOption | Del
 /**
  * Delete all keys in redis cache that match the given pattern
  * @param pattern - The pattern to match keys in redis cache
- * @param givenCursor - The cursor to start the iteration from, default is 0
+ * @param givenCursor - The cursor to start the iteration from, default is '0'
  * @returns A promise that resolves when all matching keys are deleted
  */
-export const deleteKeysByPattern = async (pattern: string, givenCursor = 0) => {
+export const deleteKeysByPattern = async (pattern: string, givenCursor = '0') => {
   let cursor = givenCursor;
   const reply = await client.scan(cursor, { MATCH: pattern, COUNT: 1000 });
   cursor = reply.cursor;
   await Promise.all(reply.keys.map((key) => client.del(key)));
-  if (cursor !== 0) {
+  if (cursor !== '0') {
     await deleteKeysByPattern(pattern, cursor);
   }
 };
