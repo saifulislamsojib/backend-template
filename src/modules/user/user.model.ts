@@ -1,7 +1,7 @@
 import { model, Model, Schema } from 'mongoose';
-import { compareHashedText, hashText } from '../auth/auth.utils';
-import { userRoles } from './user.constant';
-import type TUser from './user.types';
+import { compareHashedText, hashText } from '../auth/auth.utils.js';
+import { userRoles } from './user.constant.js';
+import type { TUser } from './user.types.js';
 
 interface IUserMethods {
   isValidPassword(password: string): Promise<boolean>;

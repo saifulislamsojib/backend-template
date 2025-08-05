@@ -1,5 +1,5 @@
-import authRoutes from '@/modules/auth/auth.route';
-import healthRoute from '@/modules/health/health.route';
+import authRoutes from '@/modules/auth/auth.route.js';
+import healthRoute from '@/modules/health/health.route.js';
 import { Router } from 'express';
 
 const apiRoutes = Router();

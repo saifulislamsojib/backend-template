@@ -1,8 +1,3 @@
-import env from 'dotenv';
-
-// env config
-env.config();
-
 const configs = Object.freeze({
   port: process.env.PORT || 8080,
   origin: process.env.CLIENT_ORIGIN,

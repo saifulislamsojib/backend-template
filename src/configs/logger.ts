@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
-import pino, { type StreamEntry } from 'pino';
+import { pino, type StreamEntry } from 'pino';
 import pretty from 'pino-pretty';
-import configs from '.';
+import configs from './index.js';
 
 const { node_env, log_level, is_logs_on_file } = configs;
 
@@ -12,7 +12,7 @@ const streams: StreamEntry<string>[] = [
 
 // If is_logs_on_file is true, add file streams for error and fatal logs
 if (is_logs_on_file) {
-  const logDir = path.join(__dirname, '../../logs');
+  const logDir = path.join(import.meta.dirname, '../../logs');
 
   // Helper function to generate log filenames with date
   const getLogFilePath = (level: string) => {
@@ -36,8 +36,8 @@ const logger = pino(
   {
     level: node_env === 'test' ? 'silent' : log_level || 'info',
     formatters: {
-      level(label) {
-        return { level: label };
+      level(level) {
+        return { level };
       },
     },
   },

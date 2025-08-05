@@ -1,6 +1,6 @@
 import { createClient } from 'redis';
-import configs from '.';
-import logger from './logger';
+import configs from './index.js';
+import logger from './logger.js';
 
 const { redis_host, redis_port } = configs;
 

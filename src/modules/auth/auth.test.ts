@@ -1,12 +1,11 @@
-import configs from '@/configs';
-import { ERROR_TYPE, type ErrorType } from '@/errors/error.const';
-import { userRoles } from '@/modules/user/user.constant';
-import type TUser from '@/modules/user/user.types';
-import type { TUserResponse } from '@/modules/user/user.types';
-import apiTester from '@/test/apiTester';
-import { expectEnum, types } from '@/test/utils';
-import omit from '@/utils/omit';
-import type { TSuccessResponse } from '@/utils/sendResponse';
+import configs from '@/configs/index.js';
+import { ERROR_TYPE, type ErrorType } from '@/errors/error.const.js';
+import { userRoles } from '@/modules/user/user.constant.js';
+import type { TUser, TUserResponse } from '@/modules/user/user.types.js';
+import apiTester from '@/test/apiTester.js';
+import { expectEnum, types } from '@/test/utils.js';
+import omit from '@/utils/omit.js';
+import type { TSuccessResponse } from '@/utils/sendResponse.js';
 import status from 'http-status';
 
 type SuccessRes = TSuccessResponse<{ token: string; user: TUser }, AnyObject>;

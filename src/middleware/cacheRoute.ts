@@ -1,7 +1,7 @@
-import configs from '@/configs';
-import client from '@/configs/redis';
-import catchAsync from '@/utils/catchAsync';
-import sendResponse from '@/utils/sendResponse';
+import configs from '@/configs/index.js';
+import client from '@/configs/redis.js';
+import catchAsync from '@/utils/catchAsync.js';
+import sendResponse from '@/utils/sendResponse.js';
 import type { Request } from 'express';
 import status from 'http-status';
 

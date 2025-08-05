@@ -1,5 +1,5 @@
-import logger from '@/configs/logger';
-import { type ZodError, type ZodIssue, z } from 'zod';
+import logger from '@/configs/logger.js';
+import { z, type ZodError } from 'zod';
 
 const node_envs = ['development', 'test', 'staging', 'production'] as const;
 const log_levels = ['trace', 'debug', 'info', 'warn', 'error', 'fatal', 'silent'] as const;
@@ -9,7 +9,7 @@ const envValidationSchema = z.object({
   DB_URI: z.string(),
   JWT_ACCESS_SECRET: z.string(),
   JWT_ACCESS_EXPIRES_IN: z.string(),
-  CLIENT_ORIGIN: z.string().url(),
+  CLIENT_ORIGIN: z.url(),
   LOG_LEVEL: z.enum(log_levels).optional(),
   IS_LOGS_ON_FILE: z.enum(['true', 'false']).optional(),
   REDIS_HOST: z.string().optional(),
@@ -18,10 +18,10 @@ const envValidationSchema = z.object({
     .string()
     .optional()
     .refine((port) => (port ? parseInt(port, 10) > 0 : true), {
-      message: 'PORT must be a positive integer.',
+      error: 'PORT must be a positive integer.',
     }),
   BCRYPT_SALT_ROUNDS: z.string().refine((val) => parseInt(val, 10) > 0, {
-    message: 'BCRYPT_SALT_ROUNDS must be a positive number.',
+    error: 'BCRYPT_SALT_ROUNDS must be a positive number.',
   }),
 });
 
@@ -37,19 +37,16 @@ const catchEnvValidation = async () => {
     await envValidationSchema.parseAsync(process.env);
     return true;
   } catch (error) {
-    const err = (error as ZodError).errors.reduce(
+    const err = (error as ZodError).issues.reduce(
       (acc, cur) => {
         const path = cur.path[0] as keyof EnvType;
         if (path) {
-          const copyCurrent: Partial<ZodIssue> = { ...cur };
-          delete copyCurrent.path;
-          delete copyCurrent.code;
-          acc[path] = copyCurrent;
+          acc[path] = cur.message;
           return acc;
         }
         return acc;
       },
-      {} as Record<Partial<keyof EnvType>, Partial<ZodIssue>>,
+      {} as Record<Partial<keyof EnvType>, string>,
     );
     logger.fatal(err, 'Environment Variable validation error');
     setTimeout(() => {

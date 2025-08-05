@@ -1,8 +1,8 @@
-import AppError from '@/errors/AppError';
-import { AUTH_TOKEN_KEY, verifyJWT } from '@/modules/auth/auth.utils';
-import User from '@/modules/user/user.model';
-import type { Role } from '@/modules/user/user.types';
-import catchAsync from '@/utils/catchAsync';
+import AppError from '@/errors/AppError.js';
+import { AUTH_TOKEN_KEY, verifyJWT } from '@/modules/auth/auth.utils.js';
+import User from '@/modules/user/user.model.js';
+import type { Role } from '@/modules/user/user.types.js';
+import catchAsync from '@/utils/catchAsync.js';
 import status from 'http-status';
 
 /**
@@ -66,7 +66,7 @@ const authCheck = (...roles: Role[]) => {
     }
 
     // all ok, then add payload and user in request and call next function
-    req.user = { ...payload, _id, name, email, role, createdAt, updatedAt };
+    req.user = { ...payload, _id, name, email, role, createdAt: createdAt!, updatedAt: updatedAt! };
     next();
   });
 };

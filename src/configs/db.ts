@@ -1,6 +1,6 @@
-import { connect, connection } from 'mongoose';
-import configs from '.';
-import logger from './logger';
+import mongoose from 'mongoose';
+import configs from './index.js';
+import logger from './logger.js';
 
 let isDbConnected = false;
 
@@ -11,7 +11,7 @@ let isDbConnected = false;
  */
 export const dbConnect = async () => {
   try {
-    await connect(configs.db_url);
+    await mongoose.connect(configs.db_url);
     logger.info('Database successfully connected!');
     isDbConnected = true;
   } catch (error) {
@@ -30,15 +30,15 @@ export const dbConnect = async () => {
  * @returns A promise that is resolved when the disconnection is successfully completed, and logs error if there is an error.
  */
 export const dbDisconnect = async () => {
-  if (!connection) return;
+  if (!mongoose.connection) return;
   try {
-    await connection.close();
+    await mongoose.connection.close();
   } catch (error) {
     logger.fatal('Database disconnection error: ', (error as Error).message);
   }
 };
 
-connection.on('disconnected', () => {
+mongoose.connection.on('disconnected', () => {
   if (isDbConnected) {
     logger.fatal('Database disconnected!');
   }

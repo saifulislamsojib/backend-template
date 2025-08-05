@@ -1,9 +1,9 @@
-import authCheck from '@/middleware/authCheck';
-import validateRequest from '@/middleware/validateRequest';
+import authCheck from '@/middleware/authCheck.js';
+import validateRequest from '@/middleware/validateRequest.js';
 import { Router } from 'express';
-import { userRoles } from '../user/user.constant';
-import { changePassword, getCurrentUser, loginUser, registerUser } from './auth.controller';
-import { changePasswordSchema, loginUserSchema, registerUserSchema } from './auth.validation';
+import { userRoles } from '../user/user.constant.js';
+import { changePassword, getCurrentUser, loginUser, registerUser } from './auth.controller.js';
+import { changePasswordSchema, loginUserSchema, registerUserSchema } from './auth.validation.js';
 
 const authRoutes = Router();
 

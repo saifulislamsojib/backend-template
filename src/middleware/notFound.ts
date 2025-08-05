@@ -1,5 +1,5 @@
-import logger from '@/configs/logger';
-import sendResponse, { type TErrorResponse } from '@/utils/sendResponse';
+import logger from '@/configs/logger.js';
+import sendResponse, { type TErrorResponse } from '@/utils/sendResponse.js';
 import type { RequestHandler } from 'express';
 import status from 'http-status';
 

@@ -2,9 +2,8 @@ import pluginJs from '@eslint/js';
 import vitest from '@vitest/eslint-plugin';
 import { flatConfigs as importConfigs } from 'eslint-plugin-import';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
-import globals from 'globals';
 import { configs as tsEslintConfigs } from 'typescript-eslint';
-import airbnb from './eslint.airbnb.mjs';
+import airbnb from './eslint.airbnb.js';
 
 const files = ['src/**/*.{ts,d.ts}'];
 
@@ -20,8 +19,7 @@ export default [
   {
     files: ['**/*.{js,mjs,cjs,ts,d.ts,mts}'],
     languageOptions: {
-      globals: globals.node,
-      ecmaVersion: 2020,
+      ecmaVersion: 2023,
       sourceType: 'module',
     },
     settings: {
@@ -29,7 +27,7 @@ export default [
         typescript: {
           alwaysTryTypes: true,
           project: './tsconfig.json',
-          extensions: ['.ts', '.d.ts', '.json'],
+          extensions: ['.ts'],
         },
       },
     },
@@ -39,7 +37,7 @@ export default [
       'import/extensions': ['error', 'ignorePackages', { ts: 'never' }],
       'import/no-extraneous-dependencies': [
         'error',
-        { devDependencies: ['vitest.config.mts', 'eslint.*.mjs'] },
+        { devDependencies: ['vitest.config.ts', 'eslint.*.js'] },
       ],
     },
   },

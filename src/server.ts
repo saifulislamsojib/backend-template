@@ -1,9 +1,9 @@
-import configs from './configs';
-import { dbConnect } from './configs/db';
-import logger from './configs/logger';
-import redisClient from './configs/redis';
-import catchEnvValidation from './utils/catchEnvValidation';
-import server, { closeServer } from './utils/serverUtils';
+import { dbConnect } from './configs/db.js';
+import configs from './configs/index.js';
+import logger from './configs/logger.js';
+import redisClient from './configs/redis.js';
+import catchEnvValidation from './utils/catchEnvValidation.js';
+import server, { closeServer } from './utils/serverUtils.js';
 
 const main = async () => {
   // check env validation

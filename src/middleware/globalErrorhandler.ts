@@ -1,8 +1,8 @@
-import configs from '@/configs';
-import logger from '@/configs/logger';
-import AppError from '@/errors/AppError';
-import { ERROR_TYPE, type ErrorType } from '@/errors/error.const';
-import sendResponse, { type TErrorResponse } from '@/utils/sendResponse';
+import configs from '@/configs/index.js';
+import logger from '@/configs/logger.js';
+import AppError from '@/errors/AppError.js';
+import { ERROR_TYPE, type ErrorType } from '@/errors/error.const.js';
+import sendResponse, { type TErrorResponse } from '@/utils/sendResponse.js';
 import type { ErrorRequestHandler } from 'express';
 import status from 'http-status';
 import { Error as MongooseError } from 'mongoose';
@@ -29,7 +29,8 @@ const globalErrorHandler: ErrorRequestHandler = (err: Error, req, res, next) => 
     statusCode = status.BAD_REQUEST;
     message = err.issues.reduce((acc, { path, message: msg, code }) => {
       const lastPath = path?.[path.length - 1];
-      const singleMessage = code === 'custom' ? msg : `${lastPath} is ${msg?.toLowerCase()}`;
+      const singleMessage =
+        code === 'custom' ? msg : `${lastPath as string} is ${msg?.toLowerCase()}`;
       return `${acc}${acc ? '; ' : ''}${singleMessage}`;
     }, '');
   } else if (err.name === 'CastError') {
@@ -58,7 +59,7 @@ const globalErrorHandler: ErrorRequestHandler = (err: Error, req, res, next) => 
 
   const errorResponse: TErrorResponse = { success: false, statusCode, type, message };
 
-  if (configs.node_env === 'development') errorResponse.stack = err.stack;
+  if (configs.node_env === 'development' && err.stack) errorResponse.stack = err.stack;
 
   const logResponse = {
     url: req.url,

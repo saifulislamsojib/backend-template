@@ -1,6 +1,6 @@
-import app from '@/app';
-import { dbDisconnect } from '@/configs/db';
-import redisClient from '@/configs/redis';
+import app from '@/app.js';
+import { dbDisconnect } from '@/configs/db.js';
+import redisClient from '@/configs/redis.js';
 import { createServer } from 'http';
 
 // create server

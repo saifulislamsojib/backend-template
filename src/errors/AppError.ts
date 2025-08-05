@@ -15,7 +15,7 @@ class AppError extends Error {
     if (stack) {
       this.stack = stack;
     } else if (stack === null) {
-      this.stack = undefined;
+      delete this.stack;
     } else {
       Error.captureStackTrace(this, this.constructor);
     }

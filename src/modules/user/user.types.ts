@@ -1,9 +1,9 @@
 import type { ObjectId } from 'mongoose';
-import { userRoles } from './user.constant';
+import { userRoles } from './user.constant.js';
 
 export type Role = (typeof userRoles)[number];
 
-type TUser = {
+export type TUser = {
   _id: ObjectId;
   name: string;
   email: string;
@@ -21,5 +21,3 @@ export type TUserResponse = Omit<TUser, '_id' | 'passwordUpdatedAt' | 'createdAt
   createdAt?: string;
   updatedAt?: string;
 };
-
-export default TUser;

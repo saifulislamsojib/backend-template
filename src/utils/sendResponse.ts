@@ -1,4 +1,4 @@
-import type { ErrorType } from '@/errors/error.const';
+import type { ErrorType } from '@/errors/error.const.js';
 import type { Response } from 'express';
 
 type ResponseData = AnyObject | unknown[];
@@ -53,8 +53,8 @@ const sendResponse = <T extends ResponseData, U extends AnyObject>(
   }
   if (!data.success && !response.success) {
     response.type = data.type;
-    response.error = data.error;
-    response.stack = data.stack;
+    if (data.error) response.error = data.error;
+    if (data.stack) response.stack = data.stack;
   }
   res.status(data.statusCode).json(response);
 };
