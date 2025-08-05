@@ -1,4 +1,4 @@
-import { model, Model, Schema } from 'mongoose';
+import { model, Schema, type Model } from 'mongoose';
 import { compareHashedText, hashText } from '../auth/auth.utils.js';
 import { userRoles } from './user.constant.js';
 import type { TUser } from './user.types.js';

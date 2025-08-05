@@ -1,5 +1,5 @@
 import type { ObjectId } from 'mongoose';
-import { userRoles } from './user.constant.js';
+import type { userRoles } from './user.constant.js';
 
 export type Role = (typeof userRoles)[number];
 
