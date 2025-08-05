@@ -9,7 +9,7 @@ logs
 
 # testing (if you want to test before build then or run in development comment this 3 lines)
 src/test
-vitest.config.mts
+vitest.config.ts
 src/**/*.test.ts
 
 # others
@@ -25,3 +25,4 @@ Dockerfile
 Dockerfile.*
 compose.yml
 docker-compose*.yml
+commitlint.config.ts

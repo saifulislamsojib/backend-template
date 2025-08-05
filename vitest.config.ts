@@ -1,5 +1,8 @@
-import path from 'path';
+import path from 'node:path';
+import { loadEnvFile } from 'node:process';
 import { defineConfig } from 'vitest/config';
+
+loadEnvFile('./.env');
 
 export default defineConfig({
   test: {

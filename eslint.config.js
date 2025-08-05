@@ -17,7 +17,7 @@ export default [
   { ignores: ['node_modules', 'dist'] },
   // for root custom configs
   {
-    files: ['**/*.{js,mjs,cjs,ts,d.ts,mts}'],
+    files: ['**/*.{js,cjs,ts,d.ts}'],
     languageOptions: {
       ecmaVersion: 2023,
       sourceType: 'module',

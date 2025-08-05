@@ -1,7 +1,7 @@
 import app from '@/app.js';
 import { dbDisconnect } from '@/configs/db.js';
 import redisClient from '@/configs/redis.js';
-import { createServer } from 'http';
+import { createServer } from 'node:http';
 
 // create server
 const server = createServer(app);

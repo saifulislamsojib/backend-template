@@ -14,7 +14,7 @@
     "type:check": "tsc --noEmit",
     "lint": "eslint --max-warnings 0 --fix",
     "lint:check": "eslint",
-    "format": "prettier --log-level warn --write \"./**/*.{js,mjs,cjs,ts,d.ts,mts,json,yaml,yml,html}\"",
+    "format": "prettier --log-level warn --write \"./**/*.{js,cjs,ts,d.ts,json,yaml,yml,html}\"",
     "test": "vitest run",
     "test:w": "vitest --watch",
     "coverage": "vitest run --coverage",
@@ -84,7 +84,7 @@
     "pnpm": ">=10"
   },
   "lint-staged": {
-    "*.{js,mjs,cjs,ts,d.ts,mts}": "eslint --max-warnings 0 --fix",
-    "*.{js,mjs,cjs,ts,d.ts,mts,json,yaml,yml,html}": "prettier --log-level warn --write"
+    "*.{js,cjs,ts,d.ts}": "eslint --max-warnings 0 --fix",
+    "*.{js,cjs,ts,d.ts,json,yaml,yml,html}": "prettier --log-level warn --write"
   }
 }
