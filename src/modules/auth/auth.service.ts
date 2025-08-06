@@ -2,9 +2,9 @@ import AppError from '@/errors/AppError.js';
 import omit from '@/utils/omit.js';
 import status from 'http-status';
 import type { ObjectId } from 'mongoose';
-import User from '../user/user.model.js';
-import type { TUser } from '../user/user.types.js';
-import { createJWT, hashText } from './auth.utils.js';
+import User from '../user/user.model.ts';
+import type { TUser } from '../user/user.types.ts';
+import { createJWT, hashText } from './auth.utils.ts';
 
 export const registerUserToDb = async (payload: Omit<TUser, '_id'>) => {
   const { email } = payload;

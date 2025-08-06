@@ -1,7 +1,7 @@
 import app from '@/app.js';
 import status from 'http-status';
 import supertest from 'supertest';
-import type { TResponse } from '../utils/sendResponse.js';
+import type { TResponse } from '../utils/sendResponse.ts';
 
 export const request = supertest(app);
 

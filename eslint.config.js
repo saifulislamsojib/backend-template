@@ -34,10 +34,21 @@ export default [
     rules: {
       camelcase: 0,
       'no-underscore-dangle': 0,
-      'import/extensions': ['error', 'ignorePackages', { ts: 'never' }],
+      'import/extensions': ['error', 'ignorePackages', { ts: 'ignorePackages' }],
       'import/no-extraneous-dependencies': [
         'error',
         { devDependencies: ['vitest.config.ts', 'eslint.*.js', 'src/configs/logger.ts'] },
+      ],
+      'no-restricted-globals': [
+        'error',
+        {
+          name: '__dirname',
+          message: '__dirname is not available in ESM. Use import.meta.dirname instead.',
+        },
+        {
+          name: '__filename',
+          message: '__filename is not available in ESM. Use import.meta.filename instead.',
+        },
       ],
     },
   },

@@ -1,4 +1,4 @@
-import { dbConnect, dbDisconnect } from '../configs/db.js';
+import { dbConnect, dbDisconnect } from '../configs/db.ts';
 
 beforeAll(dbConnect, 5000);
 

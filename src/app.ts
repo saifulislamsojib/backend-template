@@ -2,12 +2,12 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
 import { pinoHttp } from 'pino-http';
-import configs from './configs/index.js';
-import logger from './configs/logger.js';
-import globalErrorhandler from './middleware/globalErrorhandler.js';
-import notFound from './middleware/notFound.js';
-import apiRoute from './routes/api.routes.js';
-import rootRoute from './routes/root.routes.js';
+import configs from './configs/index.ts';
+import logger from './configs/logger.ts';
+import globalErrorhandler from './middleware/globalErrorhandler.ts';
+import notFound from './middleware/notFound.ts';
+import apiRoute from './routes/api.routes.ts';
+import rootRoute from './routes/root.routes.ts';
 
 const { origin, node_env } = configs;
 

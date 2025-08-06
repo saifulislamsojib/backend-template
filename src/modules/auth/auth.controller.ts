@@ -2,9 +2,9 @@ import catchAsync from '@/utils/catchAsync.js';
 import omit from '@/utils/omit.js';
 import sendResponse from '@/utils/sendResponse.js';
 import status from 'http-status';
-import type { TUser } from '../user/user.types.js';
-import { changePasswordToDb, loginUserFromDb, registerUserToDb } from './auth.service.js';
-import { setAuthCookie } from './auth.utils.js';
+import type { TUser } from '../user/user.types.ts';
+import { changePasswordToDb, loginUserFromDb, registerUserToDb } from './auth.service.ts';
+import { setAuthCookie } from './auth.utils.ts';
 
 export const registerUser = catchAsync<Omit<TUser, '_id'>>(async (req, res) => {
   const data = await registerUserToDb(req.body);

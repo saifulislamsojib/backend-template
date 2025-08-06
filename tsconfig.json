@@ -15,8 +15,8 @@
     "noEmitOnError": true,
     "resolveJsonModule": true,
     "allowUnreachableCode": false,
-    // "allowImportingTsExtensions": true,
-    // "rewriteRelativeImportExtensions": true,
+    "allowImportingTsExtensions": true,
+    "rewriteRelativeImportExtensions": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
@@ -26,10 +26,10 @@
     "noImplicitReturns": true,
     "verbatimModuleSyntax": true,
     "erasableSyntaxOnly": true,
+    "moduleDetection": "force",
     "types": ["vitest/globals"],
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     }
   },
   "files": ["src/types/index.d.ts"],
