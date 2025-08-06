@@ -37,7 +37,7 @@ export default [
       'import/extensions': ['error', 'ignorePackages', { ts: 'never' }],
       'import/no-extraneous-dependencies': [
         'error',
-        { devDependencies: ['vitest.config.ts', 'eslint.*.js'] },
+        { devDependencies: ['vitest.config.ts', 'eslint.*.js', 'src/configs/logger.ts'] },
       ],
     },
   },

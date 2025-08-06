@@ -1,7 +1,7 @@
 import AppError from '@/errors/AppError.js';
 import { AUTH_TOKEN_KEY, verifyJWT } from '@/modules/auth/auth.utils.js';
+import type { Role } from '@/modules/user/user.constant.js';
 import User from '@/modules/user/user.model.js';
-import type { Role } from '@/modules/user/user.types.js';
 import catchAsync from '@/utils/catchAsync.js';
 import status from 'http-status';
 
@@ -38,10 +38,7 @@ const authCheck = (...roles: Role[]) => {
 
     // after password update invalid the old token
     if (passwordUpdatedAt && payload.iat) {
-      const passwordChangedTime = parseInt(
-        (new Date(passwordUpdatedAt).getTime() / 1000).toString(),
-        10,
-      );
+      const passwordChangedTime = Math.floor(new Date(passwordUpdatedAt).getTime() / 1000);
       if (passwordChangedTime > payload.iat) {
         throw new AppError(status.UNAUTHORIZED, 'Invalid token!');
       }
@@ -66,7 +63,7 @@ const authCheck = (...roles: Role[]) => {
     }
 
     // all ok, then add payload and user in request and call next function
-    req.user = { ...payload, _id, name, email, role, createdAt: createdAt!, updatedAt: updatedAt! };
+    req.user = { ...payload, _id, name, email, role, createdAt, updatedAt };
     next();
   });
 };

@@ -1,4 +1,4 @@
-export const ERROR_TYPE = {
+export const ERROR_TYPE = Object.freeze({
   validationError: 'validationError',
   unauthorized: 'unauthorized',
   duplicateEntry: 'duplicateEntry', // throw by mongoose
@@ -6,8 +6,6 @@ export const ERROR_TYPE = {
   notFound: 'notFound',
   appError: 'appError',
   serverError: 'serverError',
-} as const;
-
-Object.freeze(ERROR_TYPE);
+});
 
 export type ErrorType = (typeof ERROR_TYPE)[keyof typeof ERROR_TYPE];

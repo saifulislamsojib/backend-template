@@ -33,7 +33,6 @@ const userSchema = new Schema<TUser, UserModel, IUserMethods>(
       type: String,
       enum: userRoles,
       default: userRoles[0],
-      trim: true,
     },
     passwordUpdatedAt: {
       type: Date,

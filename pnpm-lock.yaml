@@ -38,9 +38,6 @@ importers:
       pino-http:
         specifier: ^10.5.0
         version: 10.5.0
-      pino-pretty:
-        specifier: ^13.1.1
-        version: 13.1.1
       redis:
         specifier: ^5.8.0
         version: 5.8.0
@@ -111,6 +108,9 @@ importers:
       mongodb-memory-server:
         specifier: ^10.2.0
         version: 10.2.0
+      pino-pretty:
+        specifier: ^13.1.1
+        version: 13.1.1
       prettier:
         specifier: ^3.6.2
         version: 3.6.2

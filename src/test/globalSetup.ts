@@ -1,11 +1,10 @@
 import logger from '@/configs/logger.js';
 import { MongoMemoryReplSet } from 'mongodb-memory-server';
-import { loadEnvFile } from 'node:process';
 
 const globalSetup = async () => {
   if (!process.env.CI) {
     try {
-      loadEnvFile('./.env.test');
+      process.loadEnvFile('./.env.test');
     } catch {
       logger.error('.env.test file not found');
     }

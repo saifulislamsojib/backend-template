@@ -16,9 +16,7 @@ export const dbConnect = async () => {
     isDbConnected = true;
   } catch (error) {
     logger.fatal({ errorMsg: (error as Error).message }, 'Database connection error');
-    setTimeout(() => {
-      process.exit(1);
-    }, 100);
+    process.exit(1);
   }
   return isDbConnected;
 };

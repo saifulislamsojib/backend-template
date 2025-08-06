@@ -1,7 +1,5 @@
 import type { ObjectId } from 'mongoose';
-import type { userRoles } from './user.constant.js';
-
-export type Role = (typeof userRoles)[number];
+import type { Role } from './user.constant.js';
 
 export type TUser = {
   _id: ObjectId;
@@ -10,8 +8,8 @@ export type TUser = {
   password: string;
   role: Role;
   passwordUpdatedAt?: Date;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
   __v?: number;
 };
 

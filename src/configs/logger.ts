@@ -1,14 +1,18 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { pino, type StreamEntry } from 'pino';
-import pretty from 'pino-pretty';
 import configs from './index.js';
 
 const { node_env, log_level, is_logs_on_file } = configs;
 
-const streams: StreamEntry<string>[] = [
-  { stream: pretty({ colorize: node_env === 'development' }) },
-];
+const streams: StreamEntry<string>[] = [];
+
+if (node_env === 'development' || node_env === 'test') {
+  const { PinoPretty } = await import('pino-pretty');
+  streams.push({ stream: PinoPretty({ colorize: true }) });
+} else {
+  streams.push({ stream: process.stdout });
+}
 
 // If is_logs_on_file is true, add file streams for error and fatal logs
 if (is_logs_on_file) {

@@ -28,9 +28,7 @@ const main = async () => {
 
 main().catch((error) => {
   logger.fatal({ errorMsg: (error as Error).message }, 'Server connection error');
-  setTimeout(() => {
-    process.exit(1);
-  }, 100);
+  process.exit(1);
 });
 
 process.on('unhandledRejection', async () => {

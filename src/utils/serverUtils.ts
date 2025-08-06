@@ -16,14 +16,10 @@ export const closeServer = async () => {
   await Promise.all([dbDisconnect(), redisClient.destroy()]);
   if (server.listening) {
     server.close(() => {
-      setTimeout(() => {
-        process.exit(1);
-      }, 100);
+      process.exit(1);
     });
   } else {
-    setTimeout(() => {
-      process.exit(1);
-    }, 100);
+    process.exit(1);
   }
 };
 
