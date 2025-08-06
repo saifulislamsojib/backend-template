@@ -84,7 +84,7 @@
     "pnpm": ">=10"
   },
   "lint-staged": {
-    "*.{js,cjs,ts,d.ts}": "eslint --max-warnings 0 --fix",
+    "*.{js,cjs,ts,d.ts}": ["eslint --max-warnings 0 --fix", "vitest related --run"],
     "*.{js,cjs,ts,d.ts,json,yaml,yml,html}": "prettier --log-level warn --write"
   }
 }

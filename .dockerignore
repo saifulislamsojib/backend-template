@@ -1,7 +1,7 @@
 # same as gitignoire
 node_modules/
 dist/
-.env
+.env*
 *.local
 .DS_Store
 logs
@@ -19,7 +19,6 @@ src/**/*.test.ts
 .vscode
 .dockerignore
 .gitignore
-.env.example
 README.md
 Dockerfile
 Dockerfile.*

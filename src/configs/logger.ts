@@ -34,7 +34,7 @@ if (is_logs_on_file) {
 
 const logger = pino(
   {
-    level: node_env === 'test' ? 'silent' : log_level || 'info',
+    level: log_level || 'info',
     formatters: {
       level(level) {
         return { level };
