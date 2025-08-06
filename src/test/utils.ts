@@ -4,7 +4,6 @@ export const types = {
   boolean: expect.any(Boolean) as boolean,
   array: expect.any(Array) as unknown[],
   object: expect.any(Object) as object,
-  date: expect.any(Date) as Date,
 };
 
 /**
