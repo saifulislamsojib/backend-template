@@ -29,10 +29,13 @@
     "moduleDetection": "force",
     "types": ["vitest/globals"],
     "paths": {
-      "@/*": ["./src/*"]
+      "#*": ["./src/*"]
     }
   },
   "files": ["src/types/index.d.ts"],
-  "include": ["src/*", "src/**/*"],
-  "exclude": ["node_modules"]
+  "include": ["src/*.ts", "src/**/*.ts"],
+  "exclude": ["node_modules"],
+  "tsc-alias": {
+    "resolveFullPaths": true
+  }
 }

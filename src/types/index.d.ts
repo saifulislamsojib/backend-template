@@ -1,5 +1,5 @@
-import type { AuthUser } from '@/modules/auth/auth.types.ts';
-import type { EnvType } from '@/utils/catchEnvValidation.ts';
+import type { AuthUser } from '#modules/auth/auth.types';
+import type { EnvType } from '#utils/catchEnvValidation';
 
 declare global {
   namespace Express {

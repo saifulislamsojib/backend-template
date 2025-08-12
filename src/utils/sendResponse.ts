@@ -1,28 +1,7 @@
-import type { ErrorType } from '@/errors/error.const.js';
+import type { ErrorType } from '#errors/error.const';
 import type { Response } from 'express';
 
 type ResponseData = AnyObject | unknown[];
-
-export type TSuccessResponse<T extends ResponseData, U extends AnyObject = AnyObject> = {
-  success: true;
-  statusCode: number;
-  message: string;
-  data: T;
-  meta?: U;
-};
-
-export type TErrorResponse = {
-  success: false;
-  statusCode: number;
-  message: string;
-  type: ErrorType;
-  error?: Error;
-  stack?: string;
-};
-
-export type TResponse<T extends ResponseData, U extends AnyObject> =
-  | TSuccessResponse<T, U>
-  | TErrorResponse;
 
 /**
  * A helper function to send a JSON response to the request.
@@ -58,5 +37,26 @@ const sendResponse = <T extends ResponseData, U extends AnyObject>(
   }
   res.status(data.statusCode).json(response);
 };
+
+export type TSuccessResponse<T extends ResponseData, U extends AnyObject = AnyObject> = {
+  success: true;
+  statusCode: number;
+  message: string;
+  data: T;
+  meta?: U;
+};
+
+export type TErrorResponse = {
+  success: false;
+  statusCode: number;
+  message: string;
+  type: ErrorType;
+  error?: Error;
+  stack?: string;
+};
+
+export type TResponse<T extends ResponseData, U extends AnyObject> =
+  | TSuccessResponse<T, U>
+  | TErrorResponse;
 
 export default sendResponse;

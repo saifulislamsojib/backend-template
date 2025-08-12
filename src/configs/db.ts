@@ -8,7 +8,7 @@ let isDbConnected = false;
  * Connects to the MongoDB database using the provided url.
  * @returns Promise that resolves to true if the connection is successful, false if it fails.
  */
-export const dbConnect = async () => {
+const dbConnect = async () => {
   try {
     await mongoose.connect(configs.db_url);
     logger.info('Database successfully connected!');
@@ -25,8 +25,7 @@ export const dbConnect = async () => {
  *
  * @returns A promise that is resolved when the disconnection is successfully completed, and logs error if there is an error.
  */
-export const dbDisconnect = async () => {
-  if (!mongoose.connection) return;
+const dbDisconnect = async () => {
   try {
     await mongoose.connection.close();
   } catch (error) {
@@ -39,3 +38,5 @@ mongoose.connection.on('disconnected', () => {
     logger.fatal('Database disconnected!');
   }
 });
+
+export { dbConnect, dbDisconnect };

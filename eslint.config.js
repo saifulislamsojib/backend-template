@@ -1,84 +1,24 @@
-import pluginJs from '@eslint/js';
+import getFlatConfigs, { testFiles } from '@stack-lint/base';
+import getNodeConfig from '@stack-lint/node';
+import getTsConfigs from '@stack-lint/typescript';
 import vitest from '@vitest/eslint-plugin';
-import { flatConfigs as importConfigs } from 'eslint-plugin-import';
-import prettierRecommended from 'eslint-plugin-prettier/recommended';
-import { configs as tsEslintConfigs } from 'typescript-eslint';
-import airbnb from './eslint.airbnb.js';
 
-const files = ['src/**/*.{ts,d.ts}'];
-
-export default [
-  pluginJs.configs.recommended,
-  importConfigs.recommended,
-  importConfigs.typescript,
-  ...airbnb,
-  prettierRecommended,
-  // for ignore directories
-  { ignores: ['node_modules', 'dist'] },
-  // for root custom configs
-  {
-    files: ['**/*.{js,cjs,ts,d.ts}'],
-    languageOptions: {
-      ecmaVersion: 2023,
-      sourceType: 'module',
-    },
-    settings: {
-      'import/resolver': {
-        typescript: {
-          alwaysTryTypes: true,
-          project: './tsconfig.json',
-          extensions: ['.ts'],
-        },
-      },
-    },
+export default getFlatConfigs(
+  getNodeConfig(true),
+  ...getTsConfigs({
+    tsconfigRootDir: import.meta.dirname,
+    tsRootDir: 'src/',
     rules: {
-      camelcase: 0,
-      'no-underscore-dangle': 0,
-      'import/extensions': ['error', 'ignorePackages', { ts: 'ignorePackages' }],
-      'import/no-extraneous-dependencies': [
-        'error',
-        { devDependencies: ['vitest.config.ts', 'eslint.*.js', 'src/configs/logger.ts'] },
-      ],
-      'no-restricted-globals': [
-        'error',
-        {
-          name: '__dirname',
-          message: '__dirname is not available in ESM. Use import.meta.dirname instead.',
-        },
-        {
-          name: '__filename',
-          message: '__filename is not available in ESM. Use import.meta.filename instead.',
-        },
-      ],
-    },
-  },
-  // for src directory ts files only for type checking
-  ...tsEslintConfigs.recommendedTypeChecked.map((config) => ({ files, ...config })),
-  {
-    files,
-    languageOptions: {
-      parserOptions: {
-        project: true,
-        tsconfigRootDir: import.meta.dirname,
-      },
-    },
-    rules: {
-      '@typescript-eslint/no-misused-promises': [
-        'error',
-        { checksVoidReturn: { arguments: false } },
-      ],
       '@typescript-eslint/no-base-to-string': ['error', { ignoredTypeNames: ['ObjectId'] }],
     },
-  },
+  }),
   // for test files only
   {
-    files: ['**/*.test.ts', 'src/test/*.ts'],
+    files: testFiles,
     plugins: { vitest },
-    settings: { vitest: { typecheck: true } },
     rules: {
       ...vitest.configs.recommended.rules,
       'vitest/max-nested-describe': ['error', { max: 3 }],
-      'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     },
   },
-];
+);

@@ -1,15 +1,15 @@
+import { compareHashedText, hashText } from '#modules/auth/auth.utils';
 import { model, Schema, type Model } from 'mongoose';
-import { compareHashedText, hashText } from '../auth/auth.utils.ts';
 import { userRoles } from './user.constant.ts';
 import type { TUser } from './user.types.ts';
 
-interface IUserMethods {
-  isValidPassword(password: string): Promise<boolean>;
-}
+type UserMethods = {
+  isValidPassword: (password: string) => Promise<boolean>;
+};
 
-type UserModel = Model<TUser, unknown, IUserMethods>;
+type UserModel = Model<TUser, unknown, UserMethods>;
 
-const userSchema = new Schema<TUser, UserModel, IUserMethods>(
+const userSchema = new Schema<TUser, UserModel, UserMethods>(
   {
     name: {
       type: String,

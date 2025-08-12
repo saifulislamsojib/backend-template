@@ -1,4 +1,4 @@
-import type { TUser } from '../user/user.types.ts';
+import type { TUser } from '#modules/user/user.types';
 
 type JWTDecoded = { exp?: number; iat?: number };
 

@@ -8,6 +8,7 @@ const { node_env, log_level, is_logs_on_file } = configs;
 const streams: StreamEntry<string>[] = [];
 
 if (node_env === 'development' || node_env === 'test') {
+  // eslint-disable-next-line import-x/no-extraneous-dependencies
   const { PinoPretty } = await import('pino-pretty');
   streams.push({ stream: PinoPretty({ colorize: true }) });
 } else {

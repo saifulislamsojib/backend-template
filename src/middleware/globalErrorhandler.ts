@@ -1,10 +1,10 @@
-import configs from '@/configs/index.js';
-import logger from '@/configs/logger.js';
-import AppError from '@/errors/AppError.js';
-import { ERROR_TYPE, type ErrorType } from '@/errors/error.const.js';
-import sendResponse, { type TErrorResponse } from '@/utils/sendResponse.js';
+import configs from '#configs';
+import logger from '#configs/logger';
+import AppError from '#errors/AppError';
+import { ERROR_TYPE, type ErrorType } from '#errors/error.const';
+import sendResponse, { type TErrorResponse } from '#utils/sendResponse';
 import type { ErrorRequestHandler } from 'express';
-import status from 'http-status';
+import { status } from 'http-status';
 import { Error as MongooseError } from 'mongoose';
 import { ZodError } from 'zod';
 
@@ -28,9 +28,9 @@ const globalErrorHandler: ErrorRequestHandler = (err: Error, req, res, next) => 
     type = ERROR_TYPE.validationError;
     statusCode = status.BAD_REQUEST;
     message = err.issues.reduce((acc, { path, message: msg, code }) => {
-      const lastPath = path?.[path.length - 1];
+      const lastPath = path[path.length - 1];
       const singleMessage =
-        code === 'custom' ? msg : `${lastPath as string} is ${msg?.toLowerCase()}`;
+        code === 'custom' ? msg : `${lastPath as string} is ${msg.toLowerCase()}`;
       return `${acc}${acc ? '; ' : ''}${singleMessage}`;
     }, '');
   } else if (err.name === 'CastError') {
@@ -40,8 +40,8 @@ const globalErrorHandler: ErrorRequestHandler = (err: Error, req, res, next) => 
   } else if ('code' in err && err.code === 11000) {
     type = ERROR_TYPE.duplicateEntry;
     statusCode = status.BAD_REQUEST;
-    const match = err.message.match(/"([^"]*)"/);
-    const extractedMessage = match && match[1];
+    const match = /"([^"]*)"/.exec(err.message);
+    const extractedMessage = match?.[1];
     message = `${extractedMessage} is already exists`;
   } else if (err instanceof MongooseError.ValidationError) {
     type = ERROR_TYPE.validationError;

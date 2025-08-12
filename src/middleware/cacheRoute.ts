@@ -1,9 +1,9 @@
-import configs from '@/configs/index.js';
-import client from '@/configs/redis.js';
-import catchAsync from '@/utils/catchAsync.js';
-import sendResponse from '@/utils/sendResponse.js';
+import configs from '#configs';
+import client from '#configs/redis';
+import catchAsync from '#utils/catchAsync';
+import sendResponse from '#utils/sendResponse';
 import type { Request } from 'express';
-import status from 'http-status';
+import { status } from 'http-status';
 
 type Type = 'public' | 'protected';
 
@@ -15,10 +15,10 @@ type Type = 'public' | 'protected';
  *               If 'protected', the cache is user-specific and will be prefixed with the user's id and role.
  * @returns The generated cache key.
  */
-export const getRouteCacheKey = (req: Request, type: Type = 'public') => {
+const getRouteCacheKey = (req: Request, type: Type = 'public') => {
   let key = req.originalUrl;
   if (type === 'protected' && req.user) {
-    key += `:${req.user._id?.toString()}:${req.user.role}`;
+    key += `:${req.user._id.toString()}:${req.user.role}`;
   }
   return key;
 };
@@ -55,7 +55,7 @@ const cacheRoute = (type: Type = 'public') => {
  *               If 'protected', the cache is user-specific and will be prefixed with the user's id and role.
  * @returns A promise that resolves when the cache is set.
  */
-export const setRouteCache = (req: Request, data: unknown, type: Type = 'public') => {
+const setRouteCache = (req: Request, data: unknown, type: Type = 'public') => {
   const key = getRouteCacheKey(req, type);
 
   return client.setEx(key, configs.cache_revalidate_time, JSON.stringify(data));
@@ -69,8 +69,9 @@ export const setRouteCache = (req: Request, data: unknown, type: Type = 'public'
  *               If 'protected', the cache is user-specific and will be prefixed with the user's id and role.
  * @returns A promise that resolves when the cache is deleted.
  */
-export const deleteRouteCache = (req: Request, type: Type = 'public') => {
+const deleteRouteCache = (req: Request, type: Type = 'public') => {
   return client.del(getRouteCacheKey(req, type));
 };
 
+export { deleteRouteCache, getRouteCacheKey, setRouteCache };
 export default cacheRoute;

@@ -1,9 +1,9 @@
-import AppError from '@/errors/AppError.js';
-import { AUTH_TOKEN_KEY, verifyJWT } from '@/modules/auth/auth.utils.js';
-import type { Role } from '@/modules/user/user.constant.js';
-import User from '@/modules/user/user.model.js';
-import catchAsync from '@/utils/catchAsync.js';
-import status from 'http-status';
+import AppError from '#errors/AppError';
+import { AUTH_TOKEN_KEY, verifyJWT } from '#modules/auth/auth.utils';
+import type { Role } from '#modules/user/user.constant';
+import User from '#modules/user/user.model';
+import catchAsync from '#utils/catchAsync';
+import { status } from 'http-status';
 
 /**
  * Middleware to check authentication and authorization.
@@ -21,7 +21,7 @@ import status from 'http-status';
  */
 const authCheck = (...roles: Role[]) => {
   return catchAsync(async (req, _res, next) => {
-    const authorization = (req.cookies as Params)?.[AUTH_TOKEN_KEY] || req.headers.authorization;
+    const authorization = (req.cookies as Params)[AUTH_TOKEN_KEY] || req.headers.authorization;
 
     // check authorization send from client
     if (!authorization) throw new AppError(status.UNAUTHORIZED, 'Invalid token!');
@@ -55,7 +55,7 @@ const authCheck = (...roles: Role[]) => {
     }
 
     // check user role authorization
-    if (roles && !roles.includes(role)) {
+    if (roles.length && !roles.includes(role)) {
       throw new AppError(
         status.UNAUTHORIZED,
         'You do not have the necessary permissions to access this resource!',

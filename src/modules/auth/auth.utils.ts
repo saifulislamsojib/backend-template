@@ -1,10 +1,10 @@
-import configs from '@/configs/index.js';
-import AppError from '@/errors/AppError.js';
+import configs from '#configs';
+import AppError from '#errors/AppError';
 import bcrypt from 'bcrypt';
 import type { Response } from 'express';
-import status from 'http-status';
+import { status } from 'http-status';
 import jwt from 'jsonwebtoken';
-import type { AuthPayload, JWTPayload } from './auth.types.js';
+import type { AuthPayload, JWTPayload } from './auth.types.ts';
 
 /**
  * Hash a given plaintext string using bcrypt.

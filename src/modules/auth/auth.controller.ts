@@ -1,8 +1,8 @@
-import catchAsync from '@/utils/catchAsync.js';
-import omit from '@/utils/omit.js';
-import sendResponse from '@/utils/sendResponse.js';
-import status from 'http-status';
-import type { TUser } from '../user/user.types.ts';
+import type { TUser } from '#modules/user/user.types';
+import catchAsync from '#utils/catchAsync';
+import omit from '#utils/omit';
+import sendResponse from '#utils/sendResponse';
+import { status } from 'http-status';
 import { changePasswordToDb, loginUserFromDb, registerUserToDb } from './auth.service.ts';
 import { setAuthCookie } from './auth.utils.ts';
 

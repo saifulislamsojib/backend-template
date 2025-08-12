@@ -1,13 +1,13 @@
+import configs from '#configs';
+import logger from '#configs/logger';
+import globalErrorHandler from '#middleware/globalErrorhandler';
+import notFound from '#middleware/notFound';
+import apiRoutes from '#routes/api.routes';
+import rootRoute from '#routes/root.routes';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
 import { pinoHttp } from 'pino-http';
-import configs from './configs/index.ts';
-import logger from './configs/logger.ts';
-import globalErrorhandler from './middleware/globalErrorhandler.ts';
-import notFound from './middleware/notFound.ts';
-import apiRoute from './routes/api.routes.ts';
-import rootRoute from './routes/root.routes.ts';
 
 const { origin, node_env } = configs;
 
@@ -29,12 +29,12 @@ if (node_env !== 'test') {
 
 // all routes
 app.use('/', rootRoute);
-app.use('/api/v1', apiRoute);
+app.use('/api/v1', apiRoutes);
 
 // not found route handler
 app.use(notFound);
 
 // global error handler.
-app.use(globalErrorhandler);
+app.use(globalErrorHandler);
 
 export default app;

@@ -1,9 +1,9 @@
-import AppError from '@/errors/AppError.js';
-import omit from '@/utils/omit.js';
-import status from 'http-status';
+import AppError from '#errors/AppError';
+import User from '#modules/user/user.model';
+import type { TUser } from '#modules/user/user.types';
+import omit from '#utils/omit';
+import { status } from 'http-status';
 import type { ObjectId } from 'mongoose';
-import User from '../user/user.model.ts';
-import type { TUser } from '../user/user.types.ts';
 import { createJWT, hashText } from './auth.utils.ts';
 
 export const registerUserToDb = async (payload: Omit<TUser, '_id'>) => {

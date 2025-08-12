@@ -1,9 +1,9 @@
-import { dbConnect } from './configs/db.ts';
-import configs from './configs/index.ts';
-import logger from './configs/logger.ts';
-import redisClient from './configs/redis.ts';
-import catchEnvValidation from './utils/catchEnvValidation.ts';
-import server, { closeServer } from './utils/serverUtils.ts';
+import configs from '#configs';
+import { dbConnect } from '#configs/db';
+import logger from '#configs/logger';
+import redisClient from '#configs/redis';
+import catchEnvValidation from '#utils/catchEnvValidation';
+import server, { closeServer } from '#utils/serverUtils';
 
 const main = async () => {
   // check env validation
@@ -31,19 +31,21 @@ main().catch((error) => {
   process.exit(1);
 });
 
-process.on('unhandledRejection', async () => {
+process.on('unhandledRejection', () => {
   logger.fatal('😈 unhandledRejection is detected, shutting down the process..');
-  await closeServer();
+  void closeServer();
 });
 
-process.on('uncaughtException', async (error) => {
+process.on('uncaughtException', (error) => {
   logger.fatal(
     { errorMsg: error.message },
     '😈 uncaughtException is detected, shutting down the process..',
   );
-  await closeServer();
+  void closeServer();
 });
 
-process.on('SIGINT', closeServer);
+const onClose = () => void closeServer();
 
-process.on('SIGTERM', closeServer);
+process.on('SIGINT', onClose);
+
+process.on('SIGTERM', onClose);

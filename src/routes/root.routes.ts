@@ -1,6 +1,6 @@
-import packageJson from '@/../package.json' with { type: 'json' };
+import packageJson from '#./../package.json' with { type: 'json' };
 import { Router } from 'express';
-import status from 'http-status';
+import { status } from 'http-status';
 
 const rootRoute = Router();
 

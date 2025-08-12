@@ -1,9 +1,9 @@
-import app from '@/app.js';
-import status from 'http-status';
+import app from '#app';
+import type { TResponse } from '#utils/sendResponse';
+import { status } from 'http-status';
 import supertest from 'supertest';
-import type { TResponse } from '../utils/sendResponse.ts';
 
-export const request = supertest(app);
+const request = supertest(app);
 
 type Matcher = {
   status?: number;
@@ -55,10 +55,11 @@ const apiTester = async <T extends Response = Response>(testerOptions: TesterPro
   expect(res.status).toBe(expectedStatus);
   const resBody = res.body as T;
   expect(resBody.success).toBe(success);
-  if (type && resBody.success === false) {
+  if (type && !resBody.success) {
     expect(resBody.type).toMatch(type);
   }
   return resBody;
 };
 
+export { request };
 export default apiTester;

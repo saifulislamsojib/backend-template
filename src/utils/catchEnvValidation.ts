@@ -1,4 +1,4 @@
-import logger from '@/configs/logger.js';
+import logger from '#configs/logger';
 import { z, type ZodError } from 'zod';
 
 const node_envs = ['development', 'test', 'staging', 'production'] as const;
@@ -25,7 +25,7 @@ const envValidationSchema = z.object({
   }),
 });
 
-export type EnvType = z.infer<typeof envValidationSchema>;
+type EnvType = z.infer<typeof envValidationSchema>;
 
 /**
  * This function validates the environment variables of the current process.
@@ -39,9 +39,9 @@ const catchEnvValidation = async () => {
   } catch (error) {
     const err = (error as ZodError).issues.reduce(
       (acc, cur) => {
-        const path = cur.path[0] as keyof EnvType;
+        const path = cur.path[0];
         if (path) {
-          acc[path] = cur.message;
+          acc[path as keyof EnvType] = cur.message;
           return acc;
         }
         return acc;
@@ -56,4 +56,5 @@ const catchEnvValidation = async () => {
   }
 };
 
+export type { EnvType };
 export default catchEnvValidation;

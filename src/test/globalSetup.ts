@@ -1,4 +1,4 @@
-import logger from '@/configs/logger.js';
+import logger from '#configs/logger';
 import { MongoMemoryReplSet } from 'mongodb-memory-server';
 
 const globalSetup = async () => {

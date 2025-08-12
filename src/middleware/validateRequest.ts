@@ -1,4 +1,4 @@
-import catchAsync from '@/utils/catchAsync.js';
+import catchAsync from '#utils/catchAsync';
 import type { ZodObject } from 'zod';
 
 const types = ['body', 'params', 'query'] as const;
