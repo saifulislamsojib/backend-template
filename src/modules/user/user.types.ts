@@ -1,5 +1,5 @@
 import type { ObjectId } from 'mongoose';
-import type { Role } from './user.constant.ts';
+import type { Role } from './user.constant';
 
 export type TUser = {
   _id: ObjectId;

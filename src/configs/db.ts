@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-import configs from './index.ts';
-import logger from './logger.ts';
+import configs from '.';
+import logger from './logger';
 
 let isDbConnected = false;
 

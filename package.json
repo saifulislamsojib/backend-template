@@ -8,8 +8,8 @@
     "install:pkg": "pnpm install --frozen-lockfile",
     "preinstall": "npx only-allow pnpm",
     "start": "node --env-file=.env dist/server.js",
-    "node:dev": "node --watch --env-file=.env src/server.ts",
     "dev": "tsx watch --clear-screen=false --include './src/**/*' --env-file=.env src/server.ts",
+    "dev:node": "node --import 'data:text/javascript,import { register } from \"node:module\"; import { pathToFileURL } from \"node:url\"; register(\"./.node-loader.mjs\", pathToFileURL(\"./\"));' --watch --env-file=.env src/server.ts",
     "dev:n": "console-ninja pnpm dev",
     "build": "tsc && tsc-alias",
     "type:check": "tsc --noEmit",
@@ -28,13 +28,6 @@
     "redis-cli": "docker exec -it redis redis-cli",
     "lint-staged": "lint-staged",
     "prepare": "husky || true"
-  },
-  "imports": {
-    "#*": [
-      "./src/*",
-      "./src/*.ts",
-      "./src/*/index.ts"
-    ]
   },
   "keywords": [],
   "author": "Saiful Islam Sojib",

@@ -1,5 +1,5 @@
-import configs from '#configs';
-import client from '#configs/redis';
+import configs from '@/configs';
+import client from '@/configs/redis';
 
 /**
  * Get data from redis cache or set cache if the key does not exist.

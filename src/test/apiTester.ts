@@ -1,5 +1,5 @@
-import app from '#app';
-import type { TResponse } from '#utils/sendResponse';
+import app from '@/app';
+import type { TResponse } from '@/utils/sendResponse';
 import { status } from 'http-status';
 import supertest from 'supertest';
 

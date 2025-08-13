@@ -1,4 +1,4 @@
-import type { ErrorType } from '#errors/error.const';
+import type { ErrorType } from '@/errors/error.const';
 import type { Response } from 'express';
 
 type ResponseData = AnyObject | unknown[];

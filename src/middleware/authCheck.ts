@@ -1,8 +1,8 @@
-import AppError from '#errors/AppError';
-import { AUTH_TOKEN_KEY, verifyJWT } from '#modules/auth/auth.utils';
-import type { Role } from '#modules/user/user.constant';
-import User from '#modules/user/user.model';
-import catchAsync from '#utils/catchAsync';
+import AppError from '@/errors/AppError';
+import { AUTH_TOKEN_KEY, verifyJWT } from '@/modules/auth/auth.utils';
+import type { Role } from '@/modules/user/user.constant';
+import User from '@/modules/user/user.model';
+import catchAsync from '@/utils/catchAsync';
 import { status } from 'http-status';
 
 /**

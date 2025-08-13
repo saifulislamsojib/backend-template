@@ -16,7 +16,7 @@ const passwordSchema = (field = 'Password') => {
     .refine((password) => /\d/.test(password), {
       error: `${field} must contain at least one digit`,
     })
-    .refine((password) => /[!@#$%^&*(),.?":{}|<>]/.test(password), {
+    .refine((password) => /[!@@/$%^&*(),.?":{}|<>]/.test(password), {
       error: `${field} must contain at least one special character`,
     });
 };

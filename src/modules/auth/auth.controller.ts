@@ -1,10 +1,10 @@
-import type { TUser } from '#modules/user/user.types';
-import catchAsync from '#utils/catchAsync';
-import omit from '#utils/omit';
-import sendResponse from '#utils/sendResponse';
+import type { TUser } from '@/modules/user/user.types';
+import catchAsync from '@/utils/catchAsync';
+import omit from '@/utils/omit';
+import sendResponse from '@/utils/sendResponse';
 import { status } from 'http-status';
-import { changePasswordToDb, loginUserFromDb, registerUserToDb } from './auth.service.ts';
-import { setAuthCookie } from './auth.utils.ts';
+import { changePasswordToDb, loginUserFromDb, registerUserToDb } from './auth.service';
+import { setAuthCookie } from './auth.utils';
 
 export const registerUser = catchAsync<Omit<TUser, '_id'>>(async (req, res) => {
   const data = await registerUserToDb(req.body);

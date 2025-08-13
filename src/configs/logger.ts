@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { pino, type StreamEntry } from 'pino';
-import configs from './index.ts';
+import configs from '.';
 
 const { node_env, log_level, is_logs_on_file } = configs;
 

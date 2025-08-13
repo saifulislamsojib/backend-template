@@ -1,9 +1,9 @@
-import authCheck from '#middleware/authCheck';
-import validateRequest from '#middleware/validateRequest';
-import { userRoles } from '#modules/user/user.constant';
+import authCheck from '@/middleware/authCheck';
+import validateRequest from '@/middleware/validateRequest';
+import { userRoles } from '@/modules/user/user.constant';
 import { Router } from 'express';
-import { changePassword, getCurrentUser, loginUser, registerUser } from './auth.controller.ts';
-import { changePasswordSchema, loginUserSchema, registerUserSchema } from './auth.validation.ts';
+import { changePassword, getCurrentUser, loginUser, registerUser } from './auth.controller';
+import { changePasswordSchema, loginUserSchema, registerUserSchema } from './auth.validation';
 
 const authRoutes = Router();
 

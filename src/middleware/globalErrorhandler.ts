@@ -1,8 +1,8 @@
-import configs from '#configs';
-import logger from '#configs/logger';
-import AppError from '#errors/AppError';
-import { ERROR_TYPE, type ErrorType } from '#errors/error.const';
-import sendResponse, { type TErrorResponse } from '#utils/sendResponse';
+import configs from '@/configs';
+import logger from '@/configs/logger';
+import AppError from '@/errors/AppError';
+import { ERROR_TYPE, type ErrorType } from '@/errors/error.const';
+import sendResponse, { type TErrorResponse } from '@/utils/sendResponse';
 import type { ErrorRequestHandler } from 'express';
 import { status } from 'http-status';
 import { Error as MongooseError } from 'mongoose';

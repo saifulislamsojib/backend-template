@@ -1,5 +1,5 @@
-import configs from '#configs';
-import { request } from '#test/apiTester';
+import configs from '@/configs';
+import { request } from '@/test/apiTester';
 import { status } from 'http-status';
 
 const baseUrl = `${configs.api_route}/health` as const;

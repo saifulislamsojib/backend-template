@@ -1,4 +1,4 @@
-import AppError from '#errors/AppError';
+import AppError from '@/errors/AppError';
 import { status } from 'http-status';
 import multer from 'multer';
 
