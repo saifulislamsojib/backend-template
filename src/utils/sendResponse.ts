@@ -12,7 +12,7 @@ type ResponseData = AnyObject | unknown[];
  * If data.success is false, it will add the type, error, and stack to the response object.
  *
  * @param res - the express response object
- * @param {} data - the data that needs to be sent
+ * @param data - the data that needs to be sent
  * @return the express response object
  */
 const sendResponse = <T extends ResponseData, U extends AnyObject>(

@@ -1,19 +1,29 @@
 {
   "compilerOptions": {
-    "target": "ES2023",
-    "module": "esnext",
+    // File Layout
     "rootDir": "./src",
-    "moduleResolution": "bundler",
     "outDir": "./dist",
+
+    // Environment Settings
+    "module": "ESNext",
+    "target": "ES2023",
     "lib": ["ES2023"],
+    "types": ["vitest/globals"],
+    "skipLibCheck": true,
+
+    // Bundler/Build Options
+    "moduleResolution": "bundler",
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "useDefineForClassFields": true,
     "esModuleInterop": true,
     "isolatedModules": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "skipLibCheck": true,
     "removeComments": true,
     "noEmitOnError": true,
     "resolveJsonModule": true,
+
+    // Stricter Typechecking or Linting Options
+    "strict": true,
     "allowUnreachableCode": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -21,11 +31,11 @@
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
     "noUncheckedSideEffectImports": true,
+    "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
-    "verbatimModuleSyntax": true,
     "erasableSyntaxOnly": true,
-    "moduleDetection": "force",
-    "types": ["vitest/globals"],
+
+    // Path Alias
     "paths": {
       "@/*": ["./src/*"]
     }
@@ -33,6 +43,8 @@
   "files": ["src/types/index.d.ts"],
   "include": ["src/*.ts", "src/**/*.ts"],
   "exclude": ["node_modules"],
+
+  // tsc-alias options to resolve full path while build
   "tsc-alias": {
     "resolveFullPaths": true
   }

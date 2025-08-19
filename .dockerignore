@@ -7,7 +7,7 @@ dist/
 logs
 .vercel
 
-# testing (if you want to test before build then or run in development comment this 3 lines)
+# testing files
 src/test
 vitest.config.ts
 src/**/*.test.ts

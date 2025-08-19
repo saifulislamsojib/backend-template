@@ -4,12 +4,7 @@ import getTsConfigs from '@stack-lint/typescript';
 import vitest from '@vitest/eslint-plugin';
 
 export default getFlatConfigs(
-  getNodeConfig(true),
-  {
-    rules: {
-      'import-x/extensions': ['error', 'ignorePackages', { ts: 'never' }],
-    },
-  },
+  getNodeConfig({ extension: true }),
   ...getTsConfigs({
     tsconfigRootDir: import.meta.dirname,
     tsRootDir: 'src/',
@@ -17,13 +12,8 @@ export default getFlatConfigs(
       '@typescript-eslint/no-base-to-string': ['error', { ignoredTypeNames: ['ObjectId'] }],
     },
   }),
-  // for test files only
   {
     files: testFiles,
-    plugins: { vitest },
-    rules: {
-      ...vitest.configs.recommended.rules,
-      'vitest/max-nested-describe': ['error', { max: 3 }],
-    },
+    ...vitest.configs.recommended,
   },
 );
