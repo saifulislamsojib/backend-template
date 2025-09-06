@@ -1,5 +1,5 @@
 # Stage 0: setup base
-FROM node:22-alpine AS base
+FROM node:24-alpine AS base
 
 # pnpm setup
 ENV PNPM_HOME="/pnpm"
@@ -34,4 +34,4 @@ FROM base
 COPY --from=prod-deps /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
 
-CMD [ "node", "--env-file=.env", "dist/server.js" ]
+CMD [ "node", "dist/server.js" ]

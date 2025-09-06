@@ -7,6 +7,7 @@ import rootRoute from '@/routes/root.routes';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
+import helmet from 'helmet';
 import { pinoHttp } from 'pino-http';
 
 const { origin, node_env } = configs;
@@ -21,6 +22,8 @@ app.use(cors({ origin }));
 app.enable('trust proxy');
 app.enable('case sensitive routing');
 app.use(express.urlencoded({ extended: true, limit: '20mb' }));
+app.disable('x-powered-by');
+app.use(helmet({ xPoweredBy: false }));
 
 // Use pino-http middleware for HTTP request logging
 if (node_env !== 'test') {
