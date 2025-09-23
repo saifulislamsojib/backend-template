@@ -13,6 +13,11 @@ export default getFlatConfigs(
     },
   }),
   {
+    rules: {
+      'security/detect-object-injection': 'off',
+    },
+  },
+  {
     files: testFiles,
     ...vitest.configs.recommended,
   },

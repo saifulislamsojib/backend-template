@@ -1,3 +1,4 @@
+/* eslint-disable security/detect-non-literal-fs-filename */
 // @ts-check
 
 import fs from 'node:fs';
