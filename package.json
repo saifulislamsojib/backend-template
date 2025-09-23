@@ -51,9 +51,9 @@
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
-    "@stack-lint/base": "^0.0.8",
-    "@stack-lint/node": "^0.0.8",
-    "@stack-lint/typescript": "^0.0.7",
+    "@stack-lint/base": "^0.0.10",
+    "@stack-lint/node": "^0.0.10",
+    "@stack-lint/typescript": "^0.0.10",
     "@types/bcrypt": "^6.0.0",
     "@types/cookie-parser": "^1.4.9",
     "@types/cors": "^2.8.19",

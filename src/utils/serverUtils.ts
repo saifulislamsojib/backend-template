@@ -13,7 +13,8 @@ const server = createServer(app);
  * is detected. It's also called when the process is about to exit.
  */
 export const closeServer = async () => {
-  await Promise.all([dbDisconnect(), redisClient.destroy()]);
+  redisClient.destroy();
+  await dbDisconnect();
   if (server.listening) {
     server.close(() => {
       process.exit(1);
