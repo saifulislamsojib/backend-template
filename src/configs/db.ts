@@ -29,7 +29,7 @@ const dbDisconnect = async () => {
   try {
     await mongoose.connection.close();
   } catch (error) {
-    logger.fatal('Database disconnection error: ', (error as Error).message);
+    logger.fatal({ errorMsg: (error as Error).message }, 'Database disconnection error');
   }
 };
 

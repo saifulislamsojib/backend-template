@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { pino, type StreamEntry } from 'pino';
+import { destination, multistream, pino, type StreamEntry } from 'pino';
 import configs from '.';
 
 const { node_env, log_level, is_logs_on_file } = configs;
@@ -32,8 +32,8 @@ if (is_logs_on_file) {
 
   // add file streams for error and fatal logs
   streams.push(
-    { level: 'error', stream: pino.destination(getLogFilePath('error')) },
-    { level: 'fatal', stream: pino.destination(getLogFilePath('fatal')) },
+    { level: 'error', stream: destination(getLogFilePath('error')) },
+    { level: 'fatal', stream: destination(getLogFilePath('fatal')) },
   );
 }
 
@@ -46,7 +46,7 @@ const logger = pino(
       },
     },
   },
-  pino.multistream(streams),
+  multistream(streams),
 );
 
 export default logger;
