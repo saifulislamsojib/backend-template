@@ -63,7 +63,7 @@
     "@types/node": "^24.10.13",
     "@types/supertest": "^6.0.3",
     "@vitest/eslint-plugin": "^1.6.9",
-    "eslint": "^9.39.2",
+    "eslint": "^9.39.3",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "mongodb-memory-server": "^11.0.1",
