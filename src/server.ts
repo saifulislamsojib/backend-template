@@ -33,7 +33,7 @@ main().catch((error) => {
 
 process.on('unhandledRejection', () => {
   logger.fatal('😈 unhandledRejection is detected, shutting down the process..');
-  void closeServer();
+  closeServer(1);
 });
 
 process.on('uncaughtException', (error) => {
@@ -41,10 +41,10 @@ process.on('uncaughtException', (error) => {
     { errorMsg: error.message },
     '😈 uncaughtException is detected, shutting down the process..',
   );
-  void closeServer();
+  closeServer(1);
 });
 
-const onClose = () => void closeServer();
+const onClose = () => closeServer(0);
 
 process.on('SIGINT', onClose);
 

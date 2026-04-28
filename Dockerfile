@@ -6,9 +6,7 @@ ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
 
-RUN mkdir -p /app && chown -R node:node /app
 WORKDIR /app
-USER node
 
 COPY package.json pnpm-lock.yaml ./
 
@@ -33,5 +31,9 @@ FROM base
 
 COPY --from=prod-deps /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
+
+RUN chown -R node:node /app
+
+USER node
 
 CMD [ "node", "dist/server.js" ]

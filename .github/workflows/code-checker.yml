@@ -2,6 +2,11 @@ name: Code Checker(eslint, type check, and run tests)
 
 on: [push, pull_request]
 
+# cancel any previous runs in progress for the same branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
@@ -16,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       redis:
-        image: redis
+        image: redis:8.6.2-alpine
         # Set health checks to wait until redis has started
         options: >-
           --health-cmd "redis-cli ping"

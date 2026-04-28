@@ -2,6 +2,11 @@ name: Lint Commit PR
 
 on: [push, pull_request]
 
+# cancel any previous runs in progress for the same branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   commitlint:
     runs-on: ubuntu-latest

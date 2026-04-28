@@ -12,15 +12,16 @@ const server = createServer(app);
  * This function is usually called when an unhandledRejection or uncaughtException
  * is detected. It's also called when the process is about to exit.
  */
-export const closeServer = async () => {
-  redisClient.destroy();
-  await dbDisconnect();
-  if (server.listening) {
-    server.close(() => {
-      process.exit(1);
+export const closeServer = (exitCode: number) => {
+  const close = () => {
+    void Promise.all([redisClient.quit(), dbDisconnect()]).then(() => {
+      process.exit(exitCode);
     });
+  };
+  if (server.listening) {
+    server.close(close);
   } else {
-    process.exit(1);
+    close();
   }
 };
 
