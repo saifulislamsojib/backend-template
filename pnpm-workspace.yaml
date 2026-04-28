@@ -3,3 +3,5 @@ onlyBuiltDependencies:
   - esbuild
   - mongodb-memory-server
   - unrs-resolver
+
+minimumReleaseAge: 1440

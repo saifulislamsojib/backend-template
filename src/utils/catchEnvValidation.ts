@@ -37,18 +37,10 @@ const catchEnvValidation = async () => {
     await envValidationSchema.parseAsync(process.env);
     return true;
   } catch (error) {
-    const err = (error as ZodError).issues.reduce(
-      (acc, cur) => {
-        const path = cur.path[0];
-        if (path) {
-          acc[path as keyof EnvType] = cur.message;
-          return acc;
-        }
-        return acc;
-      },
-      {} as Record<Partial<keyof EnvType>, string>,
+    logger.fatal(
+      z.treeifyError(error as ZodError<EnvType>).properties,
+      'Environment Variable validation error',
     );
-    logger.fatal(err, 'Environment Variable validation error');
     setTimeout(() => {
       process.exit(1);
     }, 100);

@@ -21,7 +21,7 @@ app.use(express.json());
 app.use(cors({ origin }));
 app.enable('trust proxy');
 app.enable('case sensitive routing');
-app.use(express.urlencoded({ extended: true, limit: '20mb' }));
+app.use(express.urlencoded({ extended: true, limit: '5mb' }));
 app.disable('x-powered-by');
 app.use(helmet({ xPoweredBy: false }));
 

@@ -10,7 +10,7 @@ let isDbConnected = false;
  */
 const dbConnect = async () => {
   try {
-    await mongoose.connect(configs.db_url);
+    await mongoose.connect(configs.db_uri);
     logger.info('Database successfully connected!');
     isDbConnected = true;
   } catch (error) {
