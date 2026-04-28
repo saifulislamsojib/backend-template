@@ -1,6 +1,6 @@
 {
   "name": "backend-template",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Robust and scalable backend server template with NodeJS, TypeScript",
   "main": "dist/server.js",
   "type": "module",

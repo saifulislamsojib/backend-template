@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/saifulislamsojib/backend-template/compare/v1.0.0...v1.1.0) (2026-04-28)
+
+
+### Features
+
+* **package:** minimum release age added ([2df76a8](https://github.com/saifulislamsojib/backend-template/commit/2df76a838bbe0e49db1ae442cb1c39c02b4ec4b3))
+
 ## 1.0.0 (2026-04-28)
 
 
