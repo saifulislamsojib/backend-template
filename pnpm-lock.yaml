@@ -42,8 +42,8 @@ importers:
         specifier: ^11.0.0
         version: 11.0.0
       redis:
-        specifier: ^5.11.0
-        version: 5.11.0
+        specifier: ^5.12.1
+        version: 5.12.1
       zod:
         specifier: ^4.3.6
         version: 4.3.6
@@ -486,38 +486,41 @@ packages:
     resolution: {integrity: sha512-QNqXyfVS2wm9hweSYD2O7F0G06uurj9kZ96TRQE5Y9hU7+tgdZwIkbAKc5Ocy1HxEY2kuDQa6cQ1WRs/O5LFKA==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
 
-  '@redis/bloom@5.11.0':
-    resolution: {integrity: sha512-KYiVilAhAFN3057afUb/tfYJpsEyTkQB+tQcn5gVVA7DgcNOAj8lLxe4j8ov8BF6I9C1Fe/kwlbuAICcTMX8Lw==}
-    engines: {node: '>= 18'}
+  '@redis/bloom@5.12.1':
+    resolution: {integrity: sha512-PUUfv+ms7jgPSBVoo/DN4AkPHj4D5TZSd6SbJX7egzBplkYUcKmHRE8RKia7UtZ8bSQbLguLvxVO+asKtQfZWA==}
+    engines: {node: '>= 18.19.0'}
     peerDependencies:
-      '@redis/client': ^5.11.0
+      '@redis/client': ^5.12.1
 
-  '@redis/client@5.11.0':
-    resolution: {integrity: sha512-GHoprlNQD51Xq2Ztd94HHV94MdFZQ3CVrpA04Fz8MVoHM0B7SlbmPEVIjwTbcv58z8QyjnrOuikS0rWF03k5dQ==}
-    engines: {node: '>= 18'}
+  '@redis/client@5.12.1':
+    resolution: {integrity: sha512-7aPGWeqA3uFm43o19umzdl16CEjK/JQGtSXVPevplTaOU3VJA/rseBC1QvYUz9lLDIMBimc4SW/zrW4S89BaCA==}
+    engines: {node: '>= 18.19.0'}
     peerDependencies:
       '@node-rs/xxhash': ^1.1.0
+      '@opentelemetry/api': '>=1 <2'
     peerDependenciesMeta:
       '@node-rs/xxhash':
         optional: true
+      '@opentelemetry/api':
+        optional: true
 
-  '@redis/json@5.11.0':
-    resolution: {integrity: sha512-1iAy9kAtcD0quB21RbPTbUqqy+T2Uu2JxucwE+B4A+VaDbIRvpZR6DMqV8Iqaws2YxJYB3GC5JVNzPYio2ErUg==}
-    engines: {node: '>= 18'}
+  '@redis/json@5.12.1':
+    resolution: {integrity: sha512-eOze75esLve4vfqDel7aMX08CNaiLLQS2fV8mpRN9NxPe1rVR4vQyYiW/OgtGUysF6QOr9ANhfxABKNOJfXdKg==}
+    engines: {node: '>= 18.19.0'}
     peerDependencies:
-      '@redis/client': ^5.11.0
+      '@redis/client': ^5.12.1
 
-  '@redis/search@5.11.0':
-    resolution: {integrity: sha512-g1l7f3Rnyk/xI99oGHIgWHSKFl45Re5YTIcO8j/JE8olz389yUFyz2+A6nqVy/Zi031VgPDWscbbgOk8hlhZ3g==}
-    engines: {node: '>= 18'}
+  '@redis/search@5.12.1':
+    resolution: {integrity: sha512-ItlxbxC9cKI6IU1TLWoczwJCRb6TdmkEpWv05UrPawqaAnWGRu3rcIqsc5vN483T2fSociuyV1UkWIL5I4//2w==}
+    engines: {node: '>= 18.19.0'}
     peerDependencies:
-      '@redis/client': ^5.11.0
+      '@redis/client': ^5.12.1
 
-  '@redis/time-series@5.11.0':
-    resolution: {integrity: sha512-TWFeOcU4xkj0DkndnOyhtxvX1KWD+78UHT3XX3x3XRBUGWeQrKo3jqzDsZwxbggUgf9yLJr/akFHXru66X5UQA==}
-    engines: {node: '>= 18'}
+  '@redis/time-series@5.12.1':
+    resolution: {integrity: sha512-c6JL6E3EcZJuNqKFz+KM+l9l5mpcQiKvTwgA3blt5glWJ8hjDk0yeHN3beE/MpqYIQ8UEX44ItQzgkE/gCBELQ==}
+    engines: {node: '>= 18.19.0'}
     peerDependencies:
-      '@redis/client': ^5.11.0
+      '@redis/client': ^5.12.1
 
   '@rolldown/binding-android-arm64@1.0.0-rc.12':
     resolution: {integrity: sha512-pv1y2Fv0JybcykuiiD3qBOBdz6RteYojRFY1d+b95WVuzx211CRh+ytI/+9iVyWQ6koTh5dawe4S/yRfOFjgaA==}
@@ -658,6 +661,9 @@ packages:
 
   '@tybys/wasm-util@0.10.1':
     resolution: {integrity: sha512-9tTaPJLSiejZKx+Bmog4uSubteqTvFrVrURwkmHixBo0G4seD0zUxp98E1DzUBJxLQ3NPwXrGKDiVjwx/DpPsg==}
+
+  '@tybys/wasm-util@0.10.2':
+    resolution: {integrity: sha512-RoBvJ2X0wuKlWFIjrwffGw1IqZHKQqzIchKaadZZfnNpsAYp2mM0h36JtPCjNDAHGgYez/15uMBpfGwchhiMgg==}
 
   '@types/bcrypt@6.0.0':
     resolution: {integrity: sha512-/oJGukuH3D2+D+3H4JWLaAsJ/ji86dhRidzZ/Od7H/i8g+aCmvkeCc6Ni/f9uxGLSQVCRZkX2/lqEFG2BvWtlQ==}
@@ -2242,8 +2248,8 @@ packages:
     resolution: {integrity: sha512-B7+VDyb8Tl6oMJT9oSO2CW8XC/T4UcJGrwOVoNGwOQsQYhlpfajmrMj5xeejqaASq3V/EqThyOeATEOMuSEXiA==}
     engines: {node: '>=12'}
 
-  postcss@8.5.13:
-    resolution: {integrity: sha512-qif0+jGGZoLWdHey3UFHHWP0H7Gbmsk8T5VEqyYFbWqPr1XqvLGBbk/sl8V5exGmcYJklJOhOQq1pV9IcsiFag==}
+  postcss@8.5.14:
+    resolution: {integrity: sha512-SoSL4+OSEtR99LHFZQiJLkT59C5B1amGO1NzTwj7TT1qCUgUO6hxOvzkOYxD+vMrXBM3XJIKzokoERdqQq/Zmg==}
     engines: {node: ^10 || ^12 || >=14}
 
   prelude-ls@1.2.1:
@@ -2307,9 +2313,9 @@ packages:
     resolution: {integrity: sha512-57frrGM/OCTLqLOAh0mhVA9VBMHd+9U7Zb2THMGdBUoZVOtGbJzjxsYGDJ3A9AYYCP4hn6y1TVbaOfzWtm5GFg==}
     engines: {node: '>= 12.13.0'}
 
-  redis@5.11.0:
-    resolution: {integrity: sha512-YwXjATVDT+AuxcyfOwZn046aml9jMlQPvU1VXIlLDVAExe0u93aTfPYSeRgG4p9Q/Jlkj+LXJ1XEoFV+j2JKcQ==}
-    engines: {node: '>= 18'}
+  redis@5.12.1:
+    resolution: {integrity: sha512-LDsoVvb/CpoV9EN3FXvgvSHNJWuCIzl9MiO3ppOevuGLpSGJhwfQjpEwfFJcQvNSddHADDdZaWx0HnmMxRXG7g==}
+    engines: {node: '>= 18.19.0'}
 
   regexp-tree@0.1.27:
     resolution: {integrity: sha512-iETxpjK6YoRWJG5o6hXLwvjYAoW+FEZn9os0PD/b6AP6xQwsa/Y7lCVgIixBbUPMfhu+i2LtdeAqVTgGlQarfA==}
@@ -3049,7 +3055,7 @@ snapshots:
     dependencies:
       '@emnapi/core': 1.9.1
       '@emnapi/runtime': 1.9.1
-      '@tybys/wasm-util': 0.10.1
+      '@tybys/wasm-util': 0.10.2
     optional: true
 
   '@noble/hashes@1.8.0': {}
@@ -3078,25 +3084,25 @@ snapshots:
 
   '@pkgr/core@0.2.9': {}
 
-  '@redis/bloom@5.11.0(@redis/client@5.11.0)':
+  '@redis/bloom@5.12.1(@redis/client@5.12.1)':
     dependencies:
-      '@redis/client': 5.11.0
+      '@redis/client': 5.12.1
 
-  '@redis/client@5.11.0':
+  '@redis/client@5.12.1':
     dependencies:
       cluster-key-slot: 1.1.2
 
-  '@redis/json@5.11.0(@redis/client@5.11.0)':
+  '@redis/json@5.12.1(@redis/client@5.12.1)':
     dependencies:
-      '@redis/client': 5.11.0
+      '@redis/client': 5.12.1
 
-  '@redis/search@5.11.0(@redis/client@5.11.0)':
+  '@redis/search@5.12.1(@redis/client@5.12.1)':
     dependencies:
-      '@redis/client': 5.11.0
+      '@redis/client': 5.12.1
 
-  '@redis/time-series@5.11.0(@redis/client@5.11.0)':
+  '@redis/time-series@5.12.1(@redis/client@5.12.1)':
     dependencies:
-      '@redis/client': 5.11.0
+      '@redis/client': 5.12.1
 
   '@rolldown/binding-android-arm64@1.0.0-rc.12':
     optional: true
@@ -3197,6 +3203,11 @@ snapshots:
   '@standard-schema/spec@1.1.0': {}
 
   '@tybys/wasm-util@0.10.1':
+    dependencies:
+      tslib: 2.8.1
+    optional: true
+
+  '@tybys/wasm-util@0.10.2':
     dependencies:
       tslib: 2.8.1
     optional: true
@@ -4787,7 +4798,7 @@ snapshots:
     dependencies:
       queue-lit: 1.5.2
 
-  postcss@8.5.13:
+  postcss@8.5.14:
     dependencies:
       nanoid: 3.3.12
       picocolors: 1.1.1
@@ -4846,15 +4857,16 @@ snapshots:
 
   real-require@0.2.0: {}
 
-  redis@5.11.0:
+  redis@5.12.1:
     dependencies:
-      '@redis/bloom': 5.11.0(@redis/client@5.11.0)
-      '@redis/client': 5.11.0
-      '@redis/json': 5.11.0(@redis/client@5.11.0)
-      '@redis/search': 5.11.0(@redis/client@5.11.0)
-      '@redis/time-series': 5.11.0(@redis/client@5.11.0)
+      '@redis/bloom': 5.12.1(@redis/client@5.12.1)
+      '@redis/client': 5.12.1
+      '@redis/json': 5.12.1(@redis/client@5.12.1)
+      '@redis/search': 5.12.1(@redis/client@5.12.1)
+      '@redis/time-series': 5.12.1(@redis/client@5.12.1)
     transitivePeerDependencies:
       - '@node-rs/xxhash'
+      - '@opentelemetry/api'
 
   regexp-tree@0.1.27: {}
 
@@ -5227,7 +5239,7 @@ snapshots:
     dependencies:
       lightningcss: 1.32.0
       picomatch: 4.0.4
-      postcss: 8.5.13
+      postcss: 8.5.14
       rolldown: 1.0.0-rc.12(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)
       tinyglobby: 0.2.16
     optionalDependencies:
