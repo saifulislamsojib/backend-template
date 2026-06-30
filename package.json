@@ -32,7 +32,7 @@
   "keywords": [],
   "author": "Saiful Islam Sojib",
   "license": "ISC",
-  "packageManager": "pnpm@10.33.0",
+  "packageManager": "pnpm@11.9.0",
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
@@ -63,7 +63,7 @@
     "@types/node": "^24.10.13",
     "@types/supertest": "^7.2.0",
     "@vitest/eslint-plugin": "^1.6.20",
-    "eslint": "^10.5.0",
+    "eslint": "^10.6.0",
     "husky": "^9.1.7",
     "lint-staged": "^17.0.8",
     "mongodb-memory-server": "^11.2.0",

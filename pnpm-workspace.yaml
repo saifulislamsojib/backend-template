@@ -1,7 +1,5 @@
-onlyBuiltDependencies:
-  - bcrypt
-  - esbuild
-  - mongodb-memory-server
-  - unrs-resolver
-
-minimumReleaseAge: 1440
+allowBuilds:
+  bcrypt: true
+  esbuild: true
+  mongodb-memory-server: true
+  unrs-resolver: true
