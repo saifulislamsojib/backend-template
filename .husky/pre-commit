@@ -1,1 +1,1 @@
-pnpm lint-staged && pnpm type:check
+pnpm lint-staged && pnpm typecheck

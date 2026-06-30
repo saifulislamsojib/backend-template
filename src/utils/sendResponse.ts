@@ -56,7 +56,6 @@ export type TErrorResponse = {
 };
 
 export type TResponse<T extends ResponseData, U extends AnyObject> =
-  | TSuccessResponse<T, U>
-  | TErrorResponse;
+  TSuccessResponse<T, U> | TErrorResponse;
 
 export default sendResponse;

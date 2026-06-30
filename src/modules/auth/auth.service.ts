@@ -3,7 +3,7 @@ import User from '@/modules/user/user.model';
 import type { TUser } from '@/modules/user/user.types';
 import omit from '@/utils/omit';
 import { status } from 'http-status';
-import type { ObjectId } from 'mongoose';
+import type { Types } from 'mongoose';
 import { createJWT, hashText } from './auth.utils';
 
 export const registerUserToDb = async (payload: Omit<TUser, '_id'>) => {
@@ -50,7 +50,7 @@ export const loginUserFromDb = async (payload: Pick<TUser, 'email' | 'password'>
   };
 };
 
-export const changePasswordToDb = async (userId: string | ObjectId, payload: Params) => {
+export const changePasswordToDb = async (userId: string | Types.ObjectId, payload: Params) => {
   const { currentPassword, newPassword } = payload;
 
   if (currentPassword?.trim() === newPassword?.trim()) {

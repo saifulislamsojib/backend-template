@@ -1,8 +1,8 @@
-import type { ObjectId } from 'mongoose';
+import type { Types } from 'mongoose';
 import type { Role } from './user.constant';
 
 export type TUser = {
-  _id: ObjectId;
+  _id: Types.ObjectId;
   name: string;
   email: string;
   password: string;

@@ -8,9 +8,6 @@ export default getFlatConfigs(
   ...getTsConfigs({
     tsconfigRootDir: import.meta.dirname,
     tsRootDir: 'src/',
-    rules: {
-      '@typescript-eslint/no-base-to-string': ['error', { ignoredTypeNames: ['ObjectId'] }],
-    },
   }),
   {
     files: testFiles,

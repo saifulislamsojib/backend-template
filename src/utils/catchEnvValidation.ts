@@ -25,7 +25,7 @@ const envValidationSchema = z.object({
   }),
 });
 
-type EnvType = z.infer<typeof envValidationSchema>;
+export type EnvType = z.infer<typeof envValidationSchema>;
 
 /**
  * This function validates the environment variables of the current process.
@@ -48,5 +48,4 @@ const catchEnvValidation = async () => {
   }
 };
 
-export type { EnvType };
 export default catchEnvValidation;
