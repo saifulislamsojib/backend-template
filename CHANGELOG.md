@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/saifulislamsojib/backend-template/compare/v1.1.0...v1.1.1) (2026-06-30)
+
+
+### Bug Fixes
+
+* **lint:** standardize script naming, update mongoose types, and clean up linting configurations ([134bc06](https://github.com/saifulislamsojib/backend-template/commit/134bc068760b27dd1ee5f99fbe1ea2ab837943f3))
+
 ## [1.1.0](https://github.com/saifulislamsojib/backend-template/compare/v1.0.0...v1.1.0) (2026-04-28)
 
 
