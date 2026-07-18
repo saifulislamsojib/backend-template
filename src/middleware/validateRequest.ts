@@ -1,24 +1,14 @@
 import catchAsync from '@/utils/catchAsync';
-import type { ZodArray, ZodObject } from 'zod';
-
-const types = ['body', 'params', 'query'] as const;
-
-type Type = (typeof types)[number];
+import type { ZodObject } from 'zod';
 
 /**
  * Validate request data using zod schema middleware creator function
  * @param schema - zod schema for validation
- * @param type - where to validate, default is body
  * @returns validator middleware
  */
-const validateRequest = (schema: ZodObject | ZodArray, type: Type = 'body') => {
-  if (!types.includes(type)) {
-    throw new Error(`Type must be ${types.join(' or ')}`);
-  }
-
-  // validation check
+const validateRequest = (schema: ZodObject) => {
   return catchAsync(async (req, _res, next) => {
-    await schema.parseAsync(req[type]);
+    req.body = await schema.parseAsync(req.body);
     next();
   });
 };
