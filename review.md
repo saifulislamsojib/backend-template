@@ -8,6 +8,7 @@ This is a usable starter, but it is not production-ready as a reusable backend t
 
 ### 1. Environment validation occurs after configuration has already been consumed
 
+- **Status:** Complete
 - **Severity:** High
 - **Location:** `src/server.ts` imports; `src/configs/index.ts`; `src/utils/catchEnvValidation.ts`
 - **Problem:** `configs`, logger, Redis, database, and the HTTP server are imported before validation runs. `configs` permanently captures raw/unvalidated values, including `NaN` ports and undefined secrets. Validation therefore cannot protect dependency initialization.
@@ -25,6 +26,7 @@ export const configs = {
 
 ### 2. CI test database configuration is initialized too late
 
+- **Status:** Complete
 - **Severity:** Critical
 - **Location:** `src/test/globalSetup.ts`; `src/test/setupFile.ts`; `.github/workflows/code-checker.yml`
 - **Problem:** `globalSetup.ts` imports `logger`, which imports `configs` before `process.env.DB_URI` is replaced with the in-memory MongoDB URI. In CI, `.env.test` is ignored and no `DB_URI` is provided. `configs.db_uri` can remain undefined when `dbConnect()` runs.
@@ -32,6 +34,7 @@ export const configs = {
 
 ### 3. The documented example environment cannot pass validation
 
+- **Status:** Complete
 - **Severity:** High
 - **Location:** `.env.example`; `src/utils/catchEnvValidation.ts`
 - **Problem:** `CLIENT_ORIGIN=*` is not a valid URL under `z.url()`. A developer following the example will fail startup validation.
@@ -81,6 +84,7 @@ export const configs = {
 
 ### 10. Cache utility can destroy unrelated Redis data
 
+- **Status:** Complete
 - **Severity:** High
 - **Location:** `src/utils/redis.ts` (`clearAllCache`)
 - **Problem:** `clearAllCache()` invokes `FLUSHALL`, deleting every Redis database's data, not just this application's cache. This is dangerous for shared Redis deployments.
@@ -134,14 +138,14 @@ export const configs = {
 
 ## Top 10 priorities
 
-1. Fix configuration parsing order and use parsed config values.
-2. Fix CI/in-memory MongoDB setup so `DB_URI` is available before config imports.
+1. ~~Fix configuration parsing order and use parsed config values.~~ ✅ Complete
+2. ~~Fix CI/in-memory MongoDB setup so `DB_URI` is available before config imports.~~ ✅ Complete
 3. Remove Redis public port exposure; require authenticated internal Redis.
 4. Choose a single authentication transport; do not return cookie tokens in JSON.
 5. Add rate limiting and generic authentication failure responses.
 6. Add CSRF protection and environment-aware cookie/CORS settings.
 7. Replace MIME-only upload validation with content inspection and managed storage.
-8. Remove `FLUSHALL`; namespace cache keys and degrade gracefully on cache failure.
+8. ~~Remove `FLUSHALL`~~ ✅ Partially complete — namespace cache keys and degrade gracefully on cache failure remain.
 9. Expand test coverage and enforce coverage in CI.
 10. Add health checks, dependency readiness, correct persistence mounts, and production observability.
 

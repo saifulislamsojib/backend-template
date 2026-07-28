@@ -1,8 +1,7 @@
-import configs from '@/configs';
 import { request } from '@/test/apiTester';
 import { status } from 'http-status';
 
-const baseUrl = `${configs.api_route}/health` as const;
+const baseUrl = '/api/v1/health';
 
 describe(`Health api test, API = ${baseUrl}`, () => {
   it(`GET API = ${baseUrl} (health)`, async () => {

@@ -1,4 +1,3 @@
-import configs from '@/configs';
 import { ERROR_TYPE, type ErrorType } from '@/errors/error.const';
 import { userRoles } from '@/modules/user/user.constant';
 import type { TUser, TUserResponse } from '@/modules/user/user.types';
@@ -10,7 +9,7 @@ import { status } from 'http-status';
 
 type SuccessRes = TSuccessResponse<{ token: string; user: TUser }>;
 
-const baseUrl = `${configs.api_route}/auth` as const;
+const baseUrl = '/api/v1/auth';
 
 // test fake user
 const testUser = {

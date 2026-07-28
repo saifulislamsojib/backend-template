@@ -1,4 +1,4 @@
-import configs from '@/configs';
+import env from '@/configs/env';
 import client from '@/configs/redis';
 
 /**
@@ -15,7 +15,7 @@ const getOrSetCache = async <T>(key: string, cb: () => Promise<T>) => {
     return JSON.parse(cached) as T;
   }
   const data = await cb();
-  await client.setEx(key, configs.cache_revalidate_time, JSON.stringify(data));
+  await client.setEx(key, env.REDIS_CACHE_REVALIDATE_TIME_IN_SECONDS, JSON.stringify(data));
   return data;
 };
 
@@ -72,12 +72,4 @@ const deleteCache = async (options: DeleteCacheOptions) => {
   }
 };
 
-/**
- * Clear all redis cache.
- * @returns The result of redis `FLUSHALL` command.
- */
-const clearAllCache = async () => {
-  return client.flushAll();
-};
-
-export { clearAllCache, deleteCache, deleteKeysByPattern, getOrSetCache };
+export { deleteCache, deleteKeysByPattern, getOrSetCache };

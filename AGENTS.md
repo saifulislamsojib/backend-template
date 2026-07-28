@@ -25,9 +25,9 @@ Git hooks (Husky): pre-commit runs lint-staged (ESLint fix, related Vitest tests
 
 ## Architecture
 
-**Bootstrap flow:** `src/server.ts` validates env vars (Zod schema in `src/utils/catchEnvValidation.ts`), connects Redis and MongoDB in parallel, and only then starts the HTTP server. It also handles process shutdown by closing the HTTP server, Redis, and MongoDB connections. `src/app.ts` builds the Express app (middleware + routes) and is imported directly by tests via Supertest — the server never listens during tests.
+**Bootstrap flow:** Importing `src/configs/env.ts` validates the environment with Zod and terminates the process if it is invalid. `src/server.ts` then connects Redis and MongoDB in parallel, and starts the HTTP server only after MongoDB is connected. It also handles process shutdown by closing the HTTP server, Redis, and MongoDB connections. `src/app.ts` builds the Express app (middleware + routes) and is imported directly by tests via Supertest — the server never listens during tests.
 
-**Config:** Runtime application code reads environment values through the frozen `configs` object in `src/configs/index.ts`. To add an env var: add it to the Zod schema in `catchEnvValidation.ts` (which also drives the global `ProcessEnv` type), expose it via `configs`, and add a safe placeholder to `.env.example` when appropriate. `PORT`, Redis host/port, logging, CORS origin, JWT, bcrypt, and cache TTL are configured there.
+**Config:** Runtime application code reads environment values only through the frozen `env` object exported by `src/configs/env.ts`; do not read `process.env` outside setup/bootstrap code. To add an environment variable, add it to `envValidationSchema` and add a safe placeholder to `.env.example` when appropriate. The schema parses numeric values such as `PORT`, `REDIS_PORT`, `BCRYPT_SALT_ROUNDS`, and `REDIS_CACHE_REVALIDATE_TIME_IN_SECONDS`; `IS_LOGS_ON_FILE` remains the string union `'true' | 'false'`. CORS requires a URL in `CLIENT_ORIGIN`;
 
 **Module pattern:** Features live in `src/modules/<name>/` with files split by role as needed: `*.route.ts`, `*.controller.ts`, `*.service.ts`, `*.validation.ts` (Zod schemas), `*.model.ts` (Mongoose), `*.types.ts`, `*.constant.ts`, `*.utils.ts`, and `*.test.ts`. Controllers call `*ToDb`/`*FromDb` service functions; services hold DB logic. New modules are registered in the `moduleRoutes` array in `src/routes/api.routes.ts`, mounted under `/api/v1`.
 
@@ -41,7 +41,7 @@ Git hooks (Husky): pre-commit runs lint-staged (ESLint fix, related Vitest tests
 
 **Path alias:** `@/*` maps to `src/*` (configured in `tsconfig.json`; `.path-resolver.mjs` supports Node's native watch workflow). Use it for cross-directory imports.
 
-**Global types:** `src/types/index.d.ts` declares `AnyObject`, `Params`, typed `process.env`, and `req.user` (set by `authCheck`).
+**Global types:** `src/index.d.ts` declares `AnyObject`, `Params`, and `req.user` (set by `authCheck`).
 
 **Testing:** Use the `apiTester` helper (`src/test/apiTester.ts`) for API endpoint tests — it wraps Supertest and asserts status, success, and error type in one call. Import its named `request` client for small direct assertions. Test files live next to their module as `*.test.ts`; Vitest includes `src/**/*.test.ts`.
 

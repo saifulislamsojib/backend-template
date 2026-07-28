@@ -1,4 +1,4 @@
-import configs from '@/configs';
+import env from '@/configs/env';
 import AppError from '@/errors/AppError';
 import bcrypt from 'bcrypt';
 import type { Response } from 'express';
@@ -12,7 +12,7 @@ import type { AuthPayload, JWTPayload } from './auth.types';
  * @returns A promise that resolves the hashed string.
  */
 export const hashText = (plaintext: string) => {
-  return bcrypt.hash(plaintext, configs.bcrypt_salt_rounds);
+  return bcrypt.hash(plaintext, env.BCRYPT_SALT_ROUNDS);
 };
 
 /**
@@ -31,8 +31,8 @@ export const compareHashedText = (plaintext: string, hashed: string) => {
  * @returns The newly created JWT token.
  */
 export const createJWT = (payload: JWTPayload) => {
-  return jwt.sign(payload, configs.jwt_access_secret, {
-    expiresIn: configs.jwt_access_expires_in as `${number}`,
+  return jwt.sign(payload, env.JWT_ACCESS_SECRET, {
+    expiresIn: env.JWT_ACCESS_EXPIRES_IN as `${number}`,
   });
 };
 
@@ -44,7 +44,7 @@ export const createJWT = (payload: JWTPayload) => {
  */
 export const verifyJWT = (token: string) => {
   try {
-    return jwt.verify(token, configs.jwt_access_secret) as AuthPayload;
+    return jwt.verify(token, env.JWT_ACCESS_SECRET) as AuthPayload;
   } catch {
     throw new AppError(status.UNAUTHORIZED, 'Invalid token!');
   }

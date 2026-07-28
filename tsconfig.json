@@ -40,7 +40,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "files": ["src/types/index.d.ts"],
   "include": ["src/*.ts", "src/**/*.ts"],
   "exclude": ["node_modules"],
 

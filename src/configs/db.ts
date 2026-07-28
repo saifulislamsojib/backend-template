@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import configs from '.';
+import env from './env';
 import logger from './logger';
 
 let isDbConnected = false;
@@ -10,7 +10,7 @@ let isDbConnected = false;
  */
 const dbConnect = async () => {
   try {
-    await mongoose.connect(configs.db_uri);
+    await mongoose.connect(env.DB_URI);
     logger.info('Database successfully connected!');
     isDbConnected = true;
   } catch (error) {

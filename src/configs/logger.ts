@@ -1,13 +1,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { destination, multistream, pino, type StreamEntry } from 'pino';
-import configs from '.';
+import env from './env';
 
-const { node_env, log_level, is_logs_on_file } = configs;
+const { NODE_ENV, LOG_LEVEL, IS_LOGS_ON_FILE } = env;
 
 const streams: StreamEntry<string>[] = [];
 
-if (node_env === 'development' || node_env === 'test') {
+if (NODE_ENV === 'development' || NODE_ENV === 'test') {
   // eslint-disable-next-line import-x/no-extraneous-dependencies
   const { PinoPretty } = await import('pino-pretty');
   streams.push({ stream: PinoPretty({ colorize: true }) });
@@ -16,7 +16,7 @@ if (node_env === 'development' || node_env === 'test') {
 }
 
 // If is_logs_on_file is true, add file streams for error and fatal logs
-if (is_logs_on_file) {
+if (IS_LOGS_ON_FILE === 'true') {
   const logDir = path.join(process.cwd(), 'logs');
 
   // Helper function to generate log filenames with date
@@ -39,7 +39,7 @@ if (is_logs_on_file) {
 
 const logger = pino(
   {
-    level: log_level || 'info',
+    level: LOG_LEVEL,
     formatters: {
       level(level) {
         return { level };

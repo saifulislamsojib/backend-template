@@ -1,4 +1,4 @@
-import configs from '@/configs';
+import env from '@/configs/env';
 import logger from '@/configs/logger';
 import globalErrorHandler from '@/middleware/globalErrorhandler';
 import notFound from '@/middleware/notFound';
@@ -10,7 +10,7 @@ import express from 'express';
 import helmet from 'helmet';
 import { pinoHttp } from 'pino-http';
 
-const { origin, node_env } = configs;
+const { CLIENT_ORIGIN, NODE_ENV } = env;
 
 // app initialization
 const app = express();
@@ -18,7 +18,7 @@ const app = express();
 // app middleware
 app.use(cookieParser());
 app.use(express.json());
-app.use(cors({ origin }));
+app.use(cors({ origin: CLIENT_ORIGIN }));
 app.enable('trust proxy');
 app.enable('case sensitive routing');
 app.use(express.urlencoded({ extended: true, limit: '5mb' }));
@@ -26,7 +26,7 @@ app.disable('x-powered-by');
 app.use(helmet({ xPoweredBy: false }));
 
 // Use pino-http middleware for HTTP request logging
-if (node_env !== 'test') {
+if (NODE_ENV !== 'test') {
   app.use(pinoHttp({ logger }));
 }
 

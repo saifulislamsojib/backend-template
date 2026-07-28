@@ -1,15 +1,10 @@
-import configs from '@/configs';
 import { dbConnect } from '@/configs/db';
+import env from '@/configs/env';
 import logger from '@/configs/logger';
 import redisClient from '@/configs/redis';
-import catchEnvValidation from '@/utils/catchEnvValidation';
 import server, { closeServer } from '@/utils/serverUtils';
 
 const main = async () => {
-  // check env validation
-  const ok = await catchEnvValidation();
-  if (!ok) return;
-
   // redis connection
   const connection = redisClient.connect();
 
@@ -18,10 +13,8 @@ const main = async () => {
 
   // if db is connected successfully then start the server otherwise not
   if (isDbConnected) {
-    const { port } = configs;
-
-    server.listen(port, () => {
-      logger.info(`Hello Boss! I am listening at http://localhost:${port}`);
+    server.listen(env.PORT, () => {
+      logger.info(`Hello Boss! I am listening at http://localhost:${env.PORT}`);
     });
   }
 };

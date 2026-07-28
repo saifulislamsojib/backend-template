@@ -1,4 +1,4 @@
-import configs from '@/configs';
+import env from '@/configs/env';
 import client from '@/configs/redis';
 import catchAsync from '@/utils/catchAsync';
 import sendResponse from '@/utils/sendResponse';
@@ -58,7 +58,7 @@ const cacheRoute = (type: Type = 'public') => {
 const setRouteCache = (req: Request, data: unknown, type: Type = 'public') => {
   const key = getRouteCacheKey(req, type);
 
-  return client.setEx(key, configs.cache_revalidate_time, JSON.stringify(data));
+  return client.setEx(key, env.REDIS_CACHE_REVALIDATE_TIME_IN_SECONDS, JSON.stringify(data));
 };
 
 /**

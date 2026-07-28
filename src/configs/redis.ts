@@ -1,13 +1,13 @@
 import { createClient } from 'redis';
-import configs from '.';
+import env from './env';
 import logger from './logger';
 
-const { redis_host, redis_port } = configs;
+const { REDIS_HOST, REDIS_PORT } = env;
 
 const client = createClient({
   socket: {
-    host: redis_host,
-    port: redis_port,
+    host: REDIS_HOST,
+    port: REDIS_PORT,
   },
 });
 

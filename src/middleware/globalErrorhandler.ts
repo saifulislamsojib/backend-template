@@ -1,4 +1,4 @@
-import configs from '@/configs';
+import env from '@/configs/env';
 import logger from '@/configs/logger';
 import AppError from '@/errors/AppError';
 import { ERROR_TYPE, type ErrorType } from '@/errors/error.const';
@@ -59,7 +59,7 @@ const globalErrorHandler: ErrorRequestHandler = (err: Error, req, res, next) => 
 
   const errorResponse: TErrorResponse = { success: false, statusCode, type, message };
 
-  if (configs.node_env === 'development' && err.stack) errorResponse.stack = err.stack;
+  if (env.NODE_ENV === 'development' && err.stack) errorResponse.stack = err.stack;
 
   const logResponse = {
     url: req.url,
