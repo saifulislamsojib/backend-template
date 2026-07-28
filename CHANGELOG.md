@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/saifulislamsojib/backend-template/compare/v1.1.1...v1.1.2) (2026-07-28)
+
+
+### Performance Improvements
+
+* **db:** optimize database queries using lean, exists, and updateOne operations ([33abfa8](https://github.com/saifulislamsojib/backend-template/commit/33abfa809d939d98c7fed9e3a19305ead4361f98))
+
 ## [1.1.1](https://github.com/saifulislamsojib/backend-template/compare/v1.1.0...v1.1.1) (2026-06-30)
 
 
