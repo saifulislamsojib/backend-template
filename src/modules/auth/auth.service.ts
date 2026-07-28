@@ -10,7 +10,7 @@ export const registerUserToDb = async (payload: Omit<TUser, '_id'>) => {
   const { email } = payload;
 
   // check user is already registered or not
-  const isExist = await User.findOne({ email });
+  const isExist = await User.exists({ email });
   if (isExist) {
     throw new AppError(status.BAD_REQUEST, 'The User already exists by the email');
   }
@@ -75,11 +75,14 @@ export const changePasswordToDb = async (userId: string | Types.ObjectId, payloa
   // hash password
   const hashedPassword = await hashText(newPassword!);
 
-  const data = await User.findByIdAndUpdate(userId, {
-    password: hashedPassword,
-    passwordUpdatedAt: new Date(),
-  });
-  if (!data) {
+  const result = await User.updateOne(
+    { _id: userId },
+    {
+      password: hashedPassword,
+      passwordUpdatedAt: new Date(),
+    },
+  );
+  if (!result.modifiedCount) {
     throw new AppError(status.BAD_REQUEST, 'Password change failed');
   }
 

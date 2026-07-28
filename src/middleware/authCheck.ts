@@ -30,7 +30,7 @@ const authCheck = (...roles: Role[]) => {
     const payload = verifyJWT(authorization);
 
     // check user exist or not
-    const user = await User.findById(payload._id).select('+passwordUpdatedAt');
+    const user = await User.findById(payload._id).select('+passwordUpdatedAt').lean();
 
     if (!user) throw new AppError(status.NOT_FOUND, 'This user not found!');
 
