@@ -1,7 +1,7 @@
 import env from '@/configs/env';
 import AppError from '@/errors/AppError';
 import bcrypt from 'bcrypt';
-import type { Response } from 'express';
+import type { Request, Response } from 'express';
 import { status } from 'http-status';
 import jwt from 'jsonwebtoken';
 import type { AuthPayload, JWTPayload } from './auth.types';
@@ -32,7 +32,7 @@ export const compareHashedText = (plaintext: string, hashed: string) => {
  */
 export const createJWT = (payload: JWTPayload) => {
   return jwt.sign(payload, env.JWT_ACCESS_SECRET, {
-    expiresIn: env.JWT_ACCESS_EXPIRES_IN as `${number}`,
+    expiresIn: `${env.JWT_ACCESS_EXPIRES_IN_MINUTES}m`,
   });
 };
 
@@ -52,20 +52,32 @@ export const verifyJWT = (token: string) => {
 
 export const AUTH_TOKEN_KEY = 'access-token';
 
+export const X_APP_KEY = 'x-app-key';
+
+/**
+ * Checks if the provided app key is valid.
+ * @param req - The request object.
+ * @returns True if the app key is valid, false otherwise.
+ */
+export const isAppKeyValid = (req: Pick<Request, 'get'>) => {
+  return req.get(X_APP_KEY) === env.APP_KEY;
+};
+
+const isSecure = env.NODE_ENV !== 'development';
+
 /**
  * Sets an authentication cookie with the provided JWT token.
  * @param res - The response object used to set the cookie.
  * @param token - The JWT token to be stored in the cookie.
- * The cookie is set with HttpOnly, SameSite=None, and Secure attributes for security,
- * and is configured to expire in 7 days.
+ * The cookie is set with HttpOnly, SameSite=lax, and Secure attributes for security,
+ * and is configured to expire in JWT_ACCESS_EXPIRES_IN_MINUTES from env.
  */
 
 export const setAuthCookie = (res: Pick<Response, 'cookie'>, token: string) => {
   return res.cookie(AUTH_TOKEN_KEY, token, {
-    maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+    maxAge: 1000 * 60 * env.JWT_ACCESS_EXPIRES_IN_MINUTES,
     httpOnly: true,
-    sameSite: 'none',
-    secure: true,
-    // domain,
+    sameSite: 'lax',
+    secure: isSecure,
   });
 };

@@ -42,6 +42,7 @@ export const configs = {
 
 ### 4. Authentication returns a bearer token despite setting an HttpOnly cookie
 
+- **Status:** Complete
 - **Severity:** High
 - **Location:** `src/modules/auth/auth.service.ts`; `src/modules/auth/auth.controller.ts`; `src/modules/auth/auth.utils.ts`
 - **Problem:** Login and registration return the JWT in JSON and set it in an HttpOnly cookie. Returning it to JavaScript defeats the main XSS protection provided by HttpOnly cookies.
@@ -49,6 +50,7 @@ export const configs = {
 
 ### 5. Cookie/CORS defaults are unsafe and inconsistent
 
+- **Status:** Complete
 - **Severity:** High
 - **Location:** `src/modules/auth/auth.utils.ts`; `src/app.ts`
 - **Problem:** Cookies are always `Secure` and `SameSite=None`, which breaks local HTTP development. `SameSite=None` also requires CSRF protection for cookie-authenticated mutations. CORS does not set `credentials: true`, so cross-origin browser clients cannot reliably use the cookie.
@@ -56,6 +58,7 @@ export const configs = {
 
 ### 6. Login leaks account existence and has no abuse protection
 
+- **Status:** Complete
 - **Severity:** High
 - **Location:** `src/modules/auth/auth.service.ts` (`loginUserFromDb`)
 - **Problem:** Unknown email returns `404 User not found`; incorrect password returns `400 Password is not valid`. This enables account enumeration. There is also no rate limiting, lockout/backoff, or IP/account throttling on login and registration.
@@ -141,9 +144,9 @@ export const configs = {
 1. ~~Fix configuration parsing order and use parsed config values.~~ ✅ Complete
 2. ~~Fix CI/in-memory MongoDB setup so `DB_URI` is available before config imports.~~ ✅ Complete
 3. Remove Redis public port exposure; require authenticated internal Redis.
-4. Choose a single authentication transport; do not return cookie tokens in JSON.
-5. Add rate limiting and generic authentication failure responses.
-6. Add CSRF protection and environment-aware cookie/CORS settings.
+4. ~~Choose a single authentication transport; do not return cookie tokens in JSON.~~ ✅ Complete
+5. ~~Add rate limiting and generic authentication failure responses.~~ ✅ Complete
+6. ~~Add CSRF protection and environment-aware cookie/CORS settings.~~ ✅ Complete
 7. Replace MIME-only upload validation with content inspection and managed storage.
 8. ~~Remove `FLUSHALL`~~ ✅ Partially complete — namespace cache keys and degrade gracefully on cache failure remain.
 9. Expand test coverage and enforce coverage in CI.

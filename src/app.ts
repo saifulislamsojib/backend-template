@@ -18,7 +18,7 @@ const app = express();
 // app middleware
 app.use(cookieParser());
 app.use(express.json());
-app.use(cors({ origin: CLIENT_ORIGIN }));
+app.use(cors({ origin: CLIENT_ORIGIN, credentials: true }));
 app.enable('trust proxy');
 app.enable('case sensitive routing');
 app.use(express.urlencoded({ extended: true, limit: '5mb' }));

@@ -7,7 +7,8 @@ import omit from '@/utils/omit';
 import type { TSuccessResponse } from '@/utils/sendResponse';
 import { status } from 'http-status';
 
-type SuccessRes = TSuccessResponse<{ token: string; user: TUser }>;
+type SuccessRes = TSuccessResponse<{ user: TUser }>;
+type AppSuccessRes = TSuccessResponse<{ user: TUser; token: string }>;
 
 const baseUrl = '/api/v1/auth';
 
@@ -71,9 +72,26 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
 
       const expected = { status: status.CREATED, success: true };
 
-      const resBody = await apiTester<SuccessRes>({ url, method: 'post', body, expected });
-      expect(resBody.data).toStrictEqual(expect.objectContaining({ token: types.string, user }));
-      token = resBody.data.token;
+      const resBody = await apiTester<SuccessRes>({
+        url,
+        method: 'post',
+        body,
+        expected,
+        onResponse: (res) => {
+          const cookies = res.get('Set-Cookie')!;
+          expect(cookies).toBeDefined();
+          const [firstCookie] = cookies;
+          expect(firstCookie).toMatch(/access-token=/);
+          expect(firstCookie).toMatch(/HttpOnly/i);
+          const match = firstCookie?.match(/access-token=([^;]+)/);
+          if (match) {
+            const [, extractedToken] = match;
+            token = extractedToken!;
+          }
+        },
+      });
+      expect(resBody.data).toStrictEqual({ user });
+      expect(resBody.data).not.toHaveProperty('token');
     });
 
     // Duplication errors test
@@ -119,22 +137,20 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
     // not found user and password not match test
     it('Not found user and password not match test for login', async () => {
       const expected = {
-        status: status.NOT_FOUND as number,
+        status: status.UNAUTHORIZED,
         success: false,
-        type: ERROR_TYPE.notFound as ErrorType,
+        type: ERROR_TYPE.unauthorized,
       };
 
       // not found user test
       const notFoundEmailBody = { ...body, email: 'abraham123@gmail.com' };
       let resBody = await apiTester({ url, method: 'post', body: notFoundEmailBody, expected });
-      expect(resBody.message).toMatch(/not found/i);
+      expect(resBody.message).toMatch(/invalid email or password/i);
 
       // password not matched test
-      expected.type = ERROR_TYPE.appError;
-      expected.status = status.BAD_REQUEST;
       const notMatchedPassBody = { ...body, password: '123456@Aa1' };
       resBody = await apiTester({ url, method: 'post', body: notMatchedPassBody, expected });
-      expect(resBody.message).toMatch(/password/i);
+      expect(resBody.message).toMatch(/invalid email or password/i);
     });
 
     // login Successful test
@@ -150,9 +166,37 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
 
       const expected = { status: status.OK, success: true };
 
-      const resBody = await apiTester<SuccessRes>({ url, method: 'post', body, expected });
-      expect(resBody.data).toStrictEqual(expect.objectContaining({ token: types.string, user }));
-      token = resBody.data.token;
+      const resBody = await apiTester<SuccessRes>({
+        url,
+        method: 'post',
+        body,
+        expected,
+        onResponse: (res) => {
+          const cookies = res.get('Set-Cookie')!;
+          expect(cookies).toBeDefined();
+          const [firstCookie] = cookies;
+          expect(firstCookie).toMatch(/access-token=/);
+          const match = firstCookie?.match(/access-token=([^;]+)/);
+          if (match) {
+            const [, extractedToken] = match;
+            token = extractedToken!;
+          }
+        },
+      });
+      expect(resBody.data).toStrictEqual({ user });
+      expect(resBody.data).not.toHaveProperty('token');
+    });
+
+    it('returns a token to a client with a valid app key', async () => {
+      const resBody = await apiTester<AppSuccessRes>({
+        url,
+        method: 'post',
+        body,
+        isApp: true,
+      });
+
+      expect(resBody.data.token).toStrictEqual(types.string);
+      expect(resBody.data.user.email).toBe(body.email);
     });
   });
 
@@ -177,7 +221,7 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
 
       // check invalid token validation
       const invalidToken = 'eyJhbGciOiJIUzI';
-      resBody = await apiTester({ url, method: 'post', body, expected, token: invalidToken });
+      resBody = await apiTester({ url, method: 'post', body, expected, cookie: invalidToken });
       expect(resBody.message).toMatch(/invalid token/i);
     });
 
@@ -191,20 +235,44 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
 
       // check currentPassword validation
       const notCurrPass = omit(body, 'currentPassword');
-      let resBody = await apiTester({ url, method: 'post', body: notCurrPass, expected, token });
+      let resBody = await apiTester({
+        url,
+        method: 'post',
+        body: notCurrPass,
+        expected,
+        cookie: token,
+      });
       expect(resBody.message).toMatch(/currentPassword/i);
 
       const invalidCurrPass = { ...body, currentPassword: '12345678' };
-      resBody = await apiTester({ url, method: 'post', body: invalidCurrPass, expected, token });
+      resBody = await apiTester({
+        url,
+        method: 'post',
+        body: invalidCurrPass,
+        expected,
+        cookie: token,
+      });
       expect(resBody.message).toMatch(/Current Password/i);
 
       // check newPassword validation
       const notNewPassBody = omit(body, 'newPassword');
-      resBody = await apiTester({ url, method: 'post', body: notNewPassBody, expected, token });
+      resBody = await apiTester({
+        url,
+        method: 'post',
+        body: notNewPassBody,
+        expected,
+        cookie: token,
+      });
       expect(resBody.message).toMatch(/newPassword/i);
 
       const invalidNewPassBody = { ...body, newPassword: '12345678' };
-      resBody = await apiTester({ url, method: 'post', body: invalidNewPassBody, expected, token });
+      resBody = await apiTester({
+        url,
+        method: 'post',
+        body: invalidNewPassBody,
+        expected,
+        cookie: token,
+      });
       expect(resBody.message).toMatch(/New Password/i);
 
       // check now app errors
@@ -212,13 +280,25 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
 
       // check same pass validation
       const samePassBody = { ...body, newPassword: body.currentPassword };
-      resBody = await apiTester({ url, method: 'post', body: samePassBody, expected, token });
+      resBody = await apiTester({
+        url,
+        method: 'post',
+        body: samePassBody,
+        expected,
+        cookie: token,
+      });
       expect(resBody.message).toMatch(/same/i);
 
       // password not matched
       expected.status = status.BAD_REQUEST;
       const notMatchPassBody = { ...body, currentPassword: '123456@Aa100' };
-      resBody = await apiTester({ url, method: 'post', body: notMatchPassBody, expected, token });
+      resBody = await apiTester({
+        url,
+        method: 'post',
+        body: notMatchPassBody,
+        expected,
+        cookie: token,
+      });
       expect(resBody.message).toMatch(/password/i);
     });
 
@@ -235,9 +315,26 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
 
       const expected = { status: status.OK, success: true };
 
-      const resBody = await apiTester<SuccessRes>({ url, method: 'post', body, expected, token });
-      expect(resBody.data).toStrictEqual(expect.objectContaining({ token: types.string, user }));
-      token = resBody.data.token;
+      const resBody = await apiTester<SuccessRes>({
+        url,
+        method: 'post',
+        body,
+        expected,
+        cookie: token,
+        onResponse: (res) => {
+          const cookies = res.get('Set-Cookie')!;
+          expect(cookies).toBeDefined();
+          const [firstCookie] = cookies;
+          expect(firstCookie).toMatch(/access-token=/);
+          const match = firstCookie?.match(/access-token=([^;]+)/);
+          if (match) {
+            const [, extractedToken] = match;
+            token = extractedToken!;
+          }
+        },
+      });
+      expect(resBody.data).toStrictEqual({ user });
+      expect(resBody.data).not.toHaveProperty('token');
     });
   });
 });

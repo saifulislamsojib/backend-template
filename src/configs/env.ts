@@ -6,8 +6,12 @@ const log_levels = ['trace', 'debug', 'info', 'warn', 'error', 'fatal', 'silent'
 const envValidationSchema = z.object({
   NODE_ENV: z.enum(node_envs).default('development'),
   DB_URI: z.url().trim(),
+  APP_KEY: z.string().trim().min(8),
   JWT_ACCESS_SECRET: z.string().trim().min(10),
-  JWT_ACCESS_EXPIRES_IN: z.string().trim().default('15m'),
+  JWT_ACCESS_EXPIRES_IN_MINUTES: z
+    .string()
+    .optional()
+    .transform((val) => (val ? parseInt(val, 10) : 10080)), // 7 days in minutes
   CLIENT_ORIGIN: z.url().trim(),
   LOG_LEVEL: z.enum(log_levels).default('info'),
   IS_LOGS_ON_FILE: z.enum(['true', 'false']).default('false'),

@@ -1,4 +1,6 @@
 import app from '@/app';
+import env from '@/configs/env';
+import { AUTH_TOKEN_KEY, X_APP_KEY } from '@/modules/auth/auth.utils';
 import type { TResponse } from '@/utils/sendResponse';
 import { status } from 'http-status';
 import supertest from 'supertest';
@@ -16,7 +18,10 @@ type TesterProps = {
   method?: 'get' | 'post' | 'put' | 'patch' | 'delete';
   body?: AnyObject;
   expected?: Matcher;
-  token?: string;
+  appToken?: string;
+  isApp?: boolean;
+  cookie?: string;
+  onResponse?: (res: supertest.Response) => void;
 };
 
 type Response = TResponse<AnyObject, AnyObject>;
@@ -32,7 +37,10 @@ type Response = TResponse<AnyObject, AnyObject>;
  *    - - `status`: the expected HTTP status code. Defaults to `200`.
  *    - - `success`: the expected value of `res.body.success`. Defaults to `true`.
  *    - - `type`: the expected value of `res.body.type` if success false. Optional.
- * - `token`: the value of the `authorization` header to set. Optional.
+ * - `appToken`: the value of the `authorization` header to set. Optional.
+ * - `isApp`: if true, set `X_APP_KEY` header. Optional.
+ * - `cookie`: cookie string to set. Optional.
+ * - `onResponse`: optional callback to inspect raw response.
  *
  * @returns a promise that resolves to the response body
  */
@@ -42,16 +50,27 @@ const apiTester = async <T extends Response = Response>(testerOptions: TesterPro
     method = 'get',
     body: reqBody,
     expected: { status: expectedStatus = status.OK, success = true, type } = {},
-    token,
+    appToken,
+    cookie,
+    isApp,
+    onResponse,
   } = testerOptions;
   const query = request[method](url);
   if (reqBody) {
     query.send(reqBody);
   }
-  if (token) {
-    query.set('authorization', token);
+  if (appToken) {
+    query.set('authorization', `Bearer ${appToken}`);
+    query.set(X_APP_KEY, env.APP_KEY);
+  } else if (cookie) {
+    query.set('cookie', `${AUTH_TOKEN_KEY}=${cookie}`);
+  } else if (isApp) {
+    query.set(X_APP_KEY, env.APP_KEY);
   }
   const res = await query;
+  if (onResponse) {
+    onResponse(res);
+  }
   expect(res.status).toBe(expectedStatus);
   const resBody = res.body as T;
   expect(resBody.success).toBe(success);

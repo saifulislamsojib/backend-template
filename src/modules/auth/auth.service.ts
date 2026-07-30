@@ -4,7 +4,9 @@ import type { TUser } from '@/modules/user/user.types';
 import omit from '@/utils/omit';
 import { status } from 'http-status';
 import type { Types } from 'mongoose';
-import { createJWT, hashText } from './auth.utils';
+import { compareHashedText, createJWT, hashText } from './auth.utils';
+
+const DUMMY_HASH = '$2b$10$e7V/4X/t18f.5Ew1xV9.uO3zB9h5k.3y9jH.x4y.5z6a7b8c9d0e1';
 
 export const registerUserToDb = async (payload: Omit<TUser, '_id'>) => {
   const { email } = payload;
@@ -33,12 +35,13 @@ export const loginUserFromDb = async (payload: Pick<TUser, 'email' | 'password'>
   // check the user found or not
   const user = await User.findOne({ email }).select('+password');
   if (!user?._id) {
-    throw new AppError(status.NOT_FOUND, 'User not found with the email');
+    await compareHashedText(password, DUMMY_HASH);
+    throw new AppError(status.UNAUTHORIZED, 'Invalid email or password');
   }
 
   // check the user password
   if (!(await user.isValidPassword(password))) {
-    throw new AppError(status.BAD_REQUEST, 'Password is not valid');
+    throw new AppError(status.UNAUTHORIZED, 'Invalid email or password');
   }
 
   // create jwt token

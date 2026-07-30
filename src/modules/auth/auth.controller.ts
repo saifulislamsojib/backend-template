@@ -4,12 +4,13 @@ import omit from '@/utils/omit';
 import sendResponse from '@/utils/sendResponse';
 import { status } from 'http-status';
 import { changePasswordToDb, loginUserFromDb, registerUserToDb } from './auth.service';
-import { setAuthCookie } from './auth.utils';
+import { isAppKeyValid, setAuthCookie } from './auth.utils';
 
 export const registerUser = catchAsync<Omit<TUser, '_id'>>(async (req, res) => {
-  const data = await registerUserToDb(req.body);
-  return sendResponse(setAuthCookie(res, data.token), {
-    data,
+  const { token, user } = await registerUserToDb(req.body);
+  setAuthCookie(res, token);
+  return sendResponse(res, {
+    data: isAppKeyValid(req) ? { user, token } : { user },
     message: 'User registered successfully',
     statusCode: status.CREATED,
     success: true,
@@ -17,9 +18,10 @@ export const registerUser = catchAsync<Omit<TUser, '_id'>>(async (req, res) => {
 });
 
 export const loginUser = catchAsync<Pick<TUser, 'email' | 'password'>>(async (req, res) => {
-  const data = await loginUserFromDb(req.body);
-  return sendResponse(setAuthCookie(res, data.token), {
-    data,
+  const { token, user } = await loginUserFromDb(req.body);
+  setAuthCookie(res, token);
+  return sendResponse(res, {
+    data: isAppKeyValid(req) ? { user, token } : { user },
     message: 'User login successful',
     statusCode: status.OK,
     success: true,
@@ -27,9 +29,10 @@ export const loginUser = catchAsync<Pick<TUser, 'email' | 'password'>>(async (re
 });
 
 export const changePassword = catchAsync<Params>(async (req, res) => {
-  const data = await changePasswordToDb(req.user!._id, req.body);
+  const { token, user } = await changePasswordToDb(req.user!._id, req.body);
+  setAuthCookie(res, token);
   return sendResponse(res, {
-    data,
+    data: isAppKeyValid(req) ? { user, token } : { user },
     message: 'Password changed successfully',
     statusCode: status.OK,
     success: true,

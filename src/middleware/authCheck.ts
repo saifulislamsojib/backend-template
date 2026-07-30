@@ -1,5 +1,5 @@
 import AppError from '@/errors/AppError';
-import { AUTH_TOKEN_KEY, verifyJWT } from '@/modules/auth/auth.utils';
+import { AUTH_TOKEN_KEY, isAppKeyValid, verifyJWT } from '@/modules/auth/auth.utils';
 import type { Role } from '@/modules/user/user.constant';
 import User from '@/modules/user/user.model';
 import catchAsync from '@/utils/catchAsync';
@@ -21,7 +21,10 @@ import { status } from 'http-status';
  */
 const authCheck = (...roles: Role[]) => {
   return catchAsync(async (req, _res, next) => {
-    const authorization = (req.cookies as Params)[AUTH_TOKEN_KEY] || req.headers.authorization;
+    const isAppRequest = isAppKeyValid(req);
+    const authorization = isAppRequest
+      ? req.get('authorization')?.replace(/^Bearer\s+/i, '')
+      : (req.cookies as Params)[AUTH_TOKEN_KEY];
 
     // check authorization send from client
     if (!authorization) throw new AppError(status.UNAUTHORIZED, 'Invalid token!');
