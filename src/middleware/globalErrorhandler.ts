@@ -49,12 +49,14 @@ const globalErrorHandler: ErrorRequestHandler = (err: Error, req, res, next) => 
     message = Object.values(err.errors).reduce((acc, { message: msg }) => {
       return `${acc}${acc ? '; ' : ''}${msg}.`;
     }, '');
-  } else if (err instanceof AppError && err.statusCode === status.UNAUTHORIZED) {
-    type = ERROR_TYPE.unauthorized;
-    statusCode = status.UNAUTHORIZED;
-  } else if (err instanceof AppError && err.statusCode === status.NOT_FOUND) {
-    type = ERROR_TYPE.notFound;
-    statusCode = status.NOT_FOUND;
+  } else if (err instanceof AppError) {
+    if (err.statusCode === status.UNAUTHORIZED) {
+      type = ERROR_TYPE.unauthorized;
+    } else if (err.statusCode === status.FORBIDDEN) {
+      type = ERROR_TYPE.forbidden;
+    } else if (err.statusCode === status.NOT_FOUND) {
+      type = ERROR_TYPE.notFound;
+    }
   }
 
   const errorResponse: TErrorResponse = { success: false, statusCode, type, message };

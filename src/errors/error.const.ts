@@ -1,6 +1,7 @@
 export const ERROR_TYPE = Object.freeze({
   validationError: 'validationError',
   unauthorized: 'unauthorized',
+  forbidden: 'forbidden',
   duplicateEntry: 'duplicateEntry', // throw by mongoose
   castError: 'castError', // throw by mongoose
   notFound: 'notFound',

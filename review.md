@@ -116,6 +116,7 @@ export const configs = {
 
 ### 14. Response and error contracts are inconsistent
 
+- **Status:** Complete
 - **Severity:** Medium
 - **Location:** `src/routes/root.routes.ts`; `src/modules/health/health.controller.ts`; `src/middleware/globalErrorhandler.ts`
 - **Problem:** Most responses use `sendResponse`, while root and health use custom shapes. Some expected authentication failures are `400` or `404`, while others are `401`. This makes a shared client contract harder to implement and preserves account enumeration.

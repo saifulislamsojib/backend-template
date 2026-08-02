@@ -71,7 +71,7 @@ export const changePasswordToDb = async (userId: string | ObjectId, payload: Par
 
   // check currentPassword
   if (!(await user.isValidPassword(currentPassword!))) {
-    throw new AppError(status.BAD_REQUEST, 'Current password is not matched');
+    throw new AppError(status.UNAUTHORIZED, 'Current password is not matched');
   }
 
   // hash password

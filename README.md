@@ -33,3 +33,29 @@
     <li>To build the project run `pnpm build` command</li>
     <li>To Lint and format the project run `pnpm lint`</li>
 </ol>
+
+## API response contract
+
+All API responses, including the root and health endpoints, use the v1 envelope:
+
+```json
+{
+  "success": true,
+  "statusCode": 200,
+  "message": "Human-readable summary",
+  "data": {}
+}
+```
+
+Error responses replace `data` with a stable `type` (and may include `error` or `stack` in development):
+
+```json
+{
+  "success": false,
+  "statusCode": 401,
+  "message": "Invalid token!",
+  "type": "unauthorized"
+}
+```
+
+Invalid or missing credentials return `401`; authenticated callers without the required role return `403` with type `forbidden`.

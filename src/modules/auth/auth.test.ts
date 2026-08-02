@@ -228,7 +228,7 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
     // change password Validation Error test
     it('Validation Error Test for change-password', async () => {
       const expected = {
-        status: status.BAD_REQUEST,
+        status: status.BAD_REQUEST as 400 | 401,
         success: false,
         type: ERROR_TYPE.validationError as ErrorType,
       };
@@ -290,7 +290,8 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
       expect(resBody.message).toMatch(/same/i);
 
       // password not matched
-      expected.status = status.BAD_REQUEST;
+      expected.status = status.UNAUTHORIZED;
+      expected.type = ERROR_TYPE.unauthorized;
       const notMatchPassBody = { ...body, currentPassword: '123456@Aa100' };
       resBody = await apiTester({
         url,

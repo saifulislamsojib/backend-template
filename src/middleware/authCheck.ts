@@ -35,7 +35,7 @@ const authCheck = (...roles: Role[]) => {
     // check user exist or not
     const user = await User.findById(payload._id).select('+passwordUpdatedAt').lean();
 
-    if (!user) throw new AppError(status.NOT_FOUND, 'This user not found!');
+    if (!user) throw new AppError(status.UNAUTHORIZED, 'Invalid token!');
 
     const { email, _id, role, name, createdAt, updatedAt, passwordUpdatedAt } = user;
 
@@ -60,7 +60,7 @@ const authCheck = (...roles: Role[]) => {
     // check user role authorization
     if (roles.length && !roles.includes(role)) {
       throw new AppError(
-        status.UNAUTHORIZED,
+        status.FORBIDDEN,
         'You do not have the necessary permissions to access this resource!',
       );
     }
