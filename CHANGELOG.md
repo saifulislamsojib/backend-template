@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/saifulislamsojib/backend-template/compare/v1.1.2...v1.2.0) (2026-08-02)
+
+
+### Features
+
+* **auth:** add Redis rate limiting and App Key API authentication ([a658117](https://github.com/saifulislamsojib/backend-template/commit/a6581175afbc5535bd03cee01e23e76e37b0a183))
+
 ## [1.1.2](https://github.com/saifulislamsojib/backend-template/compare/v1.1.1...v1.1.2) (2026-07-28)
 
 
