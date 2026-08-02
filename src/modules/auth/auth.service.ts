@@ -3,7 +3,6 @@ import User from '@/modules/user/user.model';
 import type { TUser } from '@/modules/user/user.types';
 import omit from '@/utils/omit';
 import { status } from 'http-status';
-import type { Types } from 'mongoose';
 import { compareHashedText, createJWT, hashText } from './auth.utils';
 
 const DUMMY_HASH = '$2b$10$e7V/4X/t18f.5Ew1xV9.uO3zB9h5k.3y9jH.x4y.5z6a7b8c9d0e1';
@@ -53,7 +52,7 @@ export const loginUserFromDb = async (payload: Pick<TUser, 'email' | 'password'>
   };
 };
 
-export const changePasswordToDb = async (userId: string | Types.ObjectId, payload: Params) => {
+export const changePasswordToDb = async (userId: string | ObjectId, payload: Params) => {
   const { currentPassword, newPassword } = payload;
 
   if (currentPassword?.trim() === newPassword?.trim()) {
