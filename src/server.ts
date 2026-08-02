@@ -2,7 +2,7 @@ import { dbConnect } from '@/configs/db';
 import env from '@/configs/env';
 import logger from '@/configs/logger';
 import redisClient from '@/configs/redis';
-import server, { closeServer } from '@/utils/serverUtils';
+import server, { closeServer } from '@/utils/server';
 
 const main = async () => {
   // redis connection
