@@ -1,18 +1,23 @@
 services:
   redis:
     container_name: redis
-    image: redis:8.6.2-alpine
-    ports:
-      - 6379:6379
+    image: redis:8.10.0-alpine
     restart: unless-stopped
     volumes:
-      - redis-data:/var/lib/redis
+      - redis-data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
     networks:
       - template-server-network
 
   server-stage:
     depends_on:
-      - redis
+      redis:
+        condition: service_healthy
     container_name: template-server-stage
     build:
       context: .
@@ -29,6 +34,16 @@ services:
       - REDIS_HOST=redis
     env_file:
       - .env
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'node -e "fetch(''http://127.0.0.1:8080/api/v1/health'').then((response) => { if (!response.ok) process.exit(1); }).catch(() => process.exit(1))"',
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
     networks:
       - template-server-network
 

@@ -109,6 +109,7 @@ export const configs = {
 
 ### 13. Docker readiness is incomplete
 
+- **Status:** Complete
 - **Severity:** Medium
 - **Location:** `Dockerfile`; `compose.yml`
 - **Problem:** The production image has no health check, no `EXPOSE`, and Compose starts the API after Redis merely starts—not after it is healthy. The image build does not run tests or typecheck. Redis data is mounted at `/var/lib/redis`, whereas the official Redis image normally persists under `/data`.
@@ -151,7 +152,7 @@ export const configs = {
 7. Replace MIME-only upload validation with content inspection and managed storage.
 8. ~~Remove `FLUSHALL`~~ ✅ Partially complete — namespace cache keys and degrade gracefully on cache failure remain.
 9. Expand test coverage and enforce coverage in CI.
-10. Add health checks, dependency readiness, correct persistence mounts, and production observability.
+10. ~~Add health checks, dependency readiness, correct persistence mounts, and production observability.~~ ✅ Complete
 
 ## Prioritized refactoring roadmap
 

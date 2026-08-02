@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       redis:
-        image: redis:8.6.2-alpine
+        image: redis:8.10.0-alpine
         # Set health checks to wait until redis has started
         options: >-
           --health-cmd "redis-cli ping"
