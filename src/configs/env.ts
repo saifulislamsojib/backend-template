@@ -2,6 +2,7 @@ import { prettifyError, z } from 'zod';
 
 const node_envs = ['development', 'test', 'staging', 'production'] as const;
 const log_levels = ['trace', 'debug', 'info', 'warn', 'error', 'fatal', 'silent'] as const;
+const upload_storage_drivers = ['local', 's3'] as const;
 
 const envValidationSchema = z.object({
   NODE_ENV: z.enum(node_envs).default('development'),
@@ -29,6 +30,22 @@ const envValidationSchema = z.object({
     .string()
     .optional()
     .transform((val) => (val ? parseInt(val, 10) : 86400)), // Default is 24 hours
+  UPLOAD_STORAGE_DRIVER: z.enum(upload_storage_drivers).default('local'),
+  UPLOAD_LOCAL_DIRECTORY: z.string().trim().min(1).default('.data/uploads'),
+  UPLOAD_MAX_FILE_SIZE_BYTES: z
+    .string()
+    .optional()
+    .transform((val) => (val ? parseInt(val, 10) : 2 * 1024 * 1024))
+    .pipe(z.number().int().positive()),
+  UPLOAD_S3_BUCKET: z.string().trim().min(1).optional(),
+  UPLOAD_S3_REGION: z.string().trim().min(1).optional(),
+  UPLOAD_S3_ENDPOINT: z.url().trim().optional(),
+  UPLOAD_S3_ACCESS_KEY_ID: z.string().trim().min(1).optional(),
+  UPLOAD_S3_SECRET_ACCESS_KEY: z.string().trim().min(1).optional(),
+  UPLOAD_S3_FORCE_PATH_STYLE: z
+    .enum(['true', 'false'])
+    .default('false')
+    .transform((val) => val === 'true'),
 });
 
 const { error, data } = envValidationSchema.safeParse(process.env);

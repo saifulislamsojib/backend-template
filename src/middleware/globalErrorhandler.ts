@@ -6,6 +6,7 @@ import sendResponse, { type TErrorResponse } from '@/utils/sendResponse';
 import type { ErrorRequestHandler } from 'express';
 import { status } from 'http-status';
 import { Error as MongooseError } from 'mongoose';
+import { MulterError } from 'multer';
 import { ZodError } from 'zod';
 
 /**
@@ -33,6 +34,14 @@ const globalErrorHandler: ErrorRequestHandler = (err: Error, req, res, next) => 
         code === 'custom' ? msg : `${lastPath as string} is ${msg.toLowerCase()}`;
       return `${acc}${acc ? '; ' : ''}${singleMessage}`;
     }, '');
+  } else if (err instanceof MulterError) {
+    statusCode =
+      err.code === 'LIMIT_FILE_SIZE' ? status.REQUEST_ENTITY_TOO_LARGE : status.BAD_REQUEST;
+    type = ERROR_TYPE.appError;
+    message =
+      err.code === 'LIMIT_FILE_SIZE'
+        ? 'Uploaded file exceeds the allowed size'
+        : 'Invalid upload request';
   } else if (err.name === 'CastError') {
     type = ERROR_TYPE.castError;
     statusCode = status.BAD_REQUEST;

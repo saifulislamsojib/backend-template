@@ -22,6 +22,7 @@ dist
 
 # testing
 coverage
+.data/uploads
 
 # package lock files(only use pnpm)
 yarn.lock

@@ -34,11 +34,13 @@
   "license": "ISC",
   "packageManager": "pnpm@11.9.0",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1101.0",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "express-rate-limit": "^8.6.1",
+    "file-type": "^22.0.1",
     "helmet": "^8.3.0",
     "http-status": "^2.1.0",
     "jsonwebtoken": "^9.0.3",
