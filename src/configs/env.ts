@@ -3,7 +3,7 @@ import { prettifyError, z } from 'zod';
 const node_envs = ['development', 'test', 'staging', 'production'] as const;
 const log_levels = ['trace', 'debug', 'info', 'warn', 'error', 'fatal', 'silent'] as const;
 
-const envValidationSchema = z.object({
+export const envValidationSchema = z.object({
   NODE_ENV: z.enum(node_envs).default('development'),
   DB_URI: z.url().trim(),
   APP_KEY: z.string().trim().min(8),
