@@ -43,7 +43,7 @@ export const createRateLimiter = (options: RateLimitOptions = {}) => {
   if (!isTest) {
     config.store = new RedisStore({
       sendCommand: (...args: string[]) => client.sendCommand(args),
-      prefix,
+      prefix: `${env.REDIS_CACHE_KEY_PREFIX}:${prefix}`,
     });
   }
 

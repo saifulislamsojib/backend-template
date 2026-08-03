@@ -95,6 +95,7 @@ export const configs = {
 
 ### 11. Cache failures and corruption can fail otherwise healthy requests
 
+- **Status:** Complete
 - **Severity:** Medium
 - **Location:** `src/utils/redis.ts`; `src/middleware/cacheRoute.ts`
 - **Problem:** A Redis outage or malformed cached JSON throws through `catchAsync` and turns a cache issue into an API failure. The get-or-set pattern also permits cache stampedes under concurrent misses.
@@ -150,7 +151,7 @@ export const configs = {
 5. ~~Add rate limiting and generic authentication failure responses.~~ ✅ Complete
 6. ~~Add CSRF protection and environment-aware cookie/CORS settings.~~ ✅ Complete
 7. Replace MIME-only upload validation with content inspection and managed storage.
-8. ~~Remove `FLUSHALL`~~ ✅ Partially complete — namespace cache keys and degrade gracefully on cache failure remain.
+8. ~~Remove `FLUSHALL`; namespace cache keys and degrade gracefully on cache failure.~~ ✅ Complete
 9. Expand test coverage and enforce coverage in CI.
 10. ~~Add health checks, dependency readiness, correct persistence mounts, and production observability.~~ ✅ Complete
 

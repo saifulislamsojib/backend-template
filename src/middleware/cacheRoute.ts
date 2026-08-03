@@ -1,6 +1,5 @@
-import env from '@/configs/env';
-import client from '@/configs/redis';
 import catchAsync from '@/utils/catchAsync';
+import { deleteCacheKey, getCache, setCache } from '@/utils/redis';
 import sendResponse from '@/utils/sendResponse';
 import type { Request } from 'express';
 import { status } from 'http-status';
@@ -33,10 +32,10 @@ const getRouteCacheKey = (req: Request, type: Type = 'public') => {
  */
 const cacheRoute = (type: Type = 'public') => {
   return catchAsync(async (req, res, next) => {
-    const cached = await client.get(getRouteCacheKey(req, type));
-    if (cached) {
+    const cached = await getCache<AnyObject>(getRouteCacheKey(req, type));
+    if (cached !== undefined) {
       return sendResponse(res, {
-        data: JSON.parse(cached) as AnyObject,
+        data: cached,
         message: 'Data retrieved successfully from cache',
         statusCode: status.OK,
         success: true,
@@ -58,7 +57,7 @@ const cacheRoute = (type: Type = 'public') => {
 const setRouteCache = (req: Request, data: unknown, type: Type = 'public') => {
   const key = getRouteCacheKey(req, type);
 
-  return client.setEx(key, env.REDIS_CACHE_REVALIDATE_TIME_IN_SECONDS, JSON.stringify(data));
+  return setCache(key, data);
 };
 
 /**
@@ -70,7 +69,7 @@ const setRouteCache = (req: Request, data: unknown, type: Type = 'public') => {
  * @returns A promise that resolves when the cache is deleted.
  */
 const deleteRouteCache = (req: Request, type: Type = 'public') => {
-  return client.del(getRouteCacheKey(req, type));
+  return deleteCacheKey(getRouteCacheKey(req, type));
 };
 
 export { deleteRouteCache, getRouteCacheKey, setRouteCache };

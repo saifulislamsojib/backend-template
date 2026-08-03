@@ -29,6 +29,7 @@ const envValidationSchema = z.object({
     .string()
     .optional()
     .transform((val) => (val ? parseInt(val, 10) : 86400)), // Default is 24 hours
+  REDIS_CACHE_KEY_PREFIX: z.string().trim().min(8).default('backend-template'),
 });
 
 const { error, data } = envValidationSchema.safeParse(process.env);
