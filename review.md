@@ -103,6 +103,7 @@ export const configs = {
 
 ### 12. Test coverage is too narrow for a template
 
+- **Status:** Complete
 - **Severity:** High
 - **Location:** `src/modules/auth/auth.test.ts`; `src/modules/health/health.test.ts`; `vitest.config.ts`
 - **Problem:** Tests cover a small happy-path auth slice and health endpoint. There are no tests for configuration validation, global error mapping, CORS/cookie behavior, cache behavior/failure, upload limits, shutdown, or authorization role boundaries. No coverage thresholds exist.
@@ -152,7 +153,7 @@ export const configs = {
 6. ~~Add CSRF protection and environment-aware cookie/CORS settings.~~ ✅ Complete
 7. Replace MIME-only upload validation with content inspection and managed storage.
 8. ~~Remove `FLUSHALL`; namespace cache keys and degrade gracefully on cache failure.~~ ✅ Complete
-9. Expand test coverage and enforce coverage in CI.
+9. ~~Expand test coverage and enforce coverage in CI.~~ ✅ Complete
 10. ~~Add health checks, dependency readiness, correct persistence mounts, and production observability.~~ ✅ Complete
 
 ## Prioritized refactoring roadmap
