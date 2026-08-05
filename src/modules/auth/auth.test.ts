@@ -338,4 +338,43 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
       expect(resBody.data).not.toHaveProperty('token');
     });
   });
+
+  // current user api test
+  describe(`GET API = ${baseUrl}/me (current user)`, () => {
+    const url = `${baseUrl}/me`;
+
+    // Authorization test for current user
+    it('Authorization Test for current user', async () => {
+      const expected = {
+        status: status.UNAUTHORIZED,
+        success: false,
+        type: ERROR_TYPE.unauthorized,
+      };
+
+      const resBody = await apiTester({ url, expected });
+      expect(resBody.message).toMatch(/invalid token/i);
+    });
+
+    // current user Successful test
+    it('Current user Successful test with valid token', async () => {
+      const expected = { status: status.OK, success: true };
+
+      const resBody = await apiTester<TSuccessResponse<AnyObject>>({
+        url,
+        expected,
+        cookie: token,
+      });
+
+      expect(resBody.data).toMatchObject({
+        name: testUser.name,
+        email: testUser.email,
+        role: expectEnum(userRoles),
+        _id: types.string,
+        createdAt: types.string,
+        updatedAt: types.string,
+      });
+      expect(resBody.data).not.toHaveProperty('exp');
+      expect(resBody.data).not.toHaveProperty('iat');
+    });
+  });
 });

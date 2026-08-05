@@ -40,6 +40,29 @@ if (IS_LOGS_ON_FILE === 'true') {
 const logger = pino(
   {
     level: LOG_LEVEL,
+    redact: {
+      paths: [
+        'password',
+        'email',
+        'userEmail',
+        'token',
+        'accessToken',
+        'refreshToken',
+        'currentPassword',
+        'newPassword',
+        '*.password',
+        '*.email',
+        '*.userEmail',
+        '*.token',
+        '*.accessToken',
+        '*.refreshToken',
+        'req.headers.authorization',
+        'req.headers.cookie',
+        'headers.authorization',
+        'headers.cookie',
+      ],
+      censor: '[REDACTED]',
+    },
     formatters: {
       level(level) {
         return { level };

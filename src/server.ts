@@ -1,15 +1,11 @@
 import { dbConnect } from '@/configs/db';
 import env from '@/configs/env';
 import logger from '@/configs/logger';
-import redisClient from '@/configs/redis';
 import server, { closeServer } from '@/utils/server';
 
 const main = async () => {
-  // redis connection
-  const connection = redisClient.connect();
-
   // database connection with mongodb using mongoose
-  const [isDbConnected] = await Promise.all([dbConnect(), connection]);
+  const isDbConnected = await dbConnect();
 
   // if db is connected successfully then start the server otherwise not
   if (isDbConnected) {

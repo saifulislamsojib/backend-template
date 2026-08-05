@@ -64,10 +64,10 @@ const globalErrorHandler: ErrorRequestHandler = (err: Error, req, res, next) => 
   if (env.NODE_ENV === 'development' && err.stack) errorResponse.stack = err.stack;
 
   const logResponse = {
+    reqId: req.id,
     url: req.url,
     method: req.method,
     userId: req.user?._id,
-    userEmail: req.user?.email,
     ...errorResponse,
   };
   if (statusCode === status.INTERNAL_SERVER_ERROR) {

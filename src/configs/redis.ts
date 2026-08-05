@@ -17,4 +17,8 @@ client.on('error', (err: Error) => {
 
 client.on('connect', () => logger.info('Redis Client successfully connected!'));
 
+if (env.NODE_ENV !== 'test') {
+  void client.connect();
+}
+
 export default client;

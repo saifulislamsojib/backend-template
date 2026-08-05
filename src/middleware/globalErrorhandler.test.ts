@@ -2,6 +2,7 @@ import AppError from '@/errors/AppError';
 import { ERROR_TYPE } from '@/errors/error.const';
 import express from 'express';
 import { status } from 'http-status';
+import { Error as MongooseError, Types } from 'mongoose';
 import supertest from 'supertest';
 import { z } from 'zod';
 import globalErrorHandler from './globalErrorhandler';
@@ -34,6 +35,11 @@ app.get('/cast-error', () => {
   const error = new Error('Invalid id');
   error.name = 'CastError';
   Object.assign(error, { stringValue: '"not-an-id"' });
+  throw error;
+});
+app.get('/mongoose-validation-error', () => {
+  const error = new MongooseError.ValidationError();
+  error.addError('name', new MongooseError.ValidatorError({ message: 'Name is required' }));
   throw error;
 });
 app.use(globalErrorHandler);
@@ -96,5 +102,51 @@ describe('globalErrorHandler', () => {
       message: '"not-an-id" is not a valid ID!',
       type: ERROR_TYPE.castError,
     });
+  });
+
+  it('maps Mongoose validation failures to a validation response', async () => {
+    const res = await supertest(app).get('/mongoose-validation-error');
+
+    expect(res.status).toBe(status.BAD_REQUEST);
+    expect(res.body).toStrictEqual({
+      success: false,
+      statusCode: status.BAD_REQUEST,
+      message: 'Name is required.',
+      type: ERROR_TYPE.validationError,
+    });
+  });
+
+  it('omits PII (userEmail) and includes reqId and userId in error logs', async () => {
+    const userApp = express();
+
+    const userId = new Types.ObjectId();
+    const reqId = 'req-abc-123';
+
+    userApp.use((req, _res, next) => {
+      req.id = reqId;
+      req.user = {
+        _id: userId,
+        email: 'secret@example.com',
+        role: 'user',
+        name: 'Test User',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      next();
+    });
+
+    userApp.get('/error', () => {
+      throw new AppError(status.BAD_REQUEST, 'User error');
+    });
+
+    userApp.use(globalErrorHandler);
+    await supertest(userApp).get('/error');
+    expect(logger.error).toHaveBeenCalledOnce();
+    const logPayload = logger.error.mock.calls[0]?.[0] as AnyObject;
+    expect(logPayload).toMatchObject({
+      reqId,
+      userId,
+    });
+    expect(logPayload).not.toHaveProperty('userEmail');
   });
 });

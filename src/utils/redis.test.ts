@@ -37,6 +37,15 @@ describe('cache utilities', () => {
     });
   });
 
+  it('deletes multiple cache keys at once', async () => {
+    redisClient.del.mockResolvedValue(1);
+
+    await deleteCache({ keys: ['users:42', 'users:43'] });
+
+    expect(redisClient.del).toHaveBeenCalledWith(`${cacheKeyPrefix}:users:42`);
+    expect(redisClient.del).toHaveBeenCalledWith(`${cacheKeyPrefix}:users:43`);
+  });
+
   it('treats a Redis read failure as a cache miss', async () => {
     redisClient.get.mockRejectedValue(new Error('Redis unavailable'));
 

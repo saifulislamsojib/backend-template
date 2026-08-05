@@ -8,6 +8,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
+import { randomUUID } from 'node:crypto';
 import { pinoHttp } from 'pino-http';
 
 const { CLIENT_ORIGIN, NODE_ENV } = env;
@@ -27,7 +28,16 @@ app.use(helmet({ xPoweredBy: false }));
 
 // Use pino-http middleware for HTTP request logging
 if (NODE_ENV !== 'test') {
-  app.use(pinoHttp({ logger }));
+  app.use(
+    pinoHttp({
+      logger,
+      genReqId(req, res) {
+        const id = req.headers['x-request-id'] ?? randomUUID();
+        res.setHeader('X-Request-Id', id);
+        return id;
+      },
+    }),
+  );
 }
 
 // all routes
