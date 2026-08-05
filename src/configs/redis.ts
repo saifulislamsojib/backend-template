@@ -11,8 +11,8 @@ const client = createClient({
   },
 });
 
-client.on('error', (err: Error) => {
-  logger.warn({ errorMsg: err.message }, 'Redis client connection error');
+client.on('error', (err) => {
+  logger.warn({ ...err }, 'Redis client connection error');
 });
 
 client.on('connect', () => logger.info('Redis Client successfully connected!'));
