@@ -1,6 +1,6 @@
-import env from '@/configs/env';
-import logger from '@/configs/logger';
-import client from '@/configs/redis';
+import env from "@/configs/env";
+import logger from "@/configs/logger";
+import client from "@/configs/redis";
 
 const inFlightCacheReads = new Map<string, Promise<unknown>>();
 
@@ -13,8 +13,8 @@ const inFlightCacheReads = new Map<string, Promise<unknown>>();
 const getCacheKey = (key: string) => `${env.REDIS_CACHE_KEY_PREFIX}:${key}`;
 
 const logCacheError = (operation: string, key: string, error: unknown) => {
-  const message = error instanceof Error ? error.message : 'Unknown cache error';
-  logger.warn({ cacheKey: key, errorMsg: message, operation }, 'Cache operation failed');
+  const message = error instanceof Error ? error.message : "Unknown cache error";
+  logger.warn({ cacheKey: key, errorMsg: message, operation }, "Cache operation failed");
 };
 
 /**
@@ -30,7 +30,7 @@ const deleteCacheKey = async (key: string) => {
     await client.del(cacheKey);
     return true;
   } catch (error) {
-    logCacheError('delete', cacheKey, error);
+    logCacheError("delete", cacheKey, error);
     return false;
   }
 };
@@ -51,12 +51,12 @@ const getCache = async <T>(key: string): Promise<T | undefined> => {
     try {
       return JSON.parse(cached) as T;
     } catch (error) {
-      logCacheError('parse', cacheKey, error);
+      logCacheError("parse", cacheKey, error);
       await deleteCacheKey(key);
       return undefined;
     }
   } catch (error) {
-    logCacheError('get', cacheKey, error);
+    logCacheError("get", cacheKey, error);
     return undefined;
   }
 };
@@ -75,7 +75,7 @@ const setCache = async (key: string, data: unknown) => {
     await client.setEx(cacheKey, env.REDIS_CACHE_REVALIDATE_TIME_IN_SECONDS, JSON.stringify(data));
     return true;
   } catch (error) {
-    logCacheError('set', cacheKey, error);
+    logCacheError("set", cacheKey, error);
     return false;
   }
 };
@@ -114,17 +114,17 @@ const getOrSetCache = async <T>(key: string, cb: () => Promise<T>) => {
  * @param givenCursor - The Redis scan cursor to resume from.
  * @returns `true` after scanning completes, or `false` if Redis is unavailable.
  */
-const deleteKeysByPattern = async (pattern: string, givenCursor = '0') => {
+const deleteKeysByPattern = async (pattern: string, givenCursor = "0") => {
   const namespacedPattern = getCacheKey(pattern);
 
   try {
     const reply = await client.scan(givenCursor, { MATCH: namespacedPattern, COUNT: 1000 });
     if (reply.keys.length > 0) await client.del(reply.keys);
-    if (reply.cursor !== '0') await deleteKeysByPattern(pattern, reply.cursor);
+    if (reply.cursor !== "0") await deleteKeysByPattern(pattern, reply.cursor);
 
     return true;
   } catch (error) {
-    logCacheError('delete-pattern', namespacedPattern, error);
+    logCacheError("delete-pattern", namespacedPattern, error);
     return false;
   }
 };
@@ -152,11 +152,11 @@ type DeleteCacheOptions = DeleteCacheKeysOption | DeleteCachePatternOption | Del
 const deleteCache = async (options: DeleteCacheOptions) => {
   const tasks: Promise<unknown>[] = [];
 
-  if ('keys' in options) {
+  if ("keys" in options) {
     const keys = Array.isArray(options.keys) ? options.keys : [options.keys];
     tasks.push(...keys.map((key) => deleteCacheKey(key)));
   }
-  if ('patterns' in options) {
+  if ("patterns" in options) {
     const patterns = Array.isArray(options.patterns) ? options.patterns : [options.patterns];
     tasks.push(...patterns.map((pattern) => deleteKeysByPattern(pattern)));
   }

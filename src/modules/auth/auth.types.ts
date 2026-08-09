@@ -1,7 +1,7 @@
-import type { TUser } from '@/modules/user/user.types';
+import type { TUser } from "@/modules/user/user.types";
 
 type JWTDecoded = { exp?: number; iat?: number };
 
-export type JWTPayload = Pick<TUser, 'email' | '_id' | 'role'>;
-export type AuthPayload = Omit<JWTPayload, '_id'> & JWTDecoded & { _id: string };
-export type AuthUser = JWTPayload & JWTDecoded & Pick<TUser, 'name' | 'createdAt' | 'updatedAt'>;
+export type JWTPayload = Pick<TUser, "email" | "_id" | "role">;
+export type AuthPayload = Omit<JWTPayload, "_id"> & JWTDecoded & { _id: string };
+export type AuthUser = JWTPayload & JWTDecoded & Pick<TUser, "name" | "createdAt" | "updatedAt">;

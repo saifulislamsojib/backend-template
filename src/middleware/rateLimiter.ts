@@ -1,9 +1,9 @@
-import env from '@/configs/env';
-import client from '@/configs/redis';
-import AppError from '@/errors/AppError';
-import { rateLimit, type Options } from 'express-rate-limit';
-import { status } from 'http-status';
-import { RedisStore } from 'rate-limit-redis';
+import env from "@/configs/env";
+import client from "@/configs/redis";
+import AppError from "@/errors/AppError";
+import { rateLimit, type Options } from "express-rate-limit";
+import { status } from "http-status";
+import { RedisStore } from "rate-limit-redis";
 
 type RateLimitOptions = {
   windowMs?: number;
@@ -22,12 +22,12 @@ export const createRateLimiter = (options: RateLimitOptions = {}) => {
   const {
     windowMs = 10 * 60 * 1000, // 10 minutes
     limit = 10, // 10 requests per 10 minutes
-    message = 'Too many requests, please try again later.',
-    prefix = 'rl:',
+    message = "Too many requests, please try again later.",
+    prefix = "rl:",
     skipInTest = true,
   } = options;
 
-  const isTest = env.NODE_ENV === 'test';
+  const isTest = env.NODE_ENV === "test";
 
   const config: Partial<Options> = {
     windowMs,
@@ -56,6 +56,6 @@ export const createRateLimiter = (options: RateLimitOptions = {}) => {
  */
 export const authRateLimiter = createRateLimiter({
   limit: 5,
-  prefix: 'rl:auth:',
-  message: 'Too many authentication attempts. Please try again later.',
+  prefix: "rl:auth:",
+  message: "Too many authentication attempts. Please try again later.",
 });

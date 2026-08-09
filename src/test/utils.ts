@@ -14,4 +14,4 @@ export const types = {
  * expect('a').toEqual(expectEnum(myEnum));
  */
 export const expectEnum = <const T>(enumArr: readonly T[]) =>
-  expect.stringMatching(enumArr.join('|')) as string;
+  expect.stringMatching(enumArr.join("|")) as string;

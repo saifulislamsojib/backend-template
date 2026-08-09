@@ -1,5 +1,5 @@
-import type { AuthUser } from '@/modules/auth/auth.types';
-import type { Types } from 'mongoose';
+import type { AuthUser } from "@/modules/auth/auth.types";
+import type { Types } from "mongoose";
 
 declare global {
   namespace Express {

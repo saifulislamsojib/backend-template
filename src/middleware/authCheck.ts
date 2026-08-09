@@ -1,9 +1,9 @@
-import AppError from '@/errors/AppError';
-import { AUTH_TOKEN_KEY, isAppKeyValid, verifyJWT } from '@/modules/auth/auth.utils';
-import type { Role } from '@/modules/user/user.constant';
-import User from '@/modules/user/user.model';
-import catchAsync from '@/utils/catchAsync';
-import { status } from 'http-status';
+import AppError from "@/errors/AppError";
+import { AUTH_TOKEN_KEY, isAppKeyValid, verifyJWT } from "@/modules/auth/auth.utils";
+import type { Role } from "@/modules/user/user.constant";
+import User from "@/modules/user/user.model";
+import catchAsync from "@/utils/catchAsync";
+import { status } from "http-status";
 
 /**
  * Middleware to check authentication and authorization.
@@ -23,19 +23,19 @@ const authCheck = (...roles: Role[]) => {
   return catchAsync(async (req, _res, next) => {
     const isAppRequest = isAppKeyValid(req);
     const authorization = isAppRequest
-      ? req.get('authorization')?.replace(/^Bearer\s+/i, '')
+      ? req.get("authorization")?.replace(/^Bearer\s+/i, "")
       : (req.cookies as Params)[AUTH_TOKEN_KEY];
 
     // check authorization send from client
-    if (!authorization) throw new AppError(status.UNAUTHORIZED, 'Invalid token!');
+    if (!authorization) throw new AppError(status.UNAUTHORIZED, "Invalid token!");
 
     // check authorization token
     const payload = verifyJWT(authorization);
 
     // check user exist or not
-    const user = await User.findById(payload._id).select('+passwordUpdatedAt').lean();
+    const user = await User.findById(payload._id).select("+passwordUpdatedAt").lean();
 
-    if (!user) throw new AppError(status.UNAUTHORIZED, 'Invalid token!');
+    if (!user) throw new AppError(status.UNAUTHORIZED, "Invalid token!");
 
     const { email, _id, role, name, createdAt, updatedAt, passwordUpdatedAt } = user;
 
@@ -43,25 +43,25 @@ const authCheck = (...roles: Role[]) => {
     if (passwordUpdatedAt && payload.iat) {
       const passwordChangedTime = Math.floor(new Date(passwordUpdatedAt).getTime() / 1000);
       if (passwordChangedTime > payload.iat) {
-        throw new AppError(status.UNAUTHORIZED, 'Invalid token!');
+        throw new AppError(status.UNAUTHORIZED, "Invalid token!");
       }
     }
 
     // after email update invalid the old token
     if (email !== payload.email) {
-      throw new AppError(status.UNAUTHORIZED, 'Invalid token!');
+      throw new AppError(status.UNAUTHORIZED, "Invalid token!");
     }
 
     // after role update invalid the old token
     if (role !== payload.role) {
-      throw new AppError(status.UNAUTHORIZED, 'Invalid token!');
+      throw new AppError(status.UNAUTHORIZED, "Invalid token!");
     }
 
     // check user role authorization
     if (roles.length && !roles.includes(role)) {
       throw new AppError(
         status.FORBIDDEN,
-        'You do not have the necessary permissions to access this resource!',
+        "You do not have the necessary permissions to access this resource!",
       );
     }
 

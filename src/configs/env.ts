@@ -1,10 +1,10 @@
-import { prettifyError, z } from 'zod';
+import { prettifyError, z } from "zod";
 
-const node_envs = ['development', 'test', 'staging', 'production'] as const;
-const log_levels = ['trace', 'debug', 'info', 'warn', 'error', 'fatal', 'silent'] as const;
+const node_envs = ["development", "test", "staging", "production"] as const;
+const log_levels = ["trace", "debug", "info", "warn", "error", "fatal", "silent"] as const;
 
 export const envValidationSchema = z.object({
-  NODE_ENV: z.enum(node_envs).default('development'),
+  NODE_ENV: z.enum(node_envs).default("development"),
   DB_URI: z.url().trim(),
   APP_KEY: z.string().trim().min(8),
   JWT_ACCESS_SECRET: z.string().trim().min(10),
@@ -13,9 +13,9 @@ export const envValidationSchema = z.object({
     .optional()
     .transform((val) => (val ? parseInt(val, 10) : 10080)), // 7 days in minutes
   CLIENT_ORIGIN: z.url().trim(),
-  LOG_LEVEL: z.enum(log_levels).default('info'),
-  IS_LOGS_ON_FILE: z.enum(['true', 'false']).default('false'),
-  REDIS_HOST: z.string().trim().default('localhost'),
+  LOG_LEVEL: z.enum(log_levels).default("info"),
+  IS_LOGS_ON_FILE: z.enum(["true", "false"]).default("false"),
+  REDIS_HOST: z.string().trim().default("localhost"),
   REDIS_PORT: z
     .string()
     .optional()
@@ -29,13 +29,13 @@ export const envValidationSchema = z.object({
     .string()
     .optional()
     .transform((val) => (val ? parseInt(val, 10) : 86400)), // Default is 24 hours
-  REDIS_CACHE_KEY_PREFIX: z.string().trim().min(8).default('backend-template'),
+  REDIS_CACHE_KEY_PREFIX: z.string().trim().min(8).default("backend-template"),
 });
 
 const { error, data } = envValidationSchema.safeParse(process.env);
 
 if (!data) {
-  console.error(prettifyError(error), 'Environment Variable validation error');
+  console.error(prettifyError(error), "Environment Variable validation error");
   process.exit(1);
 }
 

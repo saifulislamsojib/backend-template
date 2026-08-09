@@ -1,4 +1,4 @@
-import type { Role } from './user.constant';
+import type { Role } from "./user.constant";
 
 export type TUser = {
   _id: ObjectId;
@@ -12,7 +12,7 @@ export type TUser = {
   __v?: number;
 };
 
-export type TUserResponse = Omit<TUser, '_id' | 'passwordUpdatedAt' | 'createdAt' | 'updatedAt'> & {
+export type TUserResponse = Omit<TUser, "_id" | "passwordUpdatedAt" | "createdAt" | "updatedAt"> & {
   _id: string;
   passwordUpdatedAt?: string;
   createdAt?: string;

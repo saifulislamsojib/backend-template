@@ -1,5 +1,5 @@
-import catchAsync from '@/utils/catchAsync';
-import type { ZodObject } from 'zod';
+import catchAsync from "@/utils/catchAsync";
+import type { ZodObject } from "zod";
 
 /**
  * Validate request data using zod schema middleware creator function

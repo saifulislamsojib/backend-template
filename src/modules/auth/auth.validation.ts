@@ -1,6 +1,6 @@
-import { z } from 'zod';
+import { z } from "zod";
 
-const passwordSchema = (field = 'Password') => {
+const passwordSchema = (field = "Password") => {
   return z
     .string()
     .trim()
@@ -34,6 +34,6 @@ export const registerUserSchema = z.object({
 export const loginUserSchema = z.object(loginSchemaObj);
 
 export const changePasswordSchema = z.object({
-  currentPassword: passwordSchema('Current Password'),
-  newPassword: passwordSchema('New Password'),
+  currentPassword: passwordSchema("Current Password"),
+  newPassword: passwordSchema("New Password"),
 });

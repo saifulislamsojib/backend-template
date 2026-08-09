@@ -1,10 +1,10 @@
-import env from '@/configs/env';
-import AppError from '@/errors/AppError';
-import bcrypt from 'bcrypt';
-import type { Request, Response } from 'express';
-import { status } from 'http-status';
-import jwt from 'jsonwebtoken';
-import type { AuthPayload, JWTPayload } from './auth.types';
+import env from "@/configs/env";
+import AppError from "@/errors/AppError";
+import bcrypt from "bcrypt";
+import type { Request, Response } from "express";
+import { status } from "http-status";
+import jwt from "jsonwebtoken";
+import type { AuthPayload, JWTPayload } from "./auth.types";
 
 /**
  * Hash a given plaintext string using bcrypt.
@@ -46,24 +46,24 @@ export const verifyJWT = (token: string) => {
   try {
     return jwt.verify(token, env.JWT_ACCESS_SECRET) as AuthPayload;
   } catch {
-    throw new AppError(status.UNAUTHORIZED, 'Invalid token!');
+    throw new AppError(status.UNAUTHORIZED, "Invalid token!");
   }
 };
 
-export const AUTH_TOKEN_KEY = 'access-token';
+export const AUTH_TOKEN_KEY = "access-token";
 
-export const X_APP_KEY = 'x-app-key';
+export const X_APP_KEY = "x-app-key";
 
 /**
  * Checks if the provided app key is valid.
  * @param req - The request object.
  * @returns True if the app key is valid, false otherwise.
  */
-export const isAppKeyValid = (req: Pick<Request, 'get'>) => {
+export const isAppKeyValid = (req: Pick<Request, "get">) => {
   return req.get(X_APP_KEY) === env.APP_KEY;
 };
 
-const isSecure = env.NODE_ENV !== 'development';
+const isSecure = env.NODE_ENV !== "development";
 
 /**
  * Sets an authentication cookie with the provided JWT token.
@@ -73,11 +73,11 @@ const isSecure = env.NODE_ENV !== 'development';
  * and is configured to expire in JWT_ACCESS_EXPIRES_IN_MINUTES from env.
  */
 
-export const setAuthCookie = (res: Pick<Response, 'cookie'>, token: string) => {
+export const setAuthCookie = (res: Pick<Response, "cookie">, token: string) => {
   return res.cookie(AUTH_TOKEN_KEY, token, {
     maxAge: 1000 * 60 * env.JWT_ACCESS_EXPIRES_IN_MINUTES,
     httpOnly: true,
-    sameSite: 'lax',
+    sameSite: "lax",
     secure: isSecure,
   });
 };

@@ -8,7 +8,7 @@ services:
     volumes:
       - redis-data:/data
     healthcheck:
-      test: ['CMD', 'redis-cli', 'ping']
+      test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -39,7 +39,7 @@ services:
     healthcheck:
       test:
         [
-          'CMD-SHELL',
+          "CMD-SHELL",
           'node -e "fetch(''http://127.0.0.1:8080/api/v1/health'').then((response) => { if (!response.ok) process.exit(1); }).catch(() => process.exit(1))"',
         ]
       interval: 30s

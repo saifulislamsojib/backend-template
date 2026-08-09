@@ -1,10 +1,10 @@
-import AppError from '@/errors/AppError';
-import type { Request, Response } from 'express';
-import { status } from 'http-status';
-import { createRateLimiter } from './rateLimiter';
+import AppError from "@/errors/AppError";
+import type { Request, Response } from "express";
+import { status } from "http-status";
+import { createRateLimiter } from "./rateLimiter";
 
-describe('rateLimiter middleware', () => {
-  it('should allow requests within limit and pass AppError to next() when limit is exceeded', async () => {
+describe("rateLimiter middleware", () => {
+  it("should allow requests within limit and pass AppError to next() when limit is exceeded", async () => {
     const limiter = createRateLimiter({
       windowMs: 60 * 1000,
       limit: 2,
@@ -12,7 +12,7 @@ describe('rateLimiter middleware', () => {
     });
 
     const mockReq = {
-      ip: '127.0.0.1',
+      ip: "127.0.0.1",
       headers: {},
       app: { get: () => undefined },
     } as unknown as Request;

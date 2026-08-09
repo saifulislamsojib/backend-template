@@ -1,12 +1,12 @@
-import env from '@/configs/env';
-import logger from '@/configs/logger';
-import AppError from '@/errors/AppError';
-import { ERROR_TYPE, type ErrorType } from '@/errors/error.const';
-import sendResponse, { type TErrorResponse } from '@/utils/sendResponse';
-import type { ErrorRequestHandler } from 'express';
-import { status } from 'http-status';
-import { Error as MongooseError } from 'mongoose';
-import { ZodError } from 'zod';
+import env from "@/configs/env";
+import logger from "@/configs/logger";
+import AppError from "@/errors/AppError";
+import { ERROR_TYPE, type ErrorType } from "@/errors/error.const";
+import sendResponse, { type TErrorResponse } from "@/utils/sendResponse";
+import type { ErrorRequestHandler } from "express";
+import { status } from "http-status";
+import { Error as MongooseError } from "mongoose";
+import { ZodError } from "zod";
 
 /**
  * Global error handler middleware to handle errors in a standard way.
@@ -18,11 +18,11 @@ import { ZodError } from 'zod';
  */
 const globalErrorHandler: ErrorRequestHandler = (err: Error, req, res, next) => {
   if (res.headersSent) {
-    return next('Something went wrong!');
+    return next("Something went wrong!");
   }
   let statusCode = err instanceof AppError ? err.statusCode : status.INTERNAL_SERVER_ERROR;
   let type: ErrorType = err instanceof AppError ? ERROR_TYPE.appError : ERROR_TYPE.serverError;
-  let message = err.message || 'Something went wrong!';
+  let message = err.message || "Something went wrong!";
 
   if (err instanceof ZodError) {
     type = ERROR_TYPE.validationError;
@@ -30,14 +30,14 @@ const globalErrorHandler: ErrorRequestHandler = (err: Error, req, res, next) => 
     message = err.issues.reduce((acc, { path, message: msg, code }) => {
       const lastPath = path[path.length - 1];
       const singleMessage =
-        code === 'custom' ? msg : `${lastPath as string} is ${msg.toLowerCase()}`;
-      return `${acc}${acc ? '; ' : ''}${singleMessage}`;
-    }, '');
-  } else if (err.name === 'CastError') {
+        code === "custom" ? msg : `${lastPath as string} is ${msg.toLowerCase()}`;
+      return `${acc}${acc ? "; " : ""}${singleMessage}`;
+    }, "");
+  } else if (err.name === "CastError") {
     type = ERROR_TYPE.castError;
     statusCode = status.BAD_REQUEST;
     message = `${(err as MongooseError.CastError).stringValue} is not a valid ID!`;
-  } else if ('code' in err && err.code === 11000) {
+  } else if ("code" in err && err.code === 11000) {
     type = ERROR_TYPE.duplicateEntry;
     statusCode = status.BAD_REQUEST;
     const match = /"([^"]*)"/.exec(err.message);
@@ -47,8 +47,8 @@ const globalErrorHandler: ErrorRequestHandler = (err: Error, req, res, next) => 
     type = ERROR_TYPE.validationError;
     statusCode = status.BAD_REQUEST;
     message = Object.values(err.errors).reduce((acc, { message: msg }) => {
-      return `${acc}${acc ? '; ' : ''}${msg}.`;
-    }, '');
+      return `${acc}${acc ? "; " : ""}${msg}.`;
+    }, "");
   } else if (err instanceof AppError) {
     if (err.statusCode === status.UNAUTHORIZED) {
       type = ERROR_TYPE.unauthorized;
@@ -61,7 +61,7 @@ const globalErrorHandler: ErrorRequestHandler = (err: Error, req, res, next) => 
 
   const errorResponse: TErrorResponse = { success: false, statusCode, type, message };
 
-  if (env.NODE_ENV === 'development' && err.stack) errorResponse.stack = err.stack;
+  if (env.NODE_ENV === "development" && err.stack) errorResponse.stack = err.stack;
 
   const logResponse = {
     reqId: req.id,
@@ -71,9 +71,9 @@ const globalErrorHandler: ErrorRequestHandler = (err: Error, req, res, next) => 
     ...errorResponse,
   };
   if (statusCode === status.INTERNAL_SERVER_ERROR) {
-    logger.fatal(logResponse, 'Global Error');
+    logger.fatal(logResponse, "Global Error");
   } else {
-    logger.error(logResponse, 'Global Error');
+    logger.error(logResponse, "Global Error");
   }
 
   return sendResponse(res, errorResponse);

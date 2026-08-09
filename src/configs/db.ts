@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
-import env from './env';
-import logger from './logger';
+import mongoose from "mongoose";
+import env from "./env";
+import logger from "./logger";
 
 let isDbConnected = false;
 
@@ -11,10 +11,10 @@ let isDbConnected = false;
 const dbConnect = async () => {
   try {
     await mongoose.connect(env.DB_URI);
-    logger.info('Database successfully connected!');
+    logger.info("Database successfully connected!");
     isDbConnected = true;
   } catch (error) {
-    logger.fatal({ errorMsg: (error as Error).message }, 'Database connection error');
+    logger.fatal({ errorMsg: (error as Error).message }, "Database connection error");
     process.exit(1);
   }
   return isDbConnected;
@@ -29,13 +29,13 @@ const dbDisconnect = async () => {
   try {
     await mongoose.disconnect();
   } catch (error) {
-    logger.fatal({ errorMsg: (error as Error).message }, 'Database disconnection error');
+    logger.fatal({ errorMsg: (error as Error).message }, "Database disconnection error");
   }
 };
 
-mongoose.connection.on('disconnected', () => {
+mongoose.connection.on("disconnected", () => {
   if (isDbConnected) {
-    logger.fatal('Database disconnected!');
+    logger.fatal("Database disconnected!");
   }
 });
 

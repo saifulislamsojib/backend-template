@@ -1,6 +1,6 @@
-import type { Request, RequestHandler } from 'express';
+import type { Request, RequestHandler } from "express";
 
-type Handler<T> = RequestHandler<Request['params'], Request['body'], T, Params>;
+type Handler<T> = RequestHandler<Request["params"], Request["body"], T, Params>;
 
 /**
  * A higher-order function that takes a request handler function and returns

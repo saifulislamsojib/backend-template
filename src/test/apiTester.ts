@@ -1,9 +1,9 @@
-import app from '@/app';
-import env from '@/configs/env';
-import { AUTH_TOKEN_KEY, X_APP_KEY } from '@/modules/auth/auth.utils';
-import type { TResponse } from '@/utils/sendResponse';
-import { status } from 'http-status';
-import supertest from 'supertest';
+import app from "@/app";
+import env from "@/configs/env";
+import { AUTH_TOKEN_KEY, X_APP_KEY } from "@/modules/auth/auth.utils";
+import type { TResponse } from "@/utils/sendResponse";
+import { status } from "http-status";
+import supertest from "supertest";
 
 const request = supertest(app);
 
@@ -15,7 +15,7 @@ type Matcher = {
 
 type TesterProps = {
   url: string;
-  method?: 'get' | 'post' | 'put' | 'patch' | 'delete';
+  method?: "get" | "post" | "put" | "patch" | "delete";
   body?: AnyObject;
   expected?: Matcher;
   appToken?: string;
@@ -47,7 +47,7 @@ type Response = TResponse<AnyObject, AnyObject>;
 const apiTester = async <T extends Response = Response>(testerOptions: TesterProps) => {
   const {
     url,
-    method = 'get',
+    method = "get",
     body: reqBody,
     expected: { status: expectedStatus = status.OK, success = true, type } = {},
     appToken,
@@ -60,10 +60,10 @@ const apiTester = async <T extends Response = Response>(testerOptions: TesterPro
     query.send(reqBody);
   }
   if (appToken) {
-    query.set('authorization', `Bearer ${appToken}`);
+    query.set("authorization", `Bearer ${appToken}`);
     query.set(X_APP_KEY, env.APP_KEY);
   } else if (cookie) {
-    query.set('cookie', `${AUTH_TOKEN_KEY}=${cookie}`);
+    query.set("cookie", `${AUTH_TOKEN_KEY}=${cookie}`);
   } else if (isApp) {
     query.set(X_APP_KEY, env.APP_KEY);
   }

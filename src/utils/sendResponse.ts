@@ -1,5 +1,5 @@
-import type { ErrorType } from '@/errors/error.const';
-import type { Response } from 'express';
+import type { ErrorType } from "@/errors/error.const";
+import type { Response } from "express";
 
 type ResponseData = AnyObject | unknown[];
 
@@ -16,7 +16,7 @@ type ResponseData = AnyObject | unknown[];
  * @return the express response object
  */
 const sendResponse = <T extends ResponseData, U extends AnyObject>(
-  res: Pick<Response, 'status'>,
+  res: Pick<Response, "status">,
   data: TResponse<T, U>,
 ) => {
   const response = {

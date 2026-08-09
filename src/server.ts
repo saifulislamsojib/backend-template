@@ -1,7 +1,7 @@
-import { dbConnect } from '@/configs/db';
-import env from '@/configs/env';
-import logger from '@/configs/logger';
-import server, { closeServer } from '@/utils/server';
+import { dbConnect } from "@/configs/db";
+import env from "@/configs/env";
+import logger from "@/configs/logger";
+import server, { closeServer } from "@/utils/server";
 
 const main = async () => {
   // database connection with mongodb using mongoose
@@ -16,25 +16,25 @@ const main = async () => {
 };
 
 main().catch((error) => {
-  logger.fatal({ errorMsg: (error as Error).message }, 'Server connection error');
+  logger.fatal({ errorMsg: (error as Error).message }, "Server connection error");
   process.exit(1);
 });
 
-process.on('unhandledRejection', () => {
-  logger.fatal('😈 unhandledRejection is detected, shutting down the process..');
+process.on("unhandledRejection", () => {
+  logger.fatal("😈 unhandledRejection is detected, shutting down the process..");
   closeServer(1);
 });
 
-process.on('uncaughtException', (error) => {
+process.on("uncaughtException", (error) => {
   logger.fatal(
     { errorMsg: error.message },
-    '😈 uncaughtException is detected, shutting down the process..',
+    "😈 uncaughtException is detected, shutting down the process..",
   );
   closeServer(1);
 });
 
 const onClose = () => closeServer(0);
 
-process.on('SIGINT', onClose);
+process.on("SIGINT", onClose);
 
-process.on('SIGTERM', onClose);
+process.on("SIGTERM", onClose);

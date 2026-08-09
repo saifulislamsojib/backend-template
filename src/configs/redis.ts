@@ -1,6 +1,6 @@
-import { createClient } from 'redis';
-import env from './env';
-import logger from './logger';
+import { createClient } from "redis";
+import env from "./env";
+import logger from "./logger";
 
 const { REDIS_HOST, REDIS_PORT } = env;
 
@@ -11,13 +11,13 @@ const client = createClient({
   },
 });
 
-client.on('error', (err) => {
-  logger.warn({ ...err }, 'Redis client connection error');
+client.on("error", (err) => {
+  logger.warn({ ...err }, "Redis client connection error");
 });
 
-client.on('connect', () => logger.info('Redis Client successfully connected!'));
+client.on("connect", () => logger.info("Redis Client successfully connected!"));
 
-if (env.NODE_ENV !== 'test') {
+if (env.NODE_ENV !== "test") {
   void client.connect();
 }
 
