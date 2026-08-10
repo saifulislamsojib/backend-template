@@ -44,21 +44,21 @@ docker run --name backend-template-redis -p 6379:6379 redis:8.10.0-alpine
 
 Application configuration is validated at startup. The following environment variables are supported:
 
-| Variable | Required | Default | Description |
-| --- | --- | --- | --- |
-| `NODE_ENV` | No | `development` | One of `development`, `test`, `staging`, or `production`. |
-| `PORT` | No | `8080` | HTTP server port. |
-| `DB_URI` | Yes | — | MongoDB connection URI. |
-| `REDIS_HOST` | No | `localhost` | Redis host. |
-| `REDIS_PORT` | No | `6379` | Redis port. |
-| `REDIS_CACHE_REVALIDATE_TIME_IN_SECONDS` | No | `86400` | TTL for route-cache entries. |
-| `APP_KEY` | Yes | — | Secret app key (at least 8 characters) for trusted API clients. |
-| `JWT_ACCESS_SECRET` | Yes | — | JWT signing secret (at least 10 characters). |
-| `JWT_ACCESS_EXPIRES_IN_MINUTES` | No | `10080` | Access-token lifetime in minutes (7 days). |
-| `BCRYPT_SALT_ROUNDS` | Yes | — | bcrypt work factor, such as `10`. |
-| `CLIENT_ORIGIN` | Yes | — | Allowed CORS origin, for example `http://localhost:3000`. |
-| `LOG_LEVEL` | No | `info` | Pino level: `trace`, `debug`, `info`, `warn`, `error`, `fatal`, or `silent`. |
-| `IS_LOGS_ON_FILE` | No | `false` | Set to `true` to write error and fatal logs under `logs/`. |
+| Variable                                 | Required | Default       | Description                                                                  |
+| ---------------------------------------- | -------- | ------------- | ---------------------------------------------------------------------------- |
+| `NODE_ENV`                               | No       | `development` | One of `development`, `test`, `staging`, or `production`.                    |
+| `PORT`                                   | No       | `8080`        | HTTP server port.                                                            |
+| `DB_URI`                                 | Yes      | —             | MongoDB connection URI.                                                      |
+| `REDIS_HOST`                             | No       | `localhost`   | Redis host.                                                                  |
+| `REDIS_PORT`                             | No       | `6379`        | Redis port.                                                                  |
+| `REDIS_CACHE_REVALIDATE_TIME_IN_SECONDS` | No       | `86400`       | TTL for route-cache entries.                                                 |
+| `APP_KEY`                                | Yes      | —             | Secret app key (at least 8 characters) for trusted API clients.              |
+| `JWT_ACCESS_SECRET`                      | Yes      | —             | JWT signing secret (at least 10 characters).                                 |
+| `JWT_ACCESS_EXPIRES_IN_MINUTES`          | No       | `10080`       | Access-token lifetime in minutes (7 days).                                   |
+| `BCRYPT_SALT_ROUNDS`                     | Yes      | —             | bcrypt work factor, such as `10`.                                            |
+| `CLIENT_ORIGIN`                          | Yes      | —             | Allowed CORS origin, for example `http://localhost:3000`.                    |
+| `LOG_LEVEL`                              | No       | `info`        | Pino level: `trace`, `debug`, `info`, `warn`, `error`, `fatal`, or `silent`. |
+| `IS_LOGS_ON_FILE`                        | No       | `false`       | Set to `true` to write error and fatal logs under `logs/`.                   |
 
 Example local configuration:
 
@@ -79,35 +79,35 @@ IS_LOGS_ON_FILE=false
 
 ## Scripts
 
-| Command | Description |
-| --- | --- |
-| `pnpm dev` | Start the TypeScript server with watch mode. |
-| `pnpm dev:node` | Start Node's native watch mode with path-alias support. |
-| `pnpm build` | Compile TypeScript and resolve path aliases into `dist/`. |
-| `pnpm start` | Run the compiled application using `.env`. |
-| `pnpm typecheck` | Run TypeScript without emitting files. |
-| `pnpm lint` / `pnpm lint:fix` | Check code with ESLint, optionally fixing issues. |
-| `pnpm format` | Format supported files with Prettier. |
-| `pnpm test` / `pnpm test:w` | Run tests once or in watch mode. |
-| `pnpm coverage` | Run tests with coverage reporting. |
-| `pnpm docker` | Start the production Compose stack in the background. |
-| `pnpm docker-stage` | Start the staging Compose stack in the background. |
-| `pnpm docker-dev` | Start the development Compose stack. |
-| `pnpm docker:sh`, `pnpm docker-stage:sh`, `pnpm docker-dev:sh` | Open a shell in the corresponding application container. |
-| `pnpm redis-cli` | Open Redis CLI in the production Compose Redis container. |
+| Command                                                        | Description                                               |
+| -------------------------------------------------------------- | --------------------------------------------------------- |
+| `pnpm dev`                                                     | Start the TypeScript server with watch mode.              |
+| `pnpm dev:node`                                                | Start Node's native watch mode with path-alias support.   |
+| `pnpm build`                                                   | Compile TypeScript and resolve path aliases into `dist/`. |
+| `pnpm start`                                                   | Run the compiled application using `.env`.                |
+| `pnpm typecheck`                                               | Run TypeScript without emitting files.                    |
+| `pnpm lint` / `pnpm lint:fix`                                  | Check code with ESLint, optionally fixing issues.         |
+| `pnpm format`                                                  | Format supported files with Prettier.                     |
+| `pnpm test` / `pnpm test:w`                                    | Run tests once or in watch mode.                          |
+| `pnpm coverage`                                                | Run tests with coverage reporting.                        |
+| `pnpm docker`                                                  | Start the production Compose stack in the background.     |
+| `pnpm docker-stage`                                            | Start the staging Compose stack in the background.        |
+| `pnpm docker-dev`                                              | Start the development Compose stack.                      |
+| `pnpm docker:sh`, `pnpm docker-stage:sh`, `pnpm docker-dev:sh` | Open a shell in the corresponding application container.  |
+| `pnpm redis-cli`                                               | Open Redis CLI in the production Compose Redis container. |
 
 ## API
 
 The API is mounted at `/api/v1`.
 
-| Method | Path | Authentication | Description |
-| --- | --- | --- | --- |
-| `GET` | `/` | No | Service name and version. |
-| `GET` | `/api/v1/health` | No | Health status and version. |
-| `POST` | `/api/v1/auth/register` | No | Create a user and start a session. |
-| `POST` | `/api/v1/auth/login` | No | Authenticate an existing user. |
-| `GET` | `/api/v1/auth/me` | Required | Return the authenticated user. |
-| `POST` | `/api/v1/auth/change-password` | Required | Change password and issue a new session token. |
+| Method | Path                           | Authentication | Description                                    |
+| ------ | ------------------------------ | -------------- | ---------------------------------------------- |
+| `GET`  | `/`                            | No             | Service name and version.                      |
+| `GET`  | `/api/v1/health`               | No             | Health status and version.                     |
+| `POST` | `/api/v1/auth/register`        | No             | Create a user and start a session.             |
+| `POST` | `/api/v1/auth/login`           | No             | Authenticate an existing user.                 |
+| `GET`  | `/api/v1/auth/me`              | Required       | Return the authenticated user.                 |
+| `POST` | `/api/v1/auth/change-password` | Required       | Change password and issue a new session token. |
 
 ### Authentication
 
@@ -121,6 +121,15 @@ x-app-key: <APP_KEY>
 ```
 
 All current user roles (`user`, `admin`, and `super-admin`) may access the authenticated routes.
+
+### Uploads
+
+Two uploader middlewares are provided under `src/middleware/`. Both accept a single `file` field with a 2 MB limit, and both verify content by magic bytes (never the client-supplied mimetype alone):
+
+- `uploader.single("file")` + `validateImageUpload` — accepts `image/jpeg` and `image/png`; files are stored in the gitignored `uploads/` directory as `<uuid>.<ext>`.
+- `memoryUploader.single("file")` + `validateTextUpload` — accepts `text/plain`; rejects binary signatures, NUL bytes, and invalid UTF-8.
+
+Rejected uploads are removed from disk, and oversize uploads map to `413 fileTooLarge`; other upload errors map to `400 fileError`.
 
 ### Request bodies
 
@@ -178,7 +187,7 @@ Errors use a stable `type` field. In development, errors may also include a stac
 }
 ```
 
-Validation errors use `validationError`; authorization failures use `unauthorized` (401) or `forbidden` (403). Unmatched routes return `notFound` (404).
+Validation errors use `validationError`; authorization failures use `unauthorized` (401) or `forbidden` (403). Upload failures use `fileTooLarge` (413) or `fileError` (400). Unmatched routes return `notFound` (404).
 
 Registration and login are rate-limited to five attempts per ten minutes. Other routes can opt into the included Redis cache and rate-limit helpers.
 

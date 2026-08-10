@@ -39,10 +39,10 @@ The codebase is clean, consistent, and well-tested for a template. Nothing here 
   - `.env.example` sets `JWT_ACCESS_EXPIRES_IN=1d`, but the schema (and README) expect `JWT_ACCESS_EXPIRES_IN_MINUTES`. Zod silently drops unknown keys, so the intended 1-day expiry is ignored and the 7-day default (10080 minutes) applies. The committed local `.env` has the same drift.
 - **Recommendation:** Make the example environment self-consistent: `DB_URI=mongodb://127.0.0.1:27017/backend-template`, and rename `JWT_ACCESS_EXPIRES_IN` to `JWT_ACCESS_EXPIRES_IN_MINUTES`. Add a test that parses the documented example, and a CI step that validates `.env.example` against `envValidationSchema`.
 
-#### 2. Upload size-limit failures return 500, and uploads still trust client-supplied MIME types
+#### 2. Upload size-limit failures return 500, and uploads still trust client-supplied MIME types — ✅ Resolved
 
-- **Location:** [src/middleware/globalErrorhandler.ts](src/middleware/globalErrorhandler.ts#L23-L60), [src/middleware/uploader.ts](src/middleware/uploader.ts#L5-L15), [src/middleware/memory.uploader.ts](src/middleware/memory.uploader.ts#L7-L17)
-- **Verified:** submitting a >2MB file to the uploader returns `500 {"message":"File too large","type":"serverError"}`.
+- **Status:** Fixed. A `MulterError` branch now maps `LIMIT_FILE_SIZE` to `413 fileTooLarge` (hardcoded `"File too large"`) and other multer codes to `400 fileError` in [src/middleware/globalErrorhandler.ts](src/middleware/globalErrorhandler.ts#L29-L38). Both uploaders verify content by magic bytes via `file-type` — [src/middleware/uploader.ts](src/middleware/uploader.ts) uses `fileTypeFromFile` and renames accepted files to `<uuid>.<ext>` under the gitignored `uploads/` dir; [src/middleware/memory.uploader.ts](src/middleware/memory.uploader.ts) uses `fileTypeFromBuffer` plus NUL-byte and fatal-UTF-8 checks. Rejected files are removed (disk) or rejected from memory (text), and `uploads/` is ignored in both [.gitignore](.gitignore) and [.dockerignore](.dockerignore).
+- **Verified:** `pnpm typecheck`, `pnpm lint`, `pnpm test` (92 tests), and `pnpm coverage` all pass with the new upload suites.
 - **Problem:**
   - `MulterError` (e.g. `LIMIT_FILE_SIZE`) matches none of the global handler's branches, so it becomes a 500 `serverError` instead of a stable `413 Payload Too Large`. The raw message also leaks.
   - Both uploaders validate only `file.mimetype`, which is client-controlled and spoofable. Disk uploads land in a relative `uploads/` directory with no lifecycle management, and `uploads/` is **not** in [.gitignore](.gitignore), so files can be committed by accident.
@@ -170,19 +170,23 @@ These items from the earlier review were verified as resolved in the current cod
 
 ## Roadmap
 
-**Phase 1 — onboarding blockers**
+### Phase 1 — onboarding blockers
+
 - Fix `.env.example` (valid URL + correct var names); add a CI check that parses it.
 - Update the README testing section to match the real setup.
 
-**Phase 2 — error-path hardening**
-- Map `MulterError` to 413/400; add content-based upload validation and storage lifecycle.
+### Phase 2 — error-path hardening
+
+- ~~Map `MulterError` to 413/400; add content-based upload validation and storage lifecycle.~~ — ✅ Done
 - Return generic bodies on 500s; keep details server-side.
 - Bounded `trust proxy`; composite rate-limit key.
 
-**Phase 3 — operations**
+### Phase 3 — operations
+
 - Readiness/liveness split for the health endpoint; point Compose at readiness.
 - Token versioning to close the same-second bypass; document refresh-token roadmap.
 - Tests for startup/shutdown/signal paths; keep tests out of `dist/`.
 
-**Phase 4 — template scalability**
+### Phase 4 — template scalability
+
 - `z.coerce.number()` env parsing with bounds; per-client app keys; log centralization and rotation for file logs; DB index review and pagination conventions for new modules.

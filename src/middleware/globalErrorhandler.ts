@@ -6,6 +6,7 @@ import sendResponse, { type TErrorResponse } from "@/utils/sendResponse";
 import type { ErrorRequestHandler } from "express";
 import { status } from "http-status";
 import { Error as MongooseError } from "mongoose";
+import { MulterError } from "multer";
 import { ZodError } from "zod";
 
 /**
@@ -25,7 +26,17 @@ const globalErrorHandler: ErrorRequestHandler = (err: Error, req, res, next) => 
   let type: ErrorType = isAppError ? ERROR_TYPE.appError : ERROR_TYPE.serverError;
   let message = err.message || "Something went wrong!";
 
-  if (err instanceof ZodError) {
+  if (err instanceof MulterError) {
+    if (err.code === "LIMIT_FILE_SIZE") {
+      type = ERROR_TYPE.fileTooLarge;
+      statusCode = status.REQUEST_ENTITY_TOO_LARGE;
+      message = "File too large"; // hardcoded so the response stays stable regardless of multer internals
+    } else {
+      type = ERROR_TYPE.fileError;
+      statusCode = status.BAD_REQUEST;
+      message = err.message; // multer messages are static and contain no internals (e.g. "Unexpected field")
+    }
+  } else if (err instanceof ZodError) {
     type = ERROR_TYPE.validationError;
     statusCode = status.BAD_REQUEST;
     message = err.issues.reduce((acc, { path, message: msg, code }) => {

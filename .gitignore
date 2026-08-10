@@ -26,6 +26,9 @@ dist
 # testing
 coverage
 
+# uploaded files
+/uploads/
+
 # package lock files(only use pnpm)
 yarn.lock
 package-lock.json

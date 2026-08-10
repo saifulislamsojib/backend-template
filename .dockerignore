@@ -6,11 +6,13 @@ dist/
 .DS_Store
 logs
 .vercel
+uploads
 
 # testing files
 src/test
 vitest.config.ts
 src/**/*.test.ts
+coverage
 
 # others
 .github
@@ -32,3 +34,9 @@ eslint.config.js
 .prettierrc
 .prettierignore
 .pnpm-store
+*.tsbuildinfo
+*.pdf
+*.xlsx
+*.csv
+*.zip
+*.pem
