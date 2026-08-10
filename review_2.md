@@ -81,8 +81,14 @@ The codebase is clean, consistent, and well-tested for a template. Nothing here 
 - **Problem:** `dbConnect` catches its own failure and calls `process.exit(1)`, so `main().catch()` in [server.ts](src/server.ts#L18) is unreachable for DB failures. The env-validation exit path is likewise untested (only the schema, not the module behavior, is covered). This also makes graceful shutdown impossible on DB failure — `closeServer` never runs.
 - **Recommendation:** Throw a typed startup error instead of calling `process.exit`; let `main()` (or a top-level runner) decide whether to exit. Cover the "invalid env" and "DB connect failure" paths in tests by mocking `process.exit`.
 
-#### 8. Bootstrap and shutdown have zero test coverage
+#### 8. Bootstrap and shutdown have zero test coverage — ✅ Resolved
 
+- **Status:** Fixed. New tests cover the previously-uncovered bootstrap and shutdown paths:
+  - `closeServer` — `redisClient.quit` + `dbDisconnect` + `process.exit(code)` for both a non-listening server and an already-listening server (HTTP `close` before disconnecting) ([server.test.ts](src/utils/server.test.ts)).
+  - Startup and signal handling in `src/server.ts` — `main()` connecting → `listen(env.PORT)`, DB failure → no listen, `unhandledRejection`/`uncaughtException` → exit code 1, `SIGINT`/`SIGTERM` → graceful exit 0, and the `main().catch` rejection path ([server.test.ts](src/server.test.ts)).
+  - Logger bootstrap branches — pretty stream in dev/test, JSON to stdout in production, file streams for `error`/`fatal` when `IS_LOGS_ON_FILE=true`, and `logs/` directory creation ([logger.bootstrap.test.ts](src/configs/logger.bootstrap.test.ts)).
+  - Redis client bootstrap — error/connect handlers log via the logger, client is configured from `REDIS_HOST`/`REDIS_PORT`, and it connects eagerly outside the test environment ([redis.test.ts](src/configs/redis.test.ts)).
+  - All four files are now at 100% coverage; `pnpm coverage` still passes thresholds (stmts 93.18, branches 82.75, funcs 97.61, lines 94.41; 82 tests / 21 files).
 - **Location:** `src/server.ts` (0%), [src/utils/server.ts](src/utils/server.ts) (0%), [src/configs/logger.ts](src/configs/logger.ts) (50%), [src/configs/redis.ts](src/configs/redis.ts) (62.5%)
 - **Problem:** Overall thresholds pass, but the entire startup path, graceful shutdown, `closeServer`, signal handlers, and the Redis error/connect handlers are untested. These are the highest-risk paths in a deployment and the easiest to break silently.
 - **Recommendation:** Add tests for `closeServer` (HTTP close + `redisClient.quit` + `dbDisconnect`), signal handling, and the logger/redis bootstrap edge cases.
@@ -145,7 +151,7 @@ The codebase is clean, consistent, and well-tested for a template. Nothing here 
 4. Add content-based upload validation and manage uploaded-file lifecycle.
 5. Make the health endpoint readiness-aware (DB + Redis probes).
 6. Close the same-second token bypass with a token version.
-7. Replace `process.exit` in library code with thrown startup errors; cover bootstrap/shutdown in tests.
+7. Replace `process.exit` in library code with thrown startup errors; ~~cover bootstrap/shutdown in tests.~~ — ✅ Done
 8. Exclude test files from the production build emit.
 
 ## What was fixed since the previous review
