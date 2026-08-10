@@ -48,9 +48,10 @@ The codebase is clean, consistent, and well-tested for a template. Nothing here 
   - Both uploaders validate only `file.mimetype`, which is client-controlled and spoofable. Disk uploads land in a relative `uploads/` directory with no lifecycle management, and `uploads/` is **not** in [.gitignore](.gitignore), so files can be committed by accident.
 - **Recommendation:** Map `MulterError` to a typed 4xx (413 for size, 400 otherwise) in the global handler. Validate content via magic bytes (e.g. `file-type`), generate controlled filenames, store outside the app filesystem or in object storage, clean up rejected/failed uploads, and add `uploads/` to `.gitignore`.
 
-#### 3. Internal error messages are returned to clients on 500 responses
+#### 3. Internal error messages are returned to clients on 500 responses — ✅ Resolved
 
-- **Location:** [src/middleware/globalErrorhandler.ts](src/middleware/globalErrorhandler.ts#L23-L25)
+- **Status:** Fixed. Unhandled errors now respond `500 {"message":"Something went wrong!","type":"serverError"}` regardless of environment, while the original `err.name`/`err.message` are kept in the server log (still covered by the logger's PII redaction). Mapped/expected errors (AppError, Zod, CastError, duplicate key, Mongoose validation) keep their crafted client-safe messages. Tests assert the generic body — and the absence of a stack — in both `test` and `production`/`staging` ([globalErrorhandler.test.ts](src/middleware/globalErrorhandler.test.ts)).
+- **Location:** [src/middleware/globalErrorhandler.ts](src/middleware/globalErrorhandler.ts#L62-L78)
 - **Problem:** For unexpected errors, `message = err.message` is sent to the client in every environment. Database, filesystem, and third-party error strings (paths, URIs, driver internals) are exposed. The PII redaction added to the logger protects **logs** only, not **responses**.
 - **Recommendation:** For `INTERNAL_SERVER_ERROR`, respond with a generic message (e.g. "Something went wrong") and keep details in the server log. Reserve `err.message` for mapped/expected errors. Add a test asserting a generic body for unexpected errors in `production`/`staging`.
 
@@ -139,7 +140,7 @@ The codebase is clean, consistent, and well-tested for a template. Nothing here 
 ## Top priorities
 
 1. ~~Fix `.env.example` so it passes validation, and align `JWT_ACCESS_EXPIRES_IN` → `JWT_ACCESS_EXPIRES_IN_MINUTES` (also in `.env`).~~ — ✅ Done
-2. Map `MulterError` to a typed 413/400 and stop returning internal error messages on 500s.
+2. Map `MulterError` to a typed 413/400. ~~Stop returning internal error messages on 500s.~~ — ✅ Done
 3. Harden the auth rate limit: concrete `trust proxy` and a composite IP+account key.
 4. Add content-based upload validation and manage uploaded-file lifecycle.
 5. Make the health endpoint readiness-aware (DB + Redis probes).

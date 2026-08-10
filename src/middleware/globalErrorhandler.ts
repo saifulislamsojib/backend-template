@@ -20,8 +20,9 @@ const globalErrorHandler: ErrorRequestHandler = (err: Error, req, res, next) => 
   if (res.headersSent) {
     return next("Something went wrong!");
   }
-  let statusCode = err instanceof AppError ? err.statusCode : status.INTERNAL_SERVER_ERROR;
-  let type: ErrorType = err instanceof AppError ? ERROR_TYPE.appError : ERROR_TYPE.serverError;
+  const isAppError = err instanceof AppError;
+  let statusCode = isAppError ? err.statusCode : status.INTERNAL_SERVER_ERROR;
+  let type: ErrorType = isAppError ? ERROR_TYPE.appError : ERROR_TYPE.serverError;
   let message = err.message || "Something went wrong!";
 
   if (err instanceof ZodError) {
@@ -49,7 +50,7 @@ const globalErrorHandler: ErrorRequestHandler = (err: Error, req, res, next) => 
     message = Object.values(err.errors).reduce((acc, { message: msg }) => {
       return `${acc}${acc ? "; " : ""}${msg}.`;
     }, "");
-  } else if (err instanceof AppError) {
+  } else if (isAppError) {
     if (err.statusCode === status.UNAUTHORIZED) {
       type = ERROR_TYPE.unauthorized;
     } else if (err.statusCode === status.FORBIDDEN) {
@@ -57,6 +58,12 @@ const globalErrorHandler: ErrorRequestHandler = (err: Error, req, res, next) => 
     } else if (err.statusCode === status.NOT_FOUND) {
       type = ERROR_TYPE.notFound;
     }
+  }
+
+  // Never leak internal error details to clients for unhandled errors; the original message is kept in the server log below.
+  const isServerError = statusCode === status.INTERNAL_SERVER_ERROR;
+  if (isServerError) {
+    message = "Something went wrong!";
   }
 
   const errorResponse: TErrorResponse = { success: false, statusCode, type, message };
@@ -69,8 +76,9 @@ const globalErrorHandler: ErrorRequestHandler = (err: Error, req, res, next) => 
     method: req.method,
     userId: req.user?._id,
     ...errorResponse,
+    error: { name: err.name, message: err.message },
   };
-  if (statusCode === status.INTERNAL_SERVER_ERROR) {
+  if (isServerError) {
     logger.fatal(logResponse, "Global Error");
   } else {
     logger.error(logResponse, "Global Error");

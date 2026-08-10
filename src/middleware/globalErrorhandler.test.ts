@@ -8,7 +8,7 @@ import { z } from "zod";
 import globalErrorHandler from "./globalErrorhandler";
 
 const { env, logger } = vi.hoisted(() => ({
-  env: Object.freeze({ NODE_ENV: "test" }),
+  env: { NODE_ENV: "test" },
   logger: { error: vi.fn(), fatal: vi.fn() },
 }));
 
@@ -62,18 +62,41 @@ describe("globalErrorHandler", () => {
     expect(logger.error).toHaveBeenCalledOnce();
   });
 
-  it("does not expose unexpected error details or stacks in test environments", async () => {
+  it("returns a generic body for unexpected errors and keeps details in the server log", async () => {
     const res = await supertest(app).get("/unexpected-error");
 
     expect(res.status).toBe(status.INTERNAL_SERVER_ERROR);
     expect(res.body).toStrictEqual({
       success: false,
       statusCode: status.INTERNAL_SERVER_ERROR,
-      message: "Unexpected failure",
+      message: "Something went wrong!",
       type: ERROR_TYPE.serverError,
     });
     expect(res.body).not.toHaveProperty("stack");
     expect(logger.fatal).toHaveBeenCalledOnce();
+    const logPayload = logger.fatal.mock.calls[0]?.[0] as AnyObject;
+    expect(logPayload).toMatchObject({
+      error: { name: "Error", message: "Unexpected failure" },
+    });
+  });
+
+  it("returns a generic body for unexpected errors in production and staging", async () => {
+    const previousNodeEnv = env.NODE_ENV;
+    env.NODE_ENV = "production";
+    try {
+      const res = await supertest(app).get("/unexpected-error");
+
+      expect(res.status).toBe(status.INTERNAL_SERVER_ERROR);
+      expect(res.body).toStrictEqual({
+        success: false,
+        statusCode: status.INTERNAL_SERVER_ERROR,
+        message: "Something went wrong!",
+        type: ERROR_TYPE.serverError,
+      });
+      expect(res.body).not.toHaveProperty("stack");
+    } finally {
+      env.NODE_ENV = previousNodeEnv;
+    }
   });
 
   it("maps Zod validation failures to a client-safe validation response", async () => {
