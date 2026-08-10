@@ -1,0 +1,19 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // File Layout
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    // Environment Settings
+    "types": ["node"]
+  },
+
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.test.ts", "src/test/**", "node_modules"],
+
+  // tsc-alias options to resolve full path while build
+  "tsc-alias": {
+    "resolveFullPaths": true
+  }
+}

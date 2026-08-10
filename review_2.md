@@ -93,10 +93,11 @@ The codebase is clean, consistent, and well-tested for a template. Nothing here 
 - **Problem:** Overall thresholds pass, but the entire startup path, graceful shutdown, `closeServer`, signal handlers, and the Redis error/connect handlers are untested. These are the highest-risk paths in a deployment and the easiest to break silently.
 - **Recommendation:** Add tests for `closeServer` (HTTP close + `redisClient.quit` + `dbDisconnect`), signal handling, and the logger/redis bootstrap edge cases.
 
-#### 9. Production build emits test files into `dist/`
+#### 9. Production build emits test files into `dist/` — ✅ Resolved
 
-- **Location:** [tsconfig.json](tsconfig.json#L43)
-- **Verified:** `pnpm build` produces `dist/**/*.test.js` and `dist/test/*.js` (apiTester, globalSetup, setupFile, utils).
+- **Status:** Fixed. The production build now runs `tsc -p tsconfig.app.json`, which includes `src/**/*.ts` and excludes `src/**/*.test.ts` plus `src/test/**`, so `dist/` ships only app source. Tests and the harness are type-checked separately by `tsconfig.test.json` (`noEmit`), both referenced from the solution root `tsconfig.json` and checked together via `tsc -b --noEmit`.
+- **Location:** [tsconfig.json](tsconfig.json), [tsconfig.app.json](tsconfig.app.json), [tsconfig.test.json](tsconfig.test.json), [package.json](package.json)
+- **Verified:** `pnpm build` now emits only app source — 0 test/harness files in `dist/` (previously 21 `*.test.js` + 4 `dist/test/*.js`). `pnpm typecheck`, `pnpm lint`, `pnpm test` (82 tests) and `pnpm coverage` all pass with the split configs.
 - **Problem:** `include: ["src/*.ts", "src/**/*.ts"]` compiles tests and the memory-server test harness into the production output. The Docker build happens to exclude them via `.dockerignore`, but a local `pnpm build && pnpm start` ships test code. It also couples the test harness to the prod emit.
 - **Recommendation:** Exclude `**/*.test.ts` and `src/test/**` from the build emit (keep them type-checked via a separate `tsconfig` for tests or by the `typecheck` pass). Alternatively, exclude via `tsc` `exclude`.
 
@@ -152,7 +153,7 @@ The codebase is clean, consistent, and well-tested for a template. Nothing here 
 5. Make the health endpoint readiness-aware (DB + Redis probes).
 6. Close the same-second token bypass with a token version.
 7. Replace `process.exit` in library code with thrown startup errors; ~~cover bootstrap/shutdown in tests.~~ — ✅ Done
-8. Exclude test files from the production build emit.
+8. ~~Exclude test files from the production build emit.~~ — ✅ Done
 
 ## What was fixed since the previous review
 

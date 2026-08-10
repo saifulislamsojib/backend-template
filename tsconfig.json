@@ -1,14 +1,9 @@
 {
   "compilerOptions": {
-    // File Layout
-    "rootDir": "./src",
-    "outDir": "./dist",
-
     // Environment Settings
     "module": "ESNext",
     "target": "ES2023",
     "lib": ["ES2023"],
-    "types": ["vitest/globals"],
     "skipLibCheck": true,
 
     // Bundler/Build Options
@@ -40,11 +35,9 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/*.ts", "src/**/*.ts"],
-  "exclude": ["node_modules"],
 
-  // tsc-alias options to resolve full path while build
-  "tsc-alias": {
-    "resolveFullPaths": true
-  }
+  // Solution-style root: references the app and test projects so that
+  // `tsc -b` type-checks both and editors pick the right project per file.
+  "files": [],
+  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.test.json" }]
 }

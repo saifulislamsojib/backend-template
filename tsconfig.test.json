@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+
+    // Environment Settings
+    "types": ["node", "vitest/globals"]
+  },
+
+  "include": ["src/**/*.test.ts", "src/test/**/*.ts", "src/index.d.ts"]
+}
