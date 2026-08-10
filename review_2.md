@@ -29,8 +29,9 @@ The codebase is clean, consistent, and well-tested for a template. Nothing here 
 
 ### High
 
-#### 1. `.env.example` (and the local `.env`) cannot pass startup validation and uses a stale variable name
+#### 1. `.env.example` (and the local `.env`) cannot pass startup validation and uses a stale variable name — ✅ Resolved
 
+- **Status:** Fixed. `.env.example` now uses `DB_URI=mongodb://127.0.0.1:27017/backend-template` and `JWT_ACCESS_EXPIRES_IN_MINUTES=10080`; the local `.env` aligns to `JWT_ACCESS_EXPIRES_IN_MINUTES=1440`. A regression test ([env.test.ts](src/configs/env.test.ts)) reads `.env.example`, stubs `process.env`, and asserts the env module loads without `process.exit`, so drift is caught in CI via `pnpm coverage`.
 - **Location:** [.env.example](.env.example#L2), [.env.example](.env.example#L6), [src/configs/env.ts](src/configs/env.ts#L6-L33)
 - **Verified:** `envValidationSchema.safeParse` against the example fails with `Invalid URL` on `DB_URI`.
 - **Problem:**
@@ -137,7 +138,7 @@ The codebase is clean, consistent, and well-tested for a template. Nothing here 
 
 ## Top priorities
 
-1. Fix `.env.example` so it passes validation, and align `JWT_ACCESS_EXPIRES_IN` → `JWT_ACCESS_EXPIRES_IN_MINUTES` (also in `.env`).
+1. ~~Fix `.env.example` so it passes validation, and align `JWT_ACCESS_EXPIRES_IN` → `JWT_ACCESS_EXPIRES_IN_MINUTES` (also in `.env`).~~ — ✅ Done
 2. Map `MulterError` to a typed 413/400 and stop returning internal error messages on 500s.
 3. Harden the auth rate limit: concrete `trust proxy` and a composite IP+account key.
 4. Add content-based upload validation and manage uploaded-file lifecycle.

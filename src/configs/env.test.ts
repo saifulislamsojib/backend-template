@@ -1,4 +1,27 @@
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import { envValidationSchema } from "./env";
+
+const parseEnvFile = (contents: string): Record<string, string> => {
+  const env: Record<string, string> = {};
+
+  for (const line of contents.split(/\r?\n/)) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+
+    const separatorIndex = trimmed.indexOf("=");
+    if (separatorIndex === -1) continue;
+
+    const key = trimmed.slice(0, separatorIndex).trim();
+    const value = trimmed
+      .slice(separatorIndex + 1)
+      .trim()
+      .replace(/^["']|["']$/g, "");
+    if (key) env[key] = value;
+  }
+
+  return env;
+};
 
 const validEnvironment = {
   APP_KEY: "test-app-key",
@@ -28,5 +51,30 @@ describe("environment validation", () => {
     expect(envValidationSchema.safeParse({ ...validEnvironment, APP_KEY: "short" }).success).toBe(
       false,
     );
+  });
+});
+
+describe("startup validation with the documented example", () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.restoreAllMocks();
+  });
+
+  it("loads without exiting when process.env matches .env.example", async () => {
+    const documentedExampleEnvironment = parseEnvFile(
+      readFileSync(path.join(process.cwd(), ".env.example"), "utf8"),
+    );
+    const exitSpy = vi.spyOn(process, "exit").mockImplementation(() => undefined as never);
+
+    vi.resetModules();
+    for (const [key, value] of Object.entries(documentedExampleEnvironment)) {
+      vi.stubEnv(key, value);
+    }
+
+    const { default: env } = await import("./env");
+
+    expect(exitSpy).not.toHaveBeenCalled();
+    expect(env.DB_URI).toBe("mongodb://127.0.0.1:27017/backend-template");
+    expect(env.JWT_ACCESS_EXPIRES_IN_MINUTES).toBe(10080);
   });
 });
