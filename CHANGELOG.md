@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/saifulislamsojib/backend-template/compare/v1.2.0...v1.2.1) (2026-08-10)
+
+
+### Bug Fixes
+
+* **env:** update .env.example to pass validation and add regression test added ([fd40cb6](https://github.com/saifulislamsojib/backend-template/commit/fd40cb6743bc0a8b958424e55e6c586bf6bdda64))
+
 ## [1.2.0](https://github.com/saifulislamsojib/backend-template/compare/v1.1.2...v1.2.0) (2026-08-02)
 
 
