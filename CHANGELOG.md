@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/saifulislamsojib/backend-template/compare/v1.2.2...v1.3.0) (2026-08-11)
+
+
+### Features
+
+* **action:** update project dependencies and GitHub Actions versions ([3844665](https://github.com/saifulislamsojib/backend-template/commit/3844665fec618679706a1e756d5334beaaba7029))
+
 ## [1.2.2](https://github.com/saifulislamsojib/backend-template/compare/v1.2.1...v1.2.2) (2026-08-10)
 
 
