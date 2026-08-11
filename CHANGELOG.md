@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.2](https://github.com/saifulislamsojib/backend-template/compare/v1.2.1...v1.2.2) (2026-08-10)
+
+
+### Bug Fixes
+
+* **uploader:** harden file uploads by mapping multer errors, validating content via magic bytes ([d06979f](https://github.com/saifulislamsojib/backend-template/commit/d06979f89ce0679908fa9f93154fa05c249b2765))
+
 ## [1.2.1](https://github.com/saifulislamsojib/backend-template/compare/v1.2.0...v1.2.1) (2026-08-10)
 
 
