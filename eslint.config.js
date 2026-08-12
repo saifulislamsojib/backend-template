@@ -5,10 +5,7 @@ import vitest from "@vitest/eslint-plugin";
 
 export default getFlatConfigs(
   getNodeConfig({ extension: true }),
-  ...getTsConfigs({
-    tsconfigRootDir: import.meta.dirname,
-    tsRootDir: "src/",
-  }),
+  ...getTsConfigs({ tsRootDir: "src/" }),
   {
     files: testFiles,
     ...vitest.configs.recommended,
