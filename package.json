@@ -67,7 +67,7 @@
     "@types/supertest": "^7.2.1",
     "@vitest/coverage-v8": "^4.1.10",
     "@vitest/eslint-plugin": "^1.6.27",
-    "eslint": "^10.8.1",
+    "eslint": "^10.9.0",
     "husky": "^9.1.7",
     "lint-staged": "^17.3.0",
     "mongodb-memory-server": "^11.2.0",
