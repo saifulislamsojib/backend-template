@@ -1,5 +1,7 @@
-# Stage 0: setup base
 FROM node:26.13.1-alpine AS base
+
+# Stage 1: deps-installer
+FROM base AS deps-installer
 
 # pnpm setup
 ENV PNPM_HOME="/pnpm"
@@ -10,13 +12,13 @@ WORKDIR /app
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
-# Stage 1: prod-deps
-FROM base AS prod-deps
+# Stage 2: prod-deps
+FROM deps-installer AS prod-deps
 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
 
-# Stage 2: build
-FROM base AS builder
+# Stage 3: builder
+FROM deps-installer AS builder
 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
@@ -24,13 +26,14 @@ COPY . .
 
 RUN pnpm build
 
-# Stage 3: runner
+# Stage 4: runner
 FROM base
 
-COPY --from=prod-deps /app/node_modules ./node_modules
-COPY --from=builder /app/dist ./dist
+WORKDIR /app
 
-RUN chown -R node:node /app
+COPY --from=deps-installer --chown=node:node /app/package.json ./package.json
+COPY --from=prod-deps --chown=node:node /app/node_modules ./node_modules
+COPY --from=builder --chown=node:node /app/dist ./dist
 
 USER node
 
