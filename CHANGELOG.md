@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.0](https://github.com/saifulislamsojib/backend-template/compare/v1.3.0...v1.4.0) (2026-11-16)
+
+
+### Features
+
+* **bun:** add optional Bun runtime and bundler support ([98b3c5b](https://github.com/saifulislamsojib/backend-template/commit/98b3c5b8cb27a564610a539a4eec9f5779d5ed34))
+* **validateRequest:** support validating params and query targets ([4d0b90c](https://github.com/saifulislamsojib/backend-template/commit/4d0b90c0ee299d253e48511d7e084dd4c75a1ac7))
+
 ## [1.3.0](https://github.com/saifulislamsojib/backend-template/compare/v1.2.2...v1.3.0) (2026-08-11)
 
 
