@@ -1,4 +1,4 @@
-FROM node:26.13.1-alpine AS base
+FROM node:24.22.3-alpine AS base
 
 # Stage 1: deps-installer
 FROM base AS deps-installer
@@ -15,12 +15,12 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 # Stage 2: prod-deps
 FROM deps-installer AS prod-deps
 
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile --ignore-scripts
 
 # Stage 3: builder
 FROM deps-installer AS builder
 
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile --ignore-scripts
 
 COPY . .
 

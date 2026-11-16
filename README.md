@@ -14,6 +14,7 @@ A production-oriented Express 5 API starter written in TypeScript. It provides M
 - Vitest, Supertest, and an in-memory MongoDB replica set for tests
 - ESLint, Prettier, Husky, lint-staged, Commitlint, and GitHub Actions
 - Production, staging, and development Docker Compose configurations
+- Optional Bun runtime and bundler support (dev and build scripts)
 
 ## Requirements
 
@@ -21,6 +22,7 @@ A production-oriented Express 5 API starter written in TypeScript. It provides M
 - pnpm 12 or later
 - A MongoDB instance
 - Redis for local development and Docker deployments
+- Bun 1.4.4 (optional, only for the Bun scripts)
 
 ## Quick start
 
@@ -83,7 +85,10 @@ IS_LOGS_ON_FILE=false
 | ---------------------------------------- | --------------------------------------------------------- |
 | `pnpm dev`                               | Start the TypeScript server with watch mode.              |
 | `pnpm dev:node`                          | Start Node's native watch mode with path-alias support.   |
+| `pnpm dev:bun`                           | Start the server with Bun's watch mode.                   |
 | `pnpm build`                             | Compile TypeScript and resolve path aliases into `dist/`. |
+| `pnpm build:bun`                         | Bundle the server with Bun into `dist/`.                  |
+| `pnpm fmt`                               | Format files with Bun's built-in formatter.               |
 | `pnpm start`                             | Run the compiled application using `.env`.                |
 | `pnpm typecheck`                         | Run TypeScript without emitting files.                    |
 | `pnpm lint` / `pnpm lint:fix`            | Check code with ESLint, optionally fixing issues.         |
@@ -211,7 +216,22 @@ pnpm docker
 pnpm docker-stage
 ```
 
-The production and staging images build the application in a multi-stage Node 26 Alpine image and run as the non-root `node` user.
+The production and staging images build the application in a multi-stage Node 24 Alpine image and run as the non-root `node` user.
+
+## Bun support
+
+Bun is supported as an optional runtime and bundler. pnpm remains the package manager and Vitest remains the test runner — Bun is not used to install dependencies or run tests.
+
+```bash
+# Run the dev server with Bun's watch mode
+pnpm dev:bun
+
+# Bundle the server with Bun into dist/
+pnpm build:bun
+
+# Format files with Bun's built-in formatter
+pnpm fmt
+```
 
 ## Project structure
 

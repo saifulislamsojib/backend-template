@@ -6,13 +6,18 @@ This file provides guidance to AI agents when working with code in this reposito
 
 Express 5 + TypeScript backend template (ESM, Node >= 24.22.3) with MongoDB (Mongoose), Redis caching, JWT auth, Zod validation, Pino logging, and Docker configurations. The repository pins Node 26.13.1 in `.nvmrc` and pnpm 12.21.0 in `package.json`; pnpm is enforced by `preinstall`.
 
+Bun (v1.4.4) is supported as an optional runtime and bundler only. pnpm remains the package manager and Vitest the test runner — do not use Bun for installing dependencies or running tests.
+
 ## Commands
 
 - `pnpm dev` — run dev server with tsx watch (loads `.env`)
+- `pnpm dev:bun` — run dev server with Bun's watch mode (`bun --watch --no-clear-screen src/server.ts`)
 - `pnpm build` — compile with tsc, then resolve path aliases with tsc-alias
+- `pnpm build:bun` — bundle with Bun (`bun build src/server.ts --target bun --outdir dist`)
+- `pnpm fmt` — format with Bun's built-in formatter (`bun fmt`)
 - `pnpm typecheck` — `tsc --noEmit`
 - `pnpm lint` / `pnpm lint:fix` — ESLint with `--max-warnings 0` (shared `@stack-lint/*` configs)
-- `pnpm format` — format supported source/config files with Prettier
+- `pnpm format` — format source/config files with Prettier
 - `pnpm test` — run all tests with Vitest
 - `pnpm test:w` — watch mode
 - `pnpm coverage` — run Vitest with coverage reporting

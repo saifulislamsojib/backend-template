@@ -11,11 +11,14 @@
     "dev": "tsx watch --clear-screen=false --include './src/**/*' --env-file=.env src/server.ts",
     "dev:node": "node --import 'data:text/javascript,import { register } from \"node:module\"; import { pathToFileURL } from \"node:url\"; register(\"./.path-resolver.js\", pathToFileURL(\"./\"));' --watch --env-file=.env src/server.ts",
     "dev:n": "console-ninja pnpm dev",
+    "dev:bun": "bun --watch --no-clear-screen src/server.ts",
     "build": "tsc -p tsconfig.app.json && tsc-alias -p tsconfig.app.json",
+    "build:bun": "bun build src/server.ts --target bun --outdir dist",
+    "fmt": "bun fmt",
     "typecheck": "tsc -b --noEmit",
     "lint": "eslint --max-warnings 0",
     "lint:fix": "eslint --max-warnings 0 --fix",
-    "format": "prettier --log-level warn --write \"./**/*.{js,cjs,mjs,ts,d.ts,json,yaml,yml,html}\"",
+    "format": "prettier --log-level warn --write \"./**/*.{js,cjs,mjs,ts,json,yaml,yml,html,md}\"",
     "test": "vitest run",
     "test:w": "vitest --watch",
     "coverage": "vitest run --coverage",
@@ -83,10 +86,10 @@
     "pnpm": ">=12"
   },
   "lint-staged": {
-    "*.{js,cjs,mjs,ts,d.ts}": [
+    "*.{js,cjs,mjs,ts}": [
       "eslint --max-warnings 0 --fix",
       "vitest related --run"
     ],
-    "*.{js,cjs,mjs,ts,d.ts,json,yaml,yml,html}": "prettier --log-level warn --write"
+    "*.{js,cjs,mjs,ts,json,yaml,yml,html,md}": "prettier --log-level warn --write"
   }
 }
