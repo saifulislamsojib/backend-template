@@ -167,7 +167,7 @@ describe("globalErrorHandler", () => {
     expect(res.body).toStrictEqual({
       success: false,
       statusCode: status.BAD_REQUEST,
-      message: "Unexpected field",
+      message: "Unexpected file field",
       type: ERROR_TYPE.fileError,
     });
     expect(logger.error).toHaveBeenCalledOnce();

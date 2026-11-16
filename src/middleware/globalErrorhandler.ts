@@ -34,7 +34,7 @@ const globalErrorHandler: ErrorRequestHandler = (err: Error, req, res, next) => 
     } else {
       type = ERROR_TYPE.fileError;
       statusCode = status.BAD_REQUEST;
-      message = err.message; // multer messages are static and contain no internals (e.g. "Unexpected field")
+      message = err.message; // multer messages are static and contain no internals (e.g. "Unexpected file field")
     }
   } else if (err instanceof ZodError) {
     type = ERROR_TYPE.validationError;
