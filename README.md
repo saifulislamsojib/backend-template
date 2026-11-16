@@ -79,21 +79,21 @@ IS_LOGS_ON_FILE=false
 
 ## Scripts
 
-| Command                                                        | Description                                               |
-| -------------------------------------------------------------- | --------------------------------------------------------- |
-| `pnpm dev`                                                     | Start the TypeScript server with watch mode.              |
-| `pnpm dev:node`                                                | Start Node's native watch mode with path-alias support.   |
-| `pnpm build`                                                   | Compile TypeScript and resolve path aliases into `dist/`. |
-| `pnpm start`                                                   | Run the compiled application using `.env`.                |
-| `pnpm typecheck`                                               | Run TypeScript without emitting files.                    |
-| `pnpm lint` / `pnpm lint:fix`                                  | Check code with ESLint, optionally fixing issues.         |
-| `pnpm format`                                                  | Format supported files with Prettier.                     |
-| `pnpm test` / `pnpm test:w`                                    | Run tests once or in watch mode.                          |
-| `pnpm coverage`                                                | Run tests with coverage reporting.                        |
-| `pnpm docker`                                                  | Start the production Compose stack in the background.     |
-| `pnpm docker-stage`                                            | Start the staging Compose stack in the background.        |
-| `pnpm docker:sh`, `pnpm docker-stage:sh`                       | Open a shell in the corresponding application container.  |
-| `pnpm redis-cli`                                               | Open Redis CLI in the production Compose Redis container. |
+| Command                                  | Description                                               |
+| ---------------------------------------- | --------------------------------------------------------- |
+| `pnpm dev`                               | Start the TypeScript server with watch mode.              |
+| `pnpm dev:node`                          | Start Node's native watch mode with path-alias support.   |
+| `pnpm build`                             | Compile TypeScript and resolve path aliases into `dist/`. |
+| `pnpm start`                             | Run the compiled application using `.env`.                |
+| `pnpm typecheck`                         | Run TypeScript without emitting files.                    |
+| `pnpm lint` / `pnpm lint:fix`            | Check code with ESLint, optionally fixing issues.         |
+| `pnpm format`                            | Format supported files with Prettier.                     |
+| `pnpm test` / `pnpm test:w`              | Run tests once or in watch mode.                          |
+| `pnpm coverage`                          | Run tests with coverage reporting.                        |
+| `pnpm docker`                            | Start the production Compose stack in the background.     |
+| `pnpm docker-stage`                      | Start the staging Compose stack in the background.        |
+| `pnpm docker:sh`, `pnpm docker-stage:sh` | Open a shell in the corresponding application container.  |
+| `pnpm redis-cli`                         | Open Redis CLI in the production Compose Redis container. |
 
 ## API
 

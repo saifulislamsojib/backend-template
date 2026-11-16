@@ -8,14 +8,14 @@
 
 This review is based on a full read of the codebase plus an actual verification run, not static inspection alone:
 
-| Check | Result |
-| --- | --- |
-| `pnpm typecheck` | ✅ clean |
-| `pnpm lint` (`--max-warnings 0`) | ✅ clean |
-| `pnpm test` | ✅ 62 tests / 17 files pass |
-| `pnpm coverage` | ✅ thresholds met (stmts 84.27, branches 76.74, funcs 83.33, lines 85.38) |
-| `pnpm build` | ✅ compiles; tsc-alias resolves paths |
-| Empirical checks | ✅ confirmed env drift, Multer 500, tests compiled into `dist/` |
+| Check                            | Result                                                                    |
+| -------------------------------- | ------------------------------------------------------------------------- |
+| `pnpm typecheck`                 | ✅ clean                                                                  |
+| `pnpm lint` (`--max-warnings 0`) | ✅ clean                                                                  |
+| `pnpm test`                      | ✅ 62 tests / 17 files pass                                               |
+| `pnpm coverage`                  | ✅ thresholds met (stmts 84.27, branches 76.74, funcs 83.33, lines 85.38) |
+| `pnpm build`                     | ✅ compiles; tsc-alias resolves paths                                     |
+| Empirical checks                 | ✅ confirmed env drift, Multer 500, tests compiled into `dist/`           |
 
 ## Overall assessment
 
@@ -135,14 +135,14 @@ The codebase is clean, consistent, and well-tested for a template. Nothing here 
 
 ## Scores
 
-| Area | Score |
-| --- | ---: |
-| Architecture | 7/10 |
-| Code Quality | 7/10 |
-| Security | 5/10 |
-| Performance | 6/10 |
-| Maintainability | 7/10 |
-| Production Readiness | 5/10 |
+| Area                 | Score |
+| -------------------- | ----: |
+| Architecture         |  7/10 |
+| Code Quality         |  7/10 |
+| Security             |  5/10 |
+| Performance          |  6/10 |
+| Maintainability      |  7/10 |
+| Production Readiness |  5/10 |
 
 ## Top priorities
 

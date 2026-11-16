@@ -3,4 +3,5 @@ dist/
 coverage
 .pnpm-store
 pnpm-lock.yaml
+CHANGELOG.md
 .vercel
