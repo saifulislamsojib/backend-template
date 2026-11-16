@@ -2,11 +2,11 @@ import AppError from "@/errors/AppError";
 import catchAsync from "@/utils/catchAsync";
 import { fileTypeFromFile } from "file-type";
 import { status } from "http-status";
+import multer from "multer";
 import { randomUUID } from "node:crypto";
 import { mkdirSync } from "node:fs";
 import { rename, unlink } from "node:fs/promises";
 import path from "node:path";
-import multer from "multer";
 
 /** Absolute directory where accepted image uploads are stored. */
 export const UPLOADS_DIR = path.join(process.cwd(), "uploads");
@@ -37,7 +37,7 @@ const uploader = multer({
 
 const removeUploadedFile = (filePath: string) =>
   // `file.path` is a fixed multer-controlled absolute path, never user input.
-  // eslint-disable-next-line security/detect-non-literal-fs-filename
+
   unlink(filePath).catch(() => undefined);
 
 /**
@@ -62,7 +62,7 @@ export const validateImageUpload = catchAsync(async (req, _res, next) => {
 
     const finalPath = `${file.path}.${detected.ext}`;
     // `file.path` is a fixed multer-controlled absolute path, never user input.
-    // eslint-disable-next-line security/detect-non-literal-fs-filename
+
     await rename(file.path, finalPath);
     file.path = finalPath;
     file.filename = `${file.filename}.${detected.ext}`;

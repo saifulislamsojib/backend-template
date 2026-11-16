@@ -26,7 +26,6 @@ AGENTS.md
 CLAUDE.md
 CHANGELOG.md
 Dockerfile
-Dockerfile.*
 compose.yml
 docker-compose*.yml
 commitlint.config.ts

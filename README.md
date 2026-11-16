@@ -17,8 +17,8 @@ A production-oriented Express 5 API starter written in TypeScript. It provides M
 
 ## Requirements
 
-- Node.js 24 or later (see [`.nvmrc`](.nvmrc))
-- pnpm 11 or later
+- Node.js 24.22.3 or later (see [`.nvmrc`](.nvmrc))
+- pnpm 12 or later
 - A MongoDB instance
 - Redis for local development and Docker deployments
 
@@ -92,8 +92,7 @@ IS_LOGS_ON_FILE=false
 | `pnpm coverage`                                                | Run tests with coverage reporting.                        |
 | `pnpm docker`                                                  | Start the production Compose stack in the background.     |
 | `pnpm docker-stage`                                            | Start the staging Compose stack in the background.        |
-| `pnpm docker-dev`                                              | Start the development Compose stack.                      |
-| `pnpm docker:sh`, `pnpm docker-stage:sh`, `pnpm docker-dev:sh` | Open a shell in the corresponding application container.  |
+| `pnpm docker:sh`, `pnpm docker-stage:sh`                       | Open a shell in the corresponding application container.  |
 | `pnpm redis-cli`                                               | Open Redis CLI in the production Compose Redis container. |
 
 ## API
@@ -210,12 +209,9 @@ pnpm docker
 
 # Staging: http://localhost:8081
 pnpm docker-stage
-
-# Development with bind-mounted source and watch mode: http://localhost:8080
-pnpm docker-dev
 ```
 
-The production and staging images build the application in a multi-stage Node 24 Alpine image and run as the non-root `node` user.
+The production and staging images build the application in a multi-stage Node 26 Alpine image and run as the non-root `node` user.
 
 ## Project structure
 

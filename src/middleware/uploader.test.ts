@@ -25,9 +25,9 @@ app.use(globalErrorHandler);
 /** Reads the uploads directory, returning [] when it has not been created yet. */
 const listUploads = async () => {
   // UPLOADS_DIR is a fixed module-level path, never user-controlled.
-  // eslint-disable-next-line security/detect-non-literal-fs-filename
+
   if (!existsSync(UPLOADS_DIR)) return [];
-  // eslint-disable-next-line security/detect-non-literal-fs-filename
+
   return readdir(UPLOADS_DIR);
 };
 
@@ -72,7 +72,7 @@ describe("uploader", () => {
     expect(filename).toMatch(/^[0-9a-f-]{36}\.png$/);
     expect(storedPath).toBe(path.join(UPLOADS_DIR, filename));
     // The stored file matches the upload byte-for-byte.
-    // eslint-disable-next-line security/detect-non-literal-fs-filename
+
     expect(readFileSync(storedPath).equals(PNG_BUFFER)).toBe(true);
   });
 

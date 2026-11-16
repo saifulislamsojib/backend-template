@@ -1,5 +1,5 @@
 # Stage 0: setup base
-FROM node:24-alpine AS base
+FROM node:26.13.1-alpine AS base
 
 # pnpm setup
 ENV PNPM_HOME="/pnpm"

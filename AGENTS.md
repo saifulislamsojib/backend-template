@@ -4,7 +4,7 @@ This file provides guidance to AI agents when working with code in this reposito
 
 ## Project Overview
 
-Express 5 + TypeScript backend template (ESM, Node >= 24) with MongoDB (Mongoose), Redis caching, JWT auth, Zod validation, Pino logging, and Docker configurations. The repository pins Node 24 in `.nvmrc` and pnpm 11.9.0 in `package.json`; pnpm is enforced by `preinstall`.
+Express 5 + TypeScript backend template (ESM, Node >= 24.22.3) with MongoDB (Mongoose), Redis caching, JWT auth, Zod validation, Pino logging, and Docker configurations. The repository pins Node 26.13.1 in `.nvmrc` and pnpm 12.21.0 in `package.json`; pnpm is enforced by `preinstall`.
 
 ## Commands
 
@@ -16,8 +16,8 @@ Express 5 + TypeScript backend template (ESM, Node >= 24) with MongoDB (Mongoose
 - `pnpm test` — run all tests with Vitest
 - `pnpm test:w` — watch mode
 - `pnpm coverage` — run Vitest with coverage reporting
-- `pnpm docker` / `pnpm docker-stage` / `pnpm docker-dev` — production, staging, or development Docker Compose environments (each includes Redis)
-- `pnpm docker:sh`, `pnpm docker-stage:sh`, `pnpm docker-dev:sh` — shell into the matching server container; `pnpm redis-cli` opens the Redis CLI
+- `pnpm docker` / `pnpm docker-stage` — production or staging Docker Compose environments (each includes Redis)
+- `pnpm docker:sh`, `pnpm docker-stage:sh` — shell into the matching server container; `pnpm redis-cli` opens the Redis CLI
 
 Tests use an in-memory MongoDB replica set via `mongodb-memory-server` (`src/test/globalSetup.ts`), so no local MongoDB or listening HTTP server is needed. Outside CI, the global setup loads `.env.test`; CI supplies its test environment explicitly. Redis must be reachable whenever code under test uses Redis (CI provides it as a service).
 

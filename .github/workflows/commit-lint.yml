@@ -1,6 +1,9 @@
 name: Lint Commit PR
 
-on: [push, pull_request]
+on:
+  pull_request:
+  push:
+    branches: [main]
 
 # cancel any previous runs in progress for the same branch
 concurrency:
