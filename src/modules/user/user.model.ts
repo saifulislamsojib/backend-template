@@ -22,6 +22,7 @@ const userSchema = new Schema<TUser, UserModel, UserMethods>(
       required: true,
       index: true,
       trim: true,
+      lowercase: true,
     },
     password: {
       type: String,

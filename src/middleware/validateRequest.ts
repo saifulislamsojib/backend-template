@@ -1,5 +1,5 @@
 import catchAsync from "@/utils/catchAsync";
-import type { ZodType } from "zod";
+import type { ZodObject } from "zod";
 
 type Target = "body" | "params" | "query";
 
@@ -10,7 +10,7 @@ type Target = "body" | "params" | "query";
  * @param target - the request part to validate: `body` (default), `params`, or `query`
  * @returns validator middleware
  */
-const validateRequest = (schema: ZodType, target: Target = "body") => {
+const validateRequest = (schema: ZodObject, target: Target = "body") => {
   return catchAsync(async (req, _res, next) => {
     const parsed = await schema.parseAsync(req[target]);
 

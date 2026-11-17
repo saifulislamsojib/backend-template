@@ -27,9 +27,16 @@ app.get("/unexpected-error", () => {
 app.get("/validation-error", () => {
   z.object({ name: z.string() }).parse({});
 });
-app.get("/duplicate-error", () => {
+app.get("/duplicate-error", (req) => {
+  const metadata = {
+    pattern: { keyPattern: { email: 1 }, keyValue: { email: "john@example.com" } },
+    value: { keyValue: { email: "john@example.com" } },
+    compound: { keyPattern: { email: 1, tenant: 1 } },
+  };
+  const variant = req.query.metadata as keyof typeof metadata;
   throw Object.assign(new Error('E11000 duplicate key: { email: "john@example.com" }'), {
     code: 11000,
+    ...metadata[variant],
   });
 });
 app.get("/cast-error", () => {
@@ -117,22 +124,30 @@ describe("globalErrorHandler", () => {
     });
   });
 
-  it("maps duplicate-key and invalid-id database errors to stable client responses", async () => {
-    const duplicate = await supertest(app).get("/duplicate-error");
-    const cast = await supertest(app).get("/cast-error");
+  it.each([
+    ["pattern", "A record with this email already exists"],
+    ["value", "A record with this email already exists"],
+    ["compound", "A record with this email and tenant already exists"],
+    ["missing", "A record already exists"],
+  ])(
+    "maps duplicate-key (%s) and invalid-id database errors to stable client responses",
+    async (metadata, message) => {
+      const duplicate = await supertest(app).get("/duplicate-error").query({ metadata });
+      const cast = await supertest(app).get("/cast-error");
 
-    expect(duplicate.body).toMatchObject({
-      statusCode: status.BAD_REQUEST,
-      type: ERROR_TYPE.duplicateEntry,
-      message: "john@example.com is already exists",
-    });
-    expect(cast.body).toStrictEqual({
-      success: false,
-      statusCode: status.BAD_REQUEST,
-      message: '"not-an-id" is not a valid ID!',
-      type: ERROR_TYPE.castError,
-    });
-  });
+      expect(duplicate.body).toMatchObject({
+        statusCode: status.BAD_REQUEST,
+        type: ERROR_TYPE.duplicateEntry,
+        message,
+      });
+      expect(cast.body).toStrictEqual({
+        success: false,
+        statusCode: status.BAD_REQUEST,
+        message: '"not-an-id" is not a valid ID!',
+        type: ERROR_TYPE.castError,
+      });
+    },
+  );
 
   it("maps Mongoose validation failures to a validation response", async () => {
     const res = await supertest(app).get("/mongoose-validation-error");

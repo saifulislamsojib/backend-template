@@ -32,7 +32,7 @@ const getRouteCacheKey = (req: Request, type: Type = "public") => {
  */
 const cacheRoute = (type: Type = "public") => {
   return catchAsync(async (req, res, next) => {
-    const cached = await getCache<AnyObject>(getRouteCacheKey(req, type));
+    const cached = await getCache<AnyObject | unknown[]>(getRouteCacheKey(req, type));
     if (cached !== undefined) {
       return sendResponse(res, {
         data: cached,

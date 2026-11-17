@@ -1,12 +1,12 @@
-import type { TUser } from "@/modules/user/user.types";
 import catchAsync from "@/utils/catchAsync";
 import omit from "@/utils/omit";
 import sendResponse from "@/utils/sendResponse";
 import { status } from "http-status";
 import { changePasswordToDb, loginUserFromDb, registerUserToDb } from "./auth.service";
 import { isAppKeyValid, setAuthCookie } from "./auth.utils";
+import type { ChangePasswordPayload, LoginPayload, RegisterPayload } from "./auth.validation";
 
-export const registerUser = catchAsync<Omit<TUser, "_id">>(async (req, res) => {
+export const registerUser = catchAsync<RegisterPayload>(async (req, res) => {
   const { token, user } = await registerUserToDb(req.body);
   setAuthCookie(res, token);
   return sendResponse(res, {
@@ -17,7 +17,7 @@ export const registerUser = catchAsync<Omit<TUser, "_id">>(async (req, res) => {
   });
 });
 
-export const loginUser = catchAsync<Pick<TUser, "email" | "password">>(async (req, res) => {
+export const loginUser = catchAsync<LoginPayload>(async (req, res) => {
   const { token, user } = await loginUserFromDb(req.body);
   setAuthCookie(res, token);
   return sendResponse(res, {
@@ -28,7 +28,7 @@ export const loginUser = catchAsync<Pick<TUser, "email" | "password">>(async (re
   });
 });
 
-export const changePassword = catchAsync<Params>(async (req, res) => {
+export const changePassword = catchAsync<ChangePasswordPayload>(async (req, res) => {
   const { token, user } = await changePasswordToDb(req.user!._id, req.body);
   setAuthCookie(res, token);
   return sendResponse(res, {

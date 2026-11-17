@@ -1,13 +1,13 @@
 import AppError from "@/errors/AppError";
 import User from "@/modules/user/user.model";
-import type { TUser } from "@/modules/user/user.types";
 import omit from "@/utils/omit";
 import { status } from "http-status";
 import { compareHashedText, createJWT, hashText } from "./auth.utils";
+import type { ChangePasswordPayload, LoginPayload, RegisterPayload } from "./auth.validation";
 
 const DUMMY_HASH = "$2b$10$e7V/4X/t18f.5Ew1xV9.uO3zB9h5k.3y9jH.x4y.5z6a7b8c9d0e1";
 
-export const registerUserToDb = async (payload: Omit<TUser, "_id">) => {
+export const registerUserToDb = async (payload: RegisterPayload) => {
   const { email } = payload;
 
   // check user is already registered or not
@@ -28,7 +28,7 @@ export const registerUserToDb = async (payload: Omit<TUser, "_id">) => {
   };
 };
 
-export const loginUserFromDb = async (payload: Pick<TUser, "email" | "password">) => {
+export const loginUserFromDb = async (payload: LoginPayload) => {
   const { email, password } = payload;
 
   // check the user found or not
@@ -52,10 +52,13 @@ export const loginUserFromDb = async (payload: Pick<TUser, "email" | "password">
   };
 };
 
-export const changePasswordToDb = async (userId: string | ObjectId, payload: Params) => {
+export const changePasswordToDb = async (
+  userId: string | ObjectId,
+  payload: ChangePasswordPayload,
+) => {
   const { currentPassword, newPassword } = payload;
 
-  if (currentPassword?.trim() === newPassword?.trim()) {
+  if (currentPassword === newPassword) {
     throw new AppError(
       status.BAD_REQUEST,
       "Current password and new password cannot be the same",
@@ -70,12 +73,12 @@ export const changePasswordToDb = async (userId: string | ObjectId, payload: Par
   }
 
   // check currentPassword
-  if (!(await user.isValidPassword(currentPassword!))) {
+  if (!(await user.isValidPassword(currentPassword))) {
     throw new AppError(status.UNAUTHORIZED, "Current password is not matched");
   }
 
   // hash password
-  const hashedPassword = await hashText(newPassword!);
+  const hashedPassword = await hashText(newPassword);
 
   const result = await User.updateOne(
     { _id: userId },

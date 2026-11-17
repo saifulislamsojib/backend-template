@@ -22,7 +22,7 @@ const passwordSchema = (field = "Password") => {
 };
 
 const loginSchemaObj = {
-  email: z.email(),
+  email: z.email().toLowerCase(),
   password: passwordSchema(),
 };
 
@@ -37,3 +37,7 @@ export const changePasswordSchema = z.object({
   currentPassword: passwordSchema("Current Password"),
   newPassword: passwordSchema("New Password"),
 });
+
+export type LoginPayload = z.infer<typeof loginUserSchema>;
+export type RegisterPayload = z.infer<typeof registerUserSchema>;
+export type ChangePasswordPayload = z.infer<typeof changePasswordSchema>;

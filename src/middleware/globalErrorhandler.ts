@@ -52,9 +52,27 @@ const globalErrorHandler: ErrorRequestHandler = (err: Error, req, res, next) => 
   } else if ("code" in err && err.code === 11000) {
     type = ERROR_TYPE.duplicateEntry;
     statusCode = status.BAD_REQUEST;
-    const match = /"([^"]*)"/.exec(err.message);
-    const extractedMessage = match?.[1];
-    message = `${extractedMessage} is already exists`;
+    let fields: string[] = [];
+    if (
+      "keyPattern" in err &&
+      err.keyPattern &&
+      typeof err.keyPattern === "object" &&
+      !Array.isArray(err.keyPattern)
+    ) {
+      fields = Object.keys(err.keyPattern);
+    }
+    if (
+      fields.length === 0 &&
+      "keyValue" in err &&
+      err.keyValue &&
+      typeof err.keyValue === "object" &&
+      !Array.isArray(err.keyValue)
+    ) {
+      fields = Object.keys(err.keyValue);
+    }
+    message = fields.length
+      ? `A record with this ${fields.join(" and ")} already exists`
+      : "A record already exists";
   } else if (err instanceof MongooseError.ValidationError) {
     type = ERROR_TYPE.validationError;
     statusCode = status.BAD_REQUEST;
