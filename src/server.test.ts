@@ -16,11 +16,6 @@ vi.mock("@/utils/server", () => ({
 }));
 
 describe("server bootstrap", () => {
-  beforeAll(async () => {
-    mocks.dbConnect.mockResolvedValue(false);
-    await import("./server");
-  });
-
   beforeEach(() => {
     mocks.closeServer.mockClear();
     mocks.listen.mockClear();
@@ -28,11 +23,11 @@ describe("server bootstrap", () => {
     mocks.logger.fatal.mockClear();
   });
 
-  it("attempts a database connection on startup", () => {
-    expect(mocks.dbConnect).toHaveBeenCalled();
-  });
+  it("attempts a database connection without listening when it fails", async () => {
+    mocks.dbConnect.mockResolvedValue(false);
+    await import("./server");
 
-  it("does not start listening when the database connection fails", () => {
+    expect(mocks.dbConnect).toHaveBeenCalled();
     expect(mocks.listen).not.toHaveBeenCalled();
   });
 
