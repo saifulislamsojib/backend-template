@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.5.0](https://github.com/saifulislamsojib/backend-template/compare/v1.4.0...v1.5.0) (2026-11-17)
+
+
+### Features
+
+* **build:** add GitHub Actions workflow for building and pushing Docker images ([38e3a13](https://github.com/saifulislamsojib/backend-template/commit/38e3a13ac73432316d6d9cdd21634a1109613df7))
+
+
+### Bug Fixes
+
+* **auth:** normalize emails and tighten validated payload types ([eaadfb6](https://github.com/saifulislamsojib/backend-template/commit/eaadfb680d0108e7ea3f9a70cf6ea88cb2be7386))
+* **notFound:** correct parameter name in JSDoc for request object ([4134872](https://github.com/saifulislamsojib/backend-template/commit/413487264215e35d4d6c2d35908972003cbad1b8))
+
 ## [1.4.0](https://github.com/saifulislamsojib/backend-template/compare/v1.3.0...v1.4.0) (2026-11-16)
 
 
