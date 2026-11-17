@@ -12,7 +12,7 @@ const notFoundResponse: TErrorResponse = {
 
 /**
  * Not Found middleware that Handles all unhandled routes by sending a 404 status with a JSON response.
- * @param _req - The express request object.
+ * @param req - The express request object.
  * @param res - The express response object.
  */
 const notFound: RequestHandler = (req, res) => {
