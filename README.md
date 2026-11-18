@@ -9,7 +9,7 @@ A production-oriented Express 5 API starter written in TypeScript. It provides M
 - Redis for route caching and distributed rate limiting
 - JWT authentication with bcrypt password hashing and HTTP-only cookies
 - Zod validation and a consistent API error model
-- Pino HTTP/application logging, with optional file logs
+- Pino HTTP/application logging to the console
 - Security middleware: Helmet, CORS, request size limits, and trust-proxy support
 - Vitest, Supertest, and an in-memory MongoDB replica set for tests
 - ESLint, Prettier, Husky, lint-staged, Commitlint, and GitHub Actions
@@ -60,7 +60,6 @@ Application configuration is validated at startup. The following environment var
 | `BCRYPT_SALT_ROUNDS`                     | Yes      | —             | bcrypt work factor, such as `10`.                                            |
 | `CLIENT_ORIGIN`                          | Yes      | —             | Allowed CORS origin, for example `http://localhost:3000`.                    |
 | `LOG_LEVEL`                              | No       | `info`        | Pino level: `trace`, `debug`, `info`, `warn`, `error`, `fatal`, or `silent`. |
-| `IS_LOGS_ON_FILE`                        | No       | `false`       | Set to `true` to write error and fatal logs under `logs/`.                   |
 
 Example local configuration:
 
@@ -76,7 +75,6 @@ JWT_ACCESS_EXPIRES_IN_MINUTES=10080
 BCRYPT_SALT_ROUNDS=10
 CLIENT_ORIGIN=http://localhost:3000
 LOG_LEVEL=info
-IS_LOGS_ON_FILE=false
 ```
 
 ## Scripts

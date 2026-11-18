@@ -14,7 +14,6 @@ export const envValidationSchema = z.object({
     .transform((val) => (val ? parseInt(val, 10) : 10080)), // 7 days in minutes
   CLIENT_ORIGIN: z.url().trim(),
   LOG_LEVEL: z.enum(log_levels).default("info"),
-  IS_LOGS_ON_FILE: z.enum(["true", "false"]).default("false"),
   REDIS_HOST: z.string().trim().default("localhost"),
   REDIS_PORT: z
     .string()
