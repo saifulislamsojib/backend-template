@@ -3,3 +3,7 @@ allowBuilds:
   esbuild: true
   mongodb-memory-server: true
   unrs-resolver: true
+minimumReleaseAgeExclude:
+  - "@stack-lint/base@0.3.2"
+  - "@stack-lint/node@0.3.2"
+  - "@stack-lint/typescript@0.3.2"
