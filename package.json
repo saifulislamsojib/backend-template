@@ -9,7 +9,7 @@
     "preinstall": "npx only-allow pnpm",
     "start": "node --env-file=.env dist/server.js",
     "dev": "tsx watch --clear-screen=false --include './src/**/*' --env-file=.env src/server.ts",
-    "dev:node": "node --import 'data:text/javascript,import { register } from \"node:module\"; import { pathToFileURL } from \"node:url\"; register(\"./.path-resolver.js\", pathToFileURL(\"./\"));' --watch --env-file=.env src/server.ts",
+    "dev:node": "node --import ./.path-resolver.js --watch --env-file=.env src/server.ts",
     "dev:n": "console-ninja pnpm dev",
     "dev:bun": "bun --watch --no-clear-screen src/server.ts",
     "build": "tsc -p tsconfig.app.json && tsc-alias -p tsconfig.app.json",
