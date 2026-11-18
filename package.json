@@ -84,7 +84,8 @@
   "engines": {
     "node": ">=24.22.3",
     "npm": ">=11",
-    "pnpm": ">=12"
+    "pnpm": ">=12",
+    "bun": ">=1.4.4"
   },
   "lint-staged": {
     "*.{js,cjs,mjs,ts}": [
