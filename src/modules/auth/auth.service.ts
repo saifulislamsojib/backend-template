@@ -1,61 +1,58 @@
 import AppError from "@/errors/AppError";
-import User from "@/modules/user/user.model";
-import omit from "@/utils/omit";
+import userRepository from "@/modules/user/user.repository";
 import { status } from "http-status";
 import { compareHashedText, createJWT, hashText } from "./auth.utils";
 import type { ChangePasswordPayload, LoginPayload, RegisterPayload } from "./auth.validation";
 
 const DUMMY_HASH = "$2b$10$e7V/4X/t18f.5Ew1xV9.uO3zB9h5k.3y9jH.x4y.5z6a7b8c9d0e1";
 
-export const registerUserToDb = async (payload: RegisterPayload) => {
+const registerUser = async (payload: RegisterPayload) => {
   const { email } = payload;
 
   // check user is already registered or not
-  const isExist = await User.exists({ email });
+  const isExist = await userRepository.existsByEmail(email);
   if (isExist) {
     throw new AppError(status.BAD_REQUEST, "The User already exists by the email");
   }
 
   // Now create the user
-  const user = await new User(payload).save();
+  const hashedPassword = await hashText(payload.password);
+  const user = await userRepository.createUser({
+    name: payload.name,
+    email,
+    password: hashedPassword,
+  });
 
   // create jwt token
   const token = createJWT({ email: user.email, _id: user._id, role: user.role });
 
   return {
     token,
-    user: omit(user.toObject(), "password", "passwordUpdatedAt", "__v"),
+    user,
   };
 };
 
-export const loginUserFromDb = async (payload: LoginPayload) => {
+const loginUser = async (payload: LoginPayload) => {
   const { email, password } = payload;
 
   // check the user found or not
-  const user = await User.findOne({ email }).select("+password");
-  if (!user?._id) {
+  const credentials = await userRepository.findCredentialsByEmail(email);
+  if (!credentials) {
     await compareHashedText(password, DUMMY_HASH);
     throw new AppError(status.UNAUTHORIZED, "Invalid email or password");
   }
 
   // check the user password
-  if (!(await user.isValidPassword(password))) {
+  if (!(await compareHashedText(password, credentials.passwordHash))) {
     throw new AppError(status.UNAUTHORIZED, "Invalid email or password");
   }
 
-  // create jwt token
+  const { user } = credentials;
   const token = createJWT({ email: user.email, _id: user._id, role: user.role });
-
-  return {
-    token,
-    user: omit(user.toObject(), "password", "passwordUpdatedAt", "__v"),
-  };
+  return { token, user };
 };
 
-export const changePasswordToDb = async (
-  userId: string | ObjectId,
-  payload: ChangePasswordPayload,
-) => {
+const changePassword = async (userId: string | ObjectId, payload: ChangePasswordPayload) => {
   const { currentPassword, newPassword } = payload;
 
   if (currentPassword === newPassword) {
@@ -66,28 +63,26 @@ export const changePasswordToDb = async (
     );
   }
 
-  const user = await User.findById(userId).select("+password");
+  const credentials = await userRepository.findCredentialsById(userId);
 
-  if (!user) {
+  if (!credentials) {
     throw new AppError(status.NOT_FOUND, "User not found");
   }
 
   // check currentPassword
-  if (!(await user.isValidPassword(currentPassword))) {
+  if (!(await compareHashedText(currentPassword, credentials.passwordHash))) {
     throw new AppError(status.UNAUTHORIZED, "Current password is not matched");
   }
 
   // hash password
   const hashedPassword = await hashText(newPassword);
 
-  const result = await User.updateOne(
-    { _id: userId },
-    {
-      password: hashedPassword,
-      passwordUpdatedAt: new Date(),
-    },
+  const user = await userRepository.updatePasswordIfCurrent(
+    userId,
+    credentials.passwordHash,
+    hashedPassword,
   );
-  if (!result.modifiedCount) {
+  if (!user) {
     throw new AppError(status.BAD_REQUEST, "Password change failed");
   }
 
@@ -96,6 +91,8 @@ export const changePasswordToDb = async (
 
   return {
     token,
-    user: omit(user.toObject(), "password", "passwordUpdatedAt", "__v"),
+    user,
   };
 };
+
+export default { registerUser, loginUser, changePassword };

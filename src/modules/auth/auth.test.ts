@@ -1,14 +1,16 @@
 import { ERROR_TYPE, type ErrorType } from "@/errors/error.const";
 import { userRoles } from "@/modules/user/user.constant";
-import type { TUser, TUserResponse } from "@/modules/user/user.types";
+import type { TUserResponse } from "@/modules/user/user.types";
+import userRepository from "@/modules/user/user.repository";
 import apiTester from "@/test/apiTester";
 import { expectEnum, types } from "@/test/utils";
 import omit from "@/utils/omit";
 import type { TSuccessResponse } from "@/utils/sendResponse";
 import { status } from "http-status";
+import { compareHashedText, createJWT, verifyJWT } from "./auth.utils";
 
-type SuccessRes = TSuccessResponse<{ user: TUser }>;
-type AppSuccessRes = TSuccessResponse<{ user: TUser; token: string }>;
+type SuccessRes = TSuccessResponse<{ user: TUserResponse }>;
+type AppSuccessRes = TSuccessResponse<{ user: TUserResponse; token: string }>;
 
 const baseUrl = "/api/v1/auth";
 
@@ -62,13 +64,12 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
     // Register Successful test
     it("Register Successful test with all proper data", async () => {
       const user: Partial<TUserResponse> = {
-        ...body,
+        ...omit(body, "password"),
         role: "user",
         _id: types.string,
         createdAt: types.string,
         updatedAt: types.string,
       };
-      delete user.password;
 
       const expected = { status: status.CREATED, success: true };
 
@@ -92,6 +93,12 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
       });
       expect(resBody.data).toStrictEqual({ user });
       expect(resBody.data).not.toHaveProperty("token");
+      const credentials = await userRepository.findCredentialsByEmail(body.email);
+      expect(credentials?.passwordHash).not.toBe(body.password);
+      expect(await compareHashedText(body.password, credentials!.passwordHash)).toBe(true);
+      const storedUser = credentials!.user;
+      expect(resBody.data.user._id).toBe(storedUser._id.toHexString());
+      expect(verifyJWT(createJWT(storedUser))._id).toBe(storedUser._id.toHexString());
     });
 
     // Duplication errors test
@@ -340,6 +347,21 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
   });
 
   // current user api test
+  it("accepts only the new password after a successful password change", async () => {
+    await apiTester({
+      url: `${baseUrl}/login`,
+      method: "post",
+      body: { email: testUser.email, password: testUser.password },
+      expected: { status: status.UNAUTHORIZED, success: false, type: ERROR_TYPE.unauthorized },
+    });
+    const login = await apiTester<SuccessRes>({
+      url: `${baseUrl}/login`,
+      method: "post",
+      body: { email: testUser.email, password: "123456@Aa500" },
+    });
+    expect(login.data.user.email).toBe(testUser.email);
+  });
+
   describe(`GET API = ${baseUrl}/me (current user)`, () => {
     const url = `${baseUrl}/me`;
 
@@ -365,7 +387,7 @@ describe(`Auth apis test, API = ${baseUrl}`, () => {
         cookie: token,
       });
 
-      expect(resBody.data).toMatchObject({
+      expect(resBody.data).toStrictEqual({
         name: testUser.name,
         email: testUser.email,
         role: expectEnum(userRoles),

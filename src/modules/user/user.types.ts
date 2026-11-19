@@ -1,20 +1,37 @@
 import type { Role } from "./user.constant";
 
-export type TUser = {
+export type PublicUser = {
   _id: ObjectId;
   name: string;
   email: string;
-  password: string;
   role: Role;
-  passwordUpdatedAt?: Date;
   createdAt: Date;
   updatedAt: Date;
-  __v?: number;
 };
 
-export type TUserResponse = Omit<TUser, "_id" | "passwordUpdatedAt" | "createdAt" | "updatedAt"> & {
+export type UserCredentials = {
+  user: PublicUser;
+  passwordHash: string;
+};
+
+export type TUser = PublicUser & {
+  password: string;
+  passwordUpdatedAt?: Date;
+};
+
+export type UserAuthState = PublicUser & {
+  passwordUpdatedAt?: Date;
+};
+
+export type CreateUserInput = {
+  name: string;
+  email: string;
+  password: string;
+  role?: Role;
+};
+
+export type TUserResponse = Omit<PublicUser, "_id" | "createdAt" | "updatedAt"> & {
   _id: string;
-  passwordUpdatedAt?: string;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt: string;
+  updatedAt: string;
 };

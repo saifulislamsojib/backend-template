@@ -1,3 +1,4 @@
+import { translateDatabaseError } from "@/errors/mongooseErrors";
 import type { Request, RequestHandler } from "express";
 
 type Handler<T> = RequestHandler<Request["params"], Request["body"], T, Params>;
@@ -6,7 +7,7 @@ type Handler<T> = RequestHandler<Request["params"], Request["body"], T, Params>;
  * A higher-order function that takes a request handler function and returns
  * a new function that wraps the given function in a try-catch block.
  *
- * If the wrapped function throws an error, the error is passed to the next
+ * Known database errors are translated at this HTTP boundary before being passed to the next
  * middleware function in the application's request-response cycle.
  *
  * @param requestHandler - the function to be wrapped
@@ -17,7 +18,7 @@ const catchAsync = <T extends AnyObject | undefined>(requestHandler: Handler<T>)
     try {
       await Promise.resolve(requestHandler(req, res, next));
     } catch (err) {
-      next(err);
+      next(translateDatabaseError(err));
     }
   };
 };

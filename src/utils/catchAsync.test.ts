@@ -1,39 +1,46 @@
+import PersistenceError from "@/errors/PersistenceError";
+import type { Request, Response } from "express";
+import { Error as MongooseError } from "mongoose";
 import catchAsync from "./catchAsync";
 
 describe("catchAsync", () => {
-  const req = {} as never;
-  const res = {} as never;
+  const req = {} as Request;
+  const res = {} as Response;
 
-  it("runs the handler and does not call next when it resolves", async () => {
+  it("passes the request context to a successful handler without forwarding an error", async () => {
     const next = vi.fn();
     const handler = vi.fn().mockResolvedValue(undefined);
-    const wrapped = catchAsync(handler);
-
-    await wrapped(req, res, next);
-
-    expect(handler).toHaveBeenCalledWith(req, res, next);
+    await catchAsync(handler)(req as never, res, next);
+    expect(handler).toHaveBeenCalledExactlyOnceWith(req, res, next);
     expect(next).not.toHaveBeenCalled();
   });
 
-  it("forwards errors thrown synchronously to next", async () => {
+  it("translates rejected database errors before forwarding them", async () => {
     const next = vi.fn();
-    const error = new Error("sync boom");
-    const wrapped = catchAsync(() => {
-      throw error;
+    const handler = catchAsync(() =>
+      Promise.reject(new MongooseError.CastError("ObjectId", "invalid", "_id")),
+    );
+
+    await handler(req as never, res, next);
+
+    expect(next).toHaveBeenCalledExactlyOnceWith(expect.any(PersistenceError));
+    expect(next.mock.calls[0]?.[0]).toMatchObject({
+      kind: "castError",
+      message: '"invalid" is not a valid ID!',
     });
-
-    await wrapped(req, res, next);
-
-    expect(next).toHaveBeenCalledExactlyOnceWith(error);
   });
 
-  it("forwards async rejections to next", async () => {
+  it.each(["throw", "reject"])("preserves unknown errors by identity (%s)", async (mode) => {
+    const error = new Error("database unavailable");
     const next = vi.fn();
-    const error = new Error("async boom");
-    const wrapped = catchAsync(() => Promise.reject(error));
+    const handler = catchAsync(() => {
+      if (mode === "throw") throw error;
+      return Promise.reject(error);
+    });
 
-    await wrapped(req, res, next);
+    await handler(req as never, res, next);
 
     expect(next).toHaveBeenCalledExactlyOnceWith(error);
+    expect(next.mock.calls[0]?.[0]).toBe(error);
   });
 });

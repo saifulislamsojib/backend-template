@@ -2,12 +2,12 @@ import catchAsync from "@/utils/catchAsync";
 import omit from "@/utils/omit";
 import sendResponse from "@/utils/sendResponse";
 import { status } from "http-status";
-import { changePasswordToDb, loginUserFromDb, registerUserToDb } from "./auth.service";
+import authService from "./auth.service";
 import { isAppKeyValid, setAuthCookie } from "./auth.utils";
 import type { ChangePasswordPayload, LoginPayload, RegisterPayload } from "./auth.validation";
 
-export const registerUser = catchAsync<RegisterPayload>(async (req, res) => {
-  const { token, user } = await registerUserToDb(req.body);
+const registerUser = catchAsync<RegisterPayload>(async (req, res) => {
+  const { token, user } = await authService.registerUser(req.body);
   setAuthCookie(res, token);
   return sendResponse(res, {
     data: isAppKeyValid(req) ? { user, token } : { user },
@@ -17,8 +17,8 @@ export const registerUser = catchAsync<RegisterPayload>(async (req, res) => {
   });
 });
 
-export const loginUser = catchAsync<LoginPayload>(async (req, res) => {
-  const { token, user } = await loginUserFromDb(req.body);
+const loginUser = catchAsync<LoginPayload>(async (req, res) => {
+  const { token, user } = await authService.loginUser(req.body);
   setAuthCookie(res, token);
   return sendResponse(res, {
     data: isAppKeyValid(req) ? { user, token } : { user },
@@ -28,8 +28,8 @@ export const loginUser = catchAsync<LoginPayload>(async (req, res) => {
   });
 });
 
-export const changePassword = catchAsync<ChangePasswordPayload>(async (req, res) => {
-  const { token, user } = await changePasswordToDb(req.user!._id, req.body);
+const changePassword = catchAsync<ChangePasswordPayload>(async (req, res) => {
+  const { token, user } = await authService.changePassword(req.user!._id, req.body);
   setAuthCookie(res, token);
   return sendResponse(res, {
     data: isAppKeyValid(req) ? { user, token } : { user },
@@ -39,7 +39,7 @@ export const changePassword = catchAsync<ChangePasswordPayload>(async (req, res)
   });
 });
 
-export const getCurrentUser = catchAsync((req, res) => {
+const getCurrentUser = catchAsync((req, res) => {
   const data = omit(req.user!, "exp", "iat");
   return sendResponse(res, {
     data,
@@ -48,3 +48,5 @@ export const getCurrentUser = catchAsync((req, res) => {
     success: true,
   });
 });
+
+export default { registerUser, loginUser, changePassword, getCurrentUser };

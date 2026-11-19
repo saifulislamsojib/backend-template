@@ -1,11 +1,11 @@
 import env from "@/configs/env";
 import logger from "@/configs/logger";
 import AppError from "@/errors/AppError";
+import PersistenceError from "@/errors/PersistenceError";
 import { ERROR_TYPE, type ErrorType } from "@/errors/error.const";
 import sendResponse, { type TErrorResponse } from "@/utils/sendResponse";
 import type { ErrorRequestHandler } from "express";
 import { status } from "http-status";
-import { Error as MongooseError } from "mongoose";
 import { MulterError } from "multer";
 import { ZodError } from "zod";
 
@@ -45,40 +45,10 @@ const globalErrorHandler: ErrorRequestHandler = (err: Error, req, res, next) => 
         code === "custom" ? msg : `${lastPath as string} is ${msg.toLowerCase()}`;
       return `${acc}${acc ? "; " : ""}${singleMessage}`;
     }, "");
-  } else if (err.name === "CastError") {
-    type = ERROR_TYPE.castError;
+  } else if (err instanceof PersistenceError) {
+    type = err.kind;
     statusCode = status.BAD_REQUEST;
-    message = `${(err as MongooseError.CastError).stringValue} is not a valid ID!`;
-  } else if ("code" in err && err.code === 11000) {
-    type = ERROR_TYPE.duplicateEntry;
-    statusCode = status.BAD_REQUEST;
-    let fields: string[] = [];
-    if (
-      "keyPattern" in err &&
-      err.keyPattern &&
-      typeof err.keyPattern === "object" &&
-      !Array.isArray(err.keyPattern)
-    ) {
-      fields = Object.keys(err.keyPattern);
-    }
-    if (
-      fields.length === 0 &&
-      "keyValue" in err &&
-      err.keyValue &&
-      typeof err.keyValue === "object" &&
-      !Array.isArray(err.keyValue)
-    ) {
-      fields = Object.keys(err.keyValue);
-    }
-    message = fields.length
-      ? `A record with this ${fields.join(" and ")} already exists`
-      : "A record already exists";
-  } else if (err instanceof MongooseError.ValidationError) {
-    type = ERROR_TYPE.validationError;
-    statusCode = status.BAD_REQUEST;
-    message = Object.values(err.errors).reduce((acc, { message: msg }) => {
-      return `${acc}${acc ? "; " : ""}${msg}.`;
-    }, "");
+    message = err.message;
   } else if (isAppError) {
     if (err.statusCode === status.UNAUTHORIZED) {
       type = ERROR_TYPE.unauthorized;

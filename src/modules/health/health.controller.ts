@@ -15,4 +15,4 @@ const health: RequestHandler = (_req, res) => {
   });
 };
 
-export default health;
+export default { health };

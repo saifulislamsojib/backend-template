@@ -2,8 +2,8 @@ export const ERROR_TYPE = Object.freeze({
   validationError: "validationError",
   unauthorized: "unauthorized",
   forbidden: "forbidden",
-  duplicateEntry: "duplicateEntry", // throw by mongoose
-  castError: "castError", // throw by mongoose
+  duplicateEntry: "duplicateEntry", // throw by db
+  castError: "castError", // throw by db
   notFound: "notFound",
   fileTooLarge: "fileTooLarge", // multer LIMIT_FILE_SIZE -> 413
   fileError: "fileError", // other multer errors -> 400

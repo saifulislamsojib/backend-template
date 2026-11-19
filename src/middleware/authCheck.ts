@@ -1,7 +1,7 @@
 import AppError from "@/errors/AppError";
 import { AUTH_TOKEN_KEY, isAppKeyValid, verifyJWT } from "@/modules/auth/auth.utils";
 import type { Role } from "@/modules/user/user.constant";
-import User from "@/modules/user/user.model";
+import userRepository from "@/modules/user/user.repository";
 import catchAsync from "@/utils/catchAsync";
 import { status } from "http-status";
 
@@ -33,7 +33,7 @@ const authCheck = (...roles: Role[]) => {
     const payload = verifyJWT(authorization);
 
     // check user exist or not
-    const user = await User.findById(payload._id).select("+passwordUpdatedAt").lean();
+    const user = await userRepository.findAuthStateById(payload._id);
 
     if (!user) throw new AppError(status.UNAUTHORIZED, "Invalid token!");
 

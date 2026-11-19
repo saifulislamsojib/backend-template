@@ -1,4 +1,5 @@
 import AppError from "@/errors/AppError";
+import catchAsync from "@/utils/catchAsync";
 import { ERROR_TYPE } from "@/errors/error.const";
 import express from "express";
 import { status } from "http-status";
@@ -21,35 +22,44 @@ const app = express();
 app.get("/expected-error", () => {
   throw new AppError(status.FORBIDDEN, "Access denied");
 });
-app.get("/unexpected-error", () => {
-  throw new Error("Unexpected failure");
-});
+app.get(
+  "/unexpected-error",
+  catchAsync(() => {
+    throw new Error("Unexpected failure");
+  }),
+);
 app.get("/validation-error", () => {
   z.object({ name: z.string() }).parse({});
 });
-app.get("/duplicate-error", (req) => {
-  const metadata = {
-    pattern: { keyPattern: { email: 1 }, keyValue: { email: "john@example.com" } },
-    value: { keyValue: { email: "john@example.com" } },
-    compound: { keyPattern: { email: 1, tenant: 1 } },
-  };
-  const variant = req.query.metadata as keyof typeof metadata;
-  throw Object.assign(new Error('E11000 duplicate key: { email: "john@example.com" }'), {
-    code: 11000,
-    ...metadata[variant],
-  });
-});
-app.get("/cast-error", () => {
-  const error = new Error("Invalid id");
-  error.name = "CastError";
-  Object.assign(error, { stringValue: '"not-an-id"' });
-  throw error;
-});
-app.get("/mongoose-validation-error", () => {
-  const error = new MongooseError.ValidationError();
-  error.addError("name", new MongooseError.ValidatorError({ message: "Name is required" }));
-  throw error;
-});
+app.get(
+  "/duplicate-error",
+  catchAsync((req) => {
+    const metadata = {
+      pattern: { keyPattern: { email: 1 }, keyValue: { email: "john@example.com" } },
+      value: { keyValue: { email: "john@example.com" } },
+      compound: { keyPattern: { email: 1, tenant: 1 } },
+    };
+    const variant = req.query.metadata as keyof typeof metadata;
+    throw Object.assign(new Error('E11000 duplicate key: { email: "john@example.com" }'), {
+      code: 11000,
+      ...metadata[variant],
+    });
+  }),
+);
+app.get(
+  "/cast-error",
+  catchAsync(() => {
+    throw new MongooseError.CastError("ObjectId", "not-an-id", "_id");
+  }),
+);
+app.get(
+  "/mongoose-validation-error",
+  catchAsync(() => {
+    const error = new MongooseError.ValidationError();
+    error.addError("name", new MongooseError.ValidatorError({ message: "Name is required" }));
+    throw error;
+  }),
+);
 app.get("/file-too-large-error", () => {
   throw new MulterError("LIMIT_FILE_SIZE");
 });

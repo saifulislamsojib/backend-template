@@ -1,7 +1,9 @@
 import type { AuthPayload } from "@/modules/auth/auth.types";
 import AppError from "@/errors/AppError";
+import PersistenceError from "@/errors/PersistenceError";
 import type { Request, Response } from "express";
 import { status } from "http-status";
+import { Error as MongooseError, Types } from "mongoose";
 import authCheck from "./authCheck";
 
 const mocks = vi.hoisted(() => ({
@@ -16,7 +18,9 @@ vi.mock("@/modules/auth/auth.utils", () => ({
   verifyJWT: mocks.verifyJWT,
 }));
 
-vi.mock("@/modules/user/user.model", () => ({ default: { findById: mocks.findById } }));
+vi.mock("@/modules/user/user.repository", () => ({
+  default: { findAuthStateById: mocks.findById },
+}));
 
 describe("authCheck middleware", () => {
   const res = {} as Response;
@@ -30,7 +34,7 @@ describe("authCheck middleware", () => {
   };
 
   const userDoc = {
-    _id: payload._id,
+    _id: new Types.ObjectId(payload._id),
     email: payload.email,
     role: payload.role,
     name: "John",
@@ -40,7 +44,7 @@ describe("authCheck middleware", () => {
   };
 
   const mockUserQuery = (user: AnyObject | null) => {
-    mocks.findById.mockReturnValue({ select: () => ({ lean: () => user }) });
+    mocks.findById.mockResolvedValue(user);
   };
 
   const makeReq = (overrides: AnyObject = {}) =>
@@ -115,6 +119,20 @@ describe("authCheck middleware", () => {
     expect((next.mock.calls[0]?.[0] as AppError).statusCode).toBe(status.UNAUTHORIZED);
   });
 
+  it("translates raw repository failures through the HTTP catch boundary", async () => {
+    mocks.isAppKeyValid.mockReturnValue(true);
+    mocks.verifyJWT.mockReturnValue(payload);
+    mocks.findById.mockRejectedValueOnce(new MongooseError.CastError("ObjectId", "invalid", "_id"));
+    const req = makeReq({ get: vi.fn().mockReturnValue("Bearer token") });
+    const next = vi.fn();
+
+    await authCheck()(req as never, res as never, next);
+
+    expect(next).toHaveBeenCalledExactlyOnceWith(expect.any(PersistenceError));
+    expect(next.mock.calls[0]?.[0]).toMatchObject({ kind: "castError" });
+    expect(req).not.toHaveProperty("user");
+  });
+
   it("throws UNAUTHORIZED when the email does not match the token", async () => {
     mocks.isAppKeyValid.mockReturnValue(true);
     mocks.verifyJWT.mockReturnValue(payload);
@@ -168,7 +186,7 @@ describe("authCheck middleware", () => {
     expect(next).toHaveBeenCalledExactlyOnceWith();
     expect(mocks.findById).toHaveBeenCalledWith(payload._id);
     expect(req.user).toMatchObject({
-      _id: payload._id,
+      _id: userDoc._id,
       name: "John",
       email: payload.email,
       role: "user",

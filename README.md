@@ -249,3 +249,35 @@ src/
 ## Quality automation
 
 Husky runs lint-staged and type checking before commits, and Commitlint enforces Conventional Commit messages. GitHub Actions runs linting, type checking, tests, commit validation, and release-please workflows.
+
+# Persistence architecture
+
+Controllers call services for business rules. Services call purpose-specific typed functions in
+`src/modules/<name>/<name>.repository.ts` for database access. The User repository is shared by
+authentication services and authorization middleware; models stay private to persistence.
+
+Controllers and validation modules use default object exports, matching `authService`.
+Routes access members through `authController`, `healthController`, and `authValidation`;
+validation payload types remain named type exports.
+
+Repository contracts preserve native Mongoose `ObjectId` IDs and internal `Date` timestamps;
+ID lookups accept strings or ObjectIds. HTTP JSON and decoded JWT claims use string IDs.
+This deliberate Mongo-specific contract means a future SQL migration must adapt identifier types
+and callers as well as repository implementations. Public users are explicitly
+allowlisted; password hashes and password-change timestamps have separate credential/auth-state
+projections. Documents, database query/write results, and `__v` do not cross the boundary.
+Services own password hashing/comparison and JWT rules. Password updates atomically compare the
+previous hash and return the updated user, so concurrent changes cannot both succeed.
+
+Repositories may throw raw database errors. At the HTTP boundary, `src/utils/catchAsync.ts`
+uses `translateDatabaseError` from `src/errors/mongooseErrors.ts` to convert known database
+errors into database-neutral persistence errors. Global error middleware maps these to the existing
+`castError`, `validationError`, and `duplicateEntry` responses. Unknown errors pass through unchanged
+and remain 500. Controllers and authorization middleware use this shared catch boundary;
+non-HTTP repository callers receive raw database errors.
+ESLint enforces static import boundaries with persistence, lifecycle, and test exceptions, plus
+a narrow exception for `catchAsync` to import the translator (not database drivers or models)
+and a type-only Mongoose import in `src/index.d.ts` for the shared `ObjectId` alias.
+Connection lifecycle remains in `src/configs/db.ts` and `src/server.ts`; Redis is separate.
+The existing timestamp-based token revocation policy is preserved; token-version rollout and
+same-second revocation fixes are deferred.

@@ -26,14 +26,14 @@ const loginSchemaObj = {
   password: passwordSchema(),
 };
 
-export const registerUserSchema = z.object({
+const registerUserSchema = z.object({
   name: z.string().trim().min(1).max(255),
   ...loginSchemaObj,
 });
 
-export const loginUserSchema = z.object(loginSchemaObj);
+const loginUserSchema = z.object(loginSchemaObj);
 
-export const changePasswordSchema = z.object({
+const changePasswordSchema = z.object({
   currentPassword: passwordSchema("Current Password"),
   newPassword: passwordSchema("New Password"),
 });
@@ -41,3 +41,5 @@ export const changePasswordSchema = z.object({
 export type LoginPayload = z.infer<typeof loginUserSchema>;
 export type RegisterPayload = z.infer<typeof registerUserSchema>;
 export type ChangePasswordPayload = z.infer<typeof changePasswordSchema>;
+
+export default { registerUserSchema, loginUserSchema, changePasswordSchema };
