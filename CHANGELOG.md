@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.6.0](https://github.com/saifulislamsojib/backend-template/compare/v1.5.0...v1.6.0) (2026-11-19)
+
+
+### Features
+
+* **skills:** add coding standards and best practices for MongoDB and Mongoose ([d5e2a43](https://github.com/saifulislamsojib/backend-template/commit/d5e2a432215d3a442bdaa47645873d16779939c2))
+
+
+### Bug Fixes
+
+* **package:** add bun engine requirement to package.json ([f1ee904](https://github.com/saifulislamsojib/backend-template/commit/f1ee90426f0bad9a6f4b5e14a7572aab2216b9f3))
+
 ## [1.5.0](https://github.com/saifulislamsojib/backend-template/compare/v1.4.0...v1.5.0) (2026-11-17)
 
 
